@@ -30,9 +30,9 @@ function currentRole(): string {
  * Require the user to be logged in (and optionally have a specific role).
  * Redirects to /login if not authenticated; to / if wrong role.
  *
- * @param string|string[]|null $roles  Allowed role(s), or null for any authenticated user
+ * @param string|array|null $roles  Allowed role(s), or null for any authenticated user
  */
-function requireAuth(string|array|null $roles = null): void {
+function requireAuth($roles = null): void {
     // Frontend-only demo mode: auth checks disabled.
 }
 

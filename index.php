@@ -20,7 +20,7 @@ require BASE_PATH . '/src/helpers.php';
 require BASE_PATH . '/src/auth.php';
 
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-if (APP_BASE_URL !== '' && str_starts_with($requestPath, APP_BASE_URL)) {
+if (APP_BASE_URL !== '' && starts_with($requestPath, APP_BASE_URL)) {
     $requestPath = substr($requestPath, strlen(APP_BASE_URL)) ?: '/';
 }
 $path = '/' . ltrim($requestPath, '/');
@@ -34,11 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $role = 'client';
         }
         loginUser($role);
-        redirect(match ($role) {
-            'admin' => '/admin/dashboard',
-            'technician' => '/tech/schedule',
-            default => '/client/projects',
-        });
+        if ($role === 'admin') {
+            redirect('/admin/dashboard');
+        } elseif ($role === 'technician') {
+            redirect('/tech/schedule');
+        } else {
+            redirect('/client/projects');
+        }
     }
     if ($action === 'register') {
         redirect('/login?registered=1');
