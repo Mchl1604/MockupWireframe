@@ -18,7 +18,7 @@ $projReports  = projectReports($project['name'], $reports);
 require TEMPLATES . '/partials/dashboard-top.php';
 ?>
 
-<a href="/client/projects" class="btn btn-outline-secondary btn-sm mb-4">
+<a href="<?= h(url('/client/projects')) ?>" class="btn btn-outline-secondary btn-sm mb-4">
     <i class="bi bi-arrow-left me-1"></i>Back
 </a>
 

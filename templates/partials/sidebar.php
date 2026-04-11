@@ -66,7 +66,7 @@ $roleLabel = $roleLabels[$role] ?? '';
             $aClass   = $isActive ? 'nav-link active' : 'nav-link';
             ?>
             <li class="<?= $liClass ?>">
-                <a href="<?= h($item['url']) ?>" class="<?= $aClass ?>">
+                <a href="<?= h(url($item['url'])) ?>" class="<?= $aClass ?>">
                     <i class="<?= h($item['icon']) ?> me-2"></i>
                     <span><?= h($item['label']) ?></span>
                 </a>
@@ -83,7 +83,7 @@ $roleLabel = $roleLabels[$role] ?? '';
             <div class="text-white small fw-medium text-truncate"><?= h($user['name'] ?? '') ?></div>
             <div class="text-white-50 small text-capitalize"><?= h($role) ?></div>
         </div>
-        <a href="/logout" class="text-white-50 text-decoration-none" title="Logout">
+        <a href="<?= h(url('/logout')) ?>" class="text-white-50 text-decoration-none" title="Logout">
             <i class="bi bi-box-arrow-right"></i>
         </a>
     </div>

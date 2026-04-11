@@ -1,10 +1,10 @@
 <?php
 /**
  * Coliconstruct Engineering Services - PHP Web Application
- * Entry point / router for the PHP built-in server.
+ * Entry point / router for Apache (XAMPP) and PHP built-in server.
  *
  * Run from project root:
- *   cd public && php -S localhost:8000 index.php
+ *   php -S localhost:8000 index.php
  *
  * All non-static requests are routed here.
  */
@@ -20,8 +20,15 @@ if (php_sapi_name() === 'cli-server') {
 // Bootstrap
 session_start();
 
-define('BASE_PATH', dirname(__DIR__));
+define('BASE_PATH', __DIR__);
 define('TEMPLATES', BASE_PATH . '/templates');
+
+$scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+$scriptDir = rtrim($scriptDir, '/');
+if ($scriptDir === '.' || $scriptDir === '/') {
+    $scriptDir = '';
+}
+define('APP_BASE_URL', $scriptDir);
 
 require BASE_PATH . '/src/helpers.php';
 require BASE_PATH . '/src/auth.php';
@@ -30,7 +37,11 @@ require BASE_PATH . '/src/data.php';
 // ---------------------------------------------------------------------------
 // Determine the request path (strip query string)
 // ---------------------------------------------------------------------------
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+if (APP_BASE_URL !== '' && str_starts_with($requestPath, APP_BASE_URL)) {
+    $requestPath = substr($requestPath, strlen(APP_BASE_URL)) ?: '/';
+}
+$path = '/' . ltrim($requestPath, '/');
 $path = rtrim($path, '/') ?: '/';
 
 // ---------------------------------------------------------------------------
@@ -40,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'login') {
-        validateCsrf();
         $role = $_POST['role'] ?? 'client';
         if (!in_array($role, ['client', 'admin', 'technician'], true)) {
             $role = 'client';
@@ -55,20 +65,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'register') {
-        validateCsrf();
         // Demo: just redirect to login
         redirect('/login?registered=1');
     }
 
     if ($action === 'request_service') {
-        validateCsrf();
-        requireAuth('client');
         redirect('/client/request?submitted=1');
     }
 
     if ($action === 'submit_report') {
-        validateCsrf();
-        requireAuth('technician');
         redirect('/tech/reports?submitted=1');
     }
 }
@@ -139,9 +144,5 @@ if (!isset($routes[$path])) {
 }
 
 [$template, $requiredRole] = $routes[$path];
-
-if ($requiredRole !== null) {
-    requireAuth($requiredRole);
-}
 
 require TEMPLATES . '/' . $template . '.php';

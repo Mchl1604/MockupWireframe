@@ -21,7 +21,7 @@
                         <p class="text-muted small">Register as a client to request HVAC services</p>
                     </div>
 
-                    <form method="POST" action="/register" class="needs-validation" novalidate>
+                    <form method="POST" action="<?= h(url('/register')) ?>" class="needs-validation" novalidate>
                         <?= csrfField() ?>
                         <input type="hidden" name="action" value="register">
 
@@ -65,7 +65,7 @@
 
                     <p class="text-center text-muted small mt-3 mb-0">
                         Already have an account?
-                        <a href="/login" class="text-primary fw-medium text-decoration-none">Sign in</a>
+                        <a href="<?= h(url('/login')) ?>" class="text-primary fw-medium text-decoration-none">Sign in</a>
                     </p>
                 </div>
             </div>

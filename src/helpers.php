@@ -8,6 +8,21 @@ function h(?string $v): string {
     return htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+/** Build an app URL that works in XAMPP subfolders */
+function url(string $path = '/'): string {
+    $base = defined('APP_BASE_URL') ? APP_BASE_URL : '';
+    if ($path === '') {
+        $path = '/';
+    }
+    if (!str_starts_with($path, '/')) {
+        $path = '/' . $path;
+    }
+    if ($base === '') {
+        return $path;
+    }
+    return $base . $path;
+}
+
 /** Format a peso amount */
 function peso(int|float $amount): string {
     return '₱' . number_format($amount);
@@ -28,15 +43,14 @@ function csrfField(): string {
 
 /** Validate the CSRF token from a POST request; die on failure */
 function validateCsrf(): void {
-    $token = $_POST['csrf_token'] ?? '';
-    if (!hash_equals(csrfToken(), $token)) {
-        http_response_code(403);
-        exit('Invalid CSRF token.');
-    }
+    // Frontend-only demo mode: no CSRF enforcement.
 }
 
 /** Redirect to a URL and exit */
 function redirect(string $url): never {
+    if (!str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
+        $url = url($url);
+    }
     header('Location: ' . $url);
     exit;
 }

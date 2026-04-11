@@ -9,15 +9,15 @@
 <!-- ---- Navbar ---- -->
 <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="/">
+        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="<?= h(url('/')) ?>">
             <div style="width:34px;height:34px;background:#2563eb;border-radius:8px;display:flex;align-items:center;justify-content:center;">
                 <i class="bi bi-wind text-white"></i>
             </div>
             Coliconstruct
         </a>
         <div class="ms-auto d-flex gap-2">
-            <a href="/login" class="btn btn-outline-primary btn-sm">Login</a>
-            <a href="/register" class="btn btn-primary btn-sm">Register</a>
+            <a href="<?= h(url('/login')) ?>" class="btn btn-outline-primary btn-sm">Login</a>
+            <a href="<?= h(url('/register')) ?>" class="btn btn-primary btn-sm">Register</a>
         </div>
     </div>
 </nav>
@@ -31,8 +31,8 @@
             ducting, and repair for residential and commercial clients.
         </p>
         <div class="d-flex gap-3 justify-content-center flex-wrap">
-            <a href="/register" class="btn btn-warning btn-lg fw-semibold">Get Started</a>
-            <a href="/login"    class="btn btn-outline-light btn-lg">Client Portal</a>
+            <a href="<?= h(url('/register')) ?>" class="btn btn-warning btn-lg fw-semibold">Get Started</a>
+            <a href="<?= h(url('/login')) ?>"    class="btn btn-outline-light btn-lg">Client Portal</a>
         </div>
     </div>
 </section>

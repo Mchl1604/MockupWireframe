@@ -9,7 +9,7 @@ require TEMPLATES . '/partials/dashboard-top.php';
     <i class="bi bi-check-circle-fill text-success" style="font-size:4rem;"></i>
     <h3 class="fw-bold mt-3 mb-2">Request Submitted!</h3>
     <p class="text-muted mb-4">We'll review your request and get back to you shortly.</p>
-    <a href="/client/request" class="btn btn-primary">Submit Another Request</a>
+    <a href="<?= h(url('/client/request')) ?>" class="btn btn-primary">Submit Another Request</a>
 </div>
 <?php else: ?>
 
@@ -34,7 +34,7 @@ require TEMPLATES . '/partials/dashboard-top.php';
     <div class="card">
         <div class="card-header bg-white fw-semibold">Service Request Details</div>
         <div class="card-body">
-            <form method="POST" action="/client/request" class="needs-validation" novalidate>
+            <form method="POST" action="<?= h(url('/client/request')) ?>" class="needs-validation" novalidate>
                 <?= csrfField() ?>
                 <input type="hidden" name="action" value="request_service">
                 <input type="hidden" name="service" id="selectedService" value="">
