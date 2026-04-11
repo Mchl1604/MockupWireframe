@@ -47,7 +47,7 @@ function validateCsrf(): void {
 }
 
 /** Redirect to a URL and exit */
-function redirect(string $url): void {
+function redirect(string $url) {
     if (!startsWith($url, 'http://') && !startsWith($url, 'https://')) {
         $url = url($url);
     }
@@ -60,7 +60,7 @@ function startsWith(string $haystack, string $needle): bool {
     if ($needle === '') {
         return true;
     }
-    return substr($haystack, 0, strlen($needle)) === $needle;
+    return strncmp($haystack, $needle, strlen($needle)) === 0;
 }
 
 /** Return a Bootstrap badge for a given status string */
