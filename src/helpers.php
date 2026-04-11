@@ -30,7 +30,10 @@ function peso(int|float $amount): string {
 
 /** Generate (or reuse) a CSRF token for the current session */
 function csrfToken(): string {
-    return 'frontend-demo-token';
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
 }
 
 /** Render a hidden CSRF input field */

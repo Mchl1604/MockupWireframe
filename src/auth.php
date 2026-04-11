@@ -19,7 +19,7 @@ function currentUser(): ?array {
 
 /** Get current role string */
 function currentRole(): string {
-    $role = $_SESSION['role'] ?? ($_GET['role'] ?? 'client');
+    $role = $_SESSION['role'] ?? 'client';
     if (!in_array($role, ['client', 'admin', 'technician'], true)) {
         return 'client';
     }
