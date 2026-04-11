@@ -1,7 +1,15 @@
 <?php
 if (php_sapi_name() === 'cli-server') {
-    $file = __DIR__ . parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-    if (is_file($file)) {
+    $requestedPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+    $resolvedFile = realpath(__DIR__ . $requestedPath);
+    $basePath = realpath(__DIR__);
+
+    if (
+        $resolvedFile !== false &&
+        $basePath !== false &&
+        strpos($resolvedFile, $basePath . DIRECTORY_SEPARATOR) === 0 &&
+        is_file($resolvedFile)
+    ) {
         return false;
     }
 }

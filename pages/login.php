@@ -31,14 +31,14 @@
                         <div class="mb-3">
                             <label class="form-label fw-medium">Email</label>
                             <input type="email" class="form-control" name="email"
-                                   placeholder="you@email.com" value="user@coliconstruct.com" required>
+                                   placeholder="you@email.com" required>
                             <div class="invalid-feedback">Please enter a valid email.</div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-medium">Password</label>
                             <input type="password" class="form-control" name="password"
-                                   placeholder="••••••••" value="password" required>
+                                   placeholder="••••••••" required>
                             <div class="invalid-feedback">Please enter your password.</div>
                         </div>
 
