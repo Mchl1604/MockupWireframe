@@ -6,8 +6,11 @@
             </div>
             Coliconstruct
         </a>
-        <div class="ms-auto d-flex gap-2">
+        <div class="ms-auto d-flex gap-2 flex-wrap justify-content-end">
             <a href="<?php echo htmlspecialchars($baseUrl . '/', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Home</a>
+            <a href="<?php echo htmlspecialchars($baseUrl . '/client/projects', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Client</a>
+            <a href="<?php echo htmlspecialchars($baseUrl . '/admin/dashboard', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Admin</a>
+            <a href="<?php echo htmlspecialchars($baseUrl . '/tech/schedule', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Technician</a>
             <a href="<?php echo htmlspecialchars($baseUrl . '/login', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-primary btn-sm">Login</a>
             <a href="<?php echo htmlspecialchars($baseUrl . '/register', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-primary btn-sm">Register</a>
         </div>

@@ -52,6 +52,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ' . $baseUrl . '/client/projects');
         exit;
     }
+
+    if ($path === '/client/request' && $action === 'request_service') {
+        header('Location: ' . $baseUrl . '/client/request?submitted=1');
+        exit;
+    }
+
+    if ($path === '/tech/reports' && $action === 'submit_report') {
+        header('Location: ' . $baseUrl . '/tech/reports?submitted=1');
+        exit;
+    }
 }
 
 if ($path === '/client') {
@@ -73,9 +83,26 @@ $routes = [
     '/' => __DIR__ . '/pages/index.php',
     '/login' => __DIR__ . '/pages/login.php',
     '/register' => __DIR__ . '/pages/register.php',
+    '/client/request' => __DIR__ . '/pages/client/request.php',
     '/client/projects' => __DIR__ . '/pages/client/projects.php',
+    '/client/project' => __DIR__ . '/pages/client/project.php',
+    '/client/chat' => __DIR__ . '/pages/client/chat.php',
     '/admin/dashboard' => __DIR__ . '/pages/admin/dashboard.php',
+    '/admin/requests' => __DIR__ . '/pages/admin/requests.php',
+    '/admin/quotations' => __DIR__ . '/pages/admin/quotations.php',
+    '/admin/projects' => __DIR__ . '/pages/admin/projects.php',
+    '/admin/project' => __DIR__ . '/pages/admin/project.php',
+    '/admin/schedules' => __DIR__ . '/pages/admin/schedules.php',
+    '/admin/technicians' => __DIR__ . '/pages/admin/technicians.php',
+    '/admin/reports' => __DIR__ . '/pages/admin/reports.php',
+    '/admin/materials' => __DIR__ . '/pages/admin/materials.php',
+    '/admin/users' => __DIR__ . '/pages/admin/users.php',
+    '/admin/chat' => __DIR__ . '/pages/admin/chat.php',
     '/tech/schedule' => __DIR__ . '/pages/tech/schedule.php',
+    '/tech/projects' => __DIR__ . '/pages/tech/projects.php',
+    '/tech/project' => __DIR__ . '/pages/tech/project.php',
+    '/tech/reports' => __DIR__ . '/pages/tech/reports.php',
+    '/tech/attendance' => __DIR__ . '/pages/tech/attendance.php',
 ];
 
 if (isset($routes[$path])) {
