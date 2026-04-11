@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const dashMain       = document.getElementById('dashboardMain');
     const sidebarToggle  = document.getElementById('sidebarToggle');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const dashboardBody  = document.body.classList.contains('dashboard-body') ? document.body : null;
 
     function openSidebar() {
         if (!sidebar) return;
@@ -34,9 +35,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 openSidebar();
             }
         } else {
-            // Desktop: push layout
-            if (sidebar) sidebar.classList.toggle('sidebar-hidden');
+            // Desktop: compact sidebar
+            if (sidebar) sidebar.classList.toggle('sidebar-collapsed');
             if (dashMain) dashMain.classList.toggle('sidebar-collapsed');
+            if (dashboardBody) dashboardBody.classList.toggle('sidebar-collapsed');
         }
     }
 

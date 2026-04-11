@@ -9,15 +9,12 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4 p-md-5">
                     <div class="text-center mb-4">
-                        <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-3"
-                             style="width:52px;height:52px;background:#2563eb;">
-                            <i class="bi bi-wind text-white fs-3"></i>
-                        </div>
+                        <img src="<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/coliconstruct-logo.svg', ENT_QUOTES, 'UTF-8'); ?>" alt="Coliconstruct" class="auth-logo mb-3">
                         <h4 class="fw-bold mb-1">Create Account</h4>
                         <p class="text-muted small">Register as a client to request HVAC services</p>
                     </div>
 
-                    <form method="POST" action="<?php echo htmlspecialchars($baseUrl . '/register', ENT_QUOTES, 'UTF-8'); ?>" class="needs-validation" novalidate>
+                    <form method="POST" action="<?php echo htmlspecialchars(app_url('/register'), ENT_QUOTES, 'UTF-8'); ?>" class="needs-validation" novalidate>
                         <input type="hidden" name="action" value="register">
 
                         <div class="mb-3">
@@ -60,7 +57,7 @@
 
                     <p class="text-center text-muted small mt-3 mb-0">
                         Already have an account?
-                        <a href="<?php echo htmlspecialchars($baseUrl . '/login', ENT_QUOTES, 'UTF-8'); ?>" class="text-primary fw-medium text-decoration-none">Sign in</a>
+                        <a href="<?php echo htmlspecialchars(app_url('/login'), ENT_QUOTES, 'UTF-8'); ?>" class="text-primary fw-medium text-decoration-none">Sign in</a>
                     </p>
                 </div>
             </div>

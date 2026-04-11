@@ -11,8 +11,8 @@
             ducting, and repair for residential and commercial clients.
         </p>
         <div class="d-flex gap-3 justify-content-center flex-wrap">
-            <a href="<?php echo htmlspecialchars($baseUrl . '/register', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-warning btn-lg fw-semibold">Get Started</a>
-            <a href="<?php echo htmlspecialchars($baseUrl . '/login', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-light btn-lg">Client Portal</a>
+            <a href="<?php echo htmlspecialchars(app_url('/register'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-warning btn-lg fw-semibold">Get Started</a>
+            <a href="<?php echo htmlspecialchars(app_url('/login'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-light btn-lg">Client Portal</a>
         </div>
     </div>
 </section>

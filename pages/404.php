@@ -10,7 +10,7 @@
         <p class="text-muted mb-4">
             The page you're looking for doesn't exist or has been moved.
         </p>
-        <a href="<?php echo htmlspecialchars($baseUrl . '/', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-primary">Go Home</a>
+        <a href="<?php echo htmlspecialchars(app_url('/'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-primary">Go Home</a>
     </div>
 </div>
 

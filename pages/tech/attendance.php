@@ -1,8 +1,9 @@
 <?php $pageTitle = 'Attendance'; ?>
 <?php include __DIR__ . '/../../includes/head.php'; ?>
-<body class="bg-light min-vh-100 d-flex flex-column">
+<body class="dashboard-body bg-light min-vh-100 d-flex flex-column">
 <?php include __DIR__ . '/../../includes/navbar.php'; ?>
-<main class="container py-4 my-auto">
+<?php include __DIR__ . '/../../includes/sidebar.php'; ?>
+<main class="container py-4 flex-grow-1">
     <div class="d-flex justify-content-between align-items-center mb-3"><h2 class="h4 fw-bold mb-0">Attendance</h2><span class="badge text-bg-primary" id="liveClock"></span></div>
 
     <div class="card border-0 shadow-sm mb-3">

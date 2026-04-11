@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/includes/app.php';
+
 if (php_sapi_name() === 'cli-server') {
     $requestedPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
     $resolvedFile = realpath(__DIR__ . $requestedPath);
@@ -14,25 +16,16 @@ if (php_sapi_name() === 'cli-server') {
     }
 }
 
-$scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
-$scriptDir = rtrim($scriptDir, '/');
-if ($scriptDir === '.' || $scriptDir === '/') {
-    $scriptDir = '';
+$path = app_current_path();
+if ($path === '/index.php') {
+    $path = '/';
 }
-$baseUrl = $scriptDir;
-
-$requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-if ($baseUrl !== '' && strpos($requestPath, $baseUrl) === 0) {
-    $requestPath = substr($requestPath, strlen($baseUrl));
-}
-$path = '/' . ltrim($requestPath, '/');
-$path = rtrim($path, '/') ?: '/';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($path === '/register' && $action === 'register') {
-        header('Location: ' . $baseUrl . '/login?registered=1');
+        header('Location: ' . app_url('/login', ['registered' => 1]));
         exit;
     }
 
@@ -40,42 +33,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $role = $_POST['role'] ?? 'client';
 
         if ($role === 'admin') {
-            header('Location: ' . $baseUrl . '/admin/dashboard');
+            header('Location: ' . app_url('/admin/dashboard'));
             exit;
         }
 
         if ($role === 'technician') {
-            header('Location: ' . $baseUrl . '/tech/schedule');
+            header('Location: ' . app_url('/tech/schedule'));
             exit;
         }
 
-        header('Location: ' . $baseUrl . '/client/projects');
+        header('Location: ' . app_url('/client/projects'));
         exit;
     }
 
     if ($path === '/client/request' && $action === 'request_service') {
-        header('Location: ' . $baseUrl . '/client/request?submitted=1');
+        header('Location: ' . app_url('/client/request', ['submitted' => 1]));
         exit;
     }
 
     if ($path === '/tech/reports' && $action === 'submit_report') {
-        header('Location: ' . $baseUrl . '/tech/reports?submitted=1');
+        header('Location: ' . app_url('/tech/reports', ['submitted' => 1]));
         exit;
     }
 }
 
 if ($path === '/client') {
-    header('Location: ' . $baseUrl . '/client/projects');
+    header('Location: ' . app_url('/client/projects'));
     exit;
 }
 
 if ($path === '/admin') {
-    header('Location: ' . $baseUrl . '/admin/dashboard');
+    header('Location: ' . app_url('/admin/dashboard'));
     exit;
 }
 
 if ($path === '/tech') {
-    header('Location: ' . $baseUrl . '/tech/schedule');
+    header('Location: ' . app_url('/tech/schedule'));
     exit;
 }
 

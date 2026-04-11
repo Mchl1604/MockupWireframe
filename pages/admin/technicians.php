@@ -1,7 +1,8 @@
 <?php $pageTitle = 'Technicians'; ?>
 <?php include __DIR__ . '/../../includes/head.php'; ?>
-<body class="bg-light min-vh-100 d-flex flex-column">
+<body class="dashboard-body bg-light min-vh-100 d-flex flex-column">
 <?php include __DIR__ . '/../../includes/navbar.php'; ?>
+<?php include __DIR__ . '/../../includes/sidebar.php'; ?>
 <?php
 $techs = [
     ['name' => 'Mario Santos', 'skill' => 'VRF Installation', 'status' => 'Available'],
@@ -9,7 +10,7 @@ $techs = [
     ['name' => 'Jude Flores', 'skill' => 'Electrical', 'status' => 'On Leave'],
 ];
 ?>
-<main class="container py-4 my-auto">
+<main class="container py-4 flex-grow-1">
     <h2 class="h4 fw-bold mb-3">Technicians</h2>
     <div class="table-responsive card border-0 shadow-sm">
         <table class="table table-hover mb-0">

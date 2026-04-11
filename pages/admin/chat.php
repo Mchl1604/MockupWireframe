@@ -1,8 +1,9 @@
 <?php $pageTitle = 'Admin Chat'; ?>
 <?php include __DIR__ . '/../../includes/head.php'; ?>
-<body class="bg-light min-vh-100 d-flex flex-column">
+<body class="dashboard-body bg-light min-vh-100 d-flex flex-column">
 <?php include __DIR__ . '/../../includes/navbar.php'; ?>
-<main class="container py-4 my-auto">
+<?php include __DIR__ . '/../../includes/sidebar.php'; ?>
+<main class="container py-4 flex-grow-1">
     <h2 class="h4 fw-bold mb-3">Admin Chat</h2>
     <div class="chat-wrapper shadow-sm">
         <aside class="chat-list">

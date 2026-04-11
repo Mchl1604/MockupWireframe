@@ -1,7 +1,8 @@
 <?php $pageTitle = 'Users'; ?>
 <?php include __DIR__ . '/../../includes/head.php'; ?>
-<body class="bg-light min-vh-100 d-flex flex-column">
+<body class="dashboard-body bg-light min-vh-100 d-flex flex-column">
 <?php include __DIR__ . '/../../includes/navbar.php'; ?>
+<?php include __DIR__ . '/../../includes/sidebar.php'; ?>
 <?php
 $users = [
     ['name' => 'Juan Dela Cruz', 'email' => 'juan@example.com', 'role' => 'Client'],
@@ -9,7 +10,7 @@ $users = [
     ['name' => 'Mario Santos', 'email' => 'mario@coliconstruct.com', 'role' => 'Technician'],
 ];
 ?>
-<main class="container py-4 my-auto">
+<main class="container py-4 flex-grow-1">
     <div class="d-flex justify-content-between align-items-center mb-3"><h2 class="h4 fw-bold mb-0">Users</h2><button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">Add User</button></div>
     <div class="table-responsive card border-0 shadow-sm">
         <table class="table table-hover mb-0"><thead class="table-light"><tr><th>Name</th><th>Email</th><th>Role</th></tr></thead><tbody>

@@ -1,7 +1,8 @@
 <?php $pageTitle = 'Project Details'; ?>
 <?php include __DIR__ . '/../../includes/head.php'; ?>
-<body class="bg-light min-vh-100 d-flex flex-column">
+<body class="dashboard-body bg-light min-vh-100 d-flex flex-column">
 <?php include __DIR__ . '/../../includes/navbar.php'; ?>
+<?php include __DIR__ . '/../../includes/sidebar.php'; ?>
 
 <?php
 $project = [
@@ -18,10 +19,10 @@ $materials = [
 ];
 ?>
 
-<main class="container py-4 my-auto">
+<main class="container py-4 flex-grow-1">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="h4 fw-bold mb-0">Project Details</h2>
-        <a href="<?php echo htmlspecialchars($baseUrl . '/client/projects', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Back to Projects</a>
+        <a href="<?php echo htmlspecialchars(app_url('/client/projects'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Back to Projects</a>
     </div>
 
     <div class="card border-0 shadow-sm mb-3">

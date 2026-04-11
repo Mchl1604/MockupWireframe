@@ -1,8 +1,9 @@
 <?php $pageTitle = 'Schedules'; ?>
 <?php include __DIR__ . '/../../includes/head.php'; ?>
-<body class="bg-light min-vh-100 d-flex flex-column">
+<body class="dashboard-body bg-light min-vh-100 d-flex flex-column">
 <?php include __DIR__ . '/../../includes/navbar.php'; ?>
-<main class="container py-4 my-auto">
+<?php include __DIR__ . '/../../includes/sidebar.php'; ?>
+<main class="container py-4 flex-grow-1">
     <h2 class="h4 fw-bold mb-3">Schedules</h2>
     <div class="calendar-grid bg-white shadow-sm">
         <?php foreach (['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] as $d): ?><div class="cal-header"><?php echo htmlspecialchars($d, ENT_QUOTES, 'UTF-8'); ?></div><?php endforeach; ?>
