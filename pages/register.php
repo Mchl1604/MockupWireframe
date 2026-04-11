@@ -1,17 +1,13 @@
 <?php $pageTitle = 'Register'; ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<?php require TEMPLATES . '/partials/head.php'; ?>
-</head>
-<body class="bg-light min-vh-100 d-flex align-items-center py-4">
+<?php include __DIR__ . '/../includes/head.php'; ?>
+<body class="bg-light min-vh-100 d-flex flex-column">
+<?php include __DIR__ . '/../includes/navbar.php'; ?>
 
-<div class="container">
+<div class="container py-5 my-auto">
     <div class="row justify-content-center">
         <div class="col-sm-10 col-md-7 col-lg-5">
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4 p-md-5">
-                    <!-- Logo -->
                     <div class="text-center mb-4">
                         <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-3"
                              style="width:52px;height:52px;background:#2563eb;">
@@ -21,8 +17,7 @@
                         <p class="text-muted small">Register as a client to request HVAC services</p>
                     </div>
 
-                    <form method="POST" action="<?= h(url('/register')) ?>" class="needs-validation" novalidate>
-                        <?= csrfField() ?>
+                    <form method="POST" action="<?php echo htmlspecialchars($baseUrl . '/register', ENT_QUOTES, 'UTF-8'); ?>" class="needs-validation" novalidate>
                         <input type="hidden" name="action" value="register">
 
                         <div class="mb-3">
@@ -65,7 +60,7 @@
 
                     <p class="text-center text-muted small mt-3 mb-0">
                         Already have an account?
-                        <a href="<?= h(url('/login')) ?>" class="text-primary fw-medium text-decoration-none">Sign in</a>
+                        <a href="<?php echo htmlspecialchars($baseUrl . '/login', ENT_QUOTES, 'UTF-8'); ?>" class="text-primary fw-medium text-decoration-none">Sign in</a>
                     </p>
                 </div>
             </div>
@@ -73,6 +68,4 @@
     </div>
 </div>
 
-<?php require TEMPLATES . '/partials/footer.php'; ?>
-</body>
-</html>
+<?php include __DIR__ . '/../includes/footer.php'; ?>
