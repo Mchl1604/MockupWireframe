@@ -20,7 +20,7 @@ require BASE_PATH . '/src/helpers.php';
 require BASE_PATH . '/src/auth.php';
 
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-if (APP_BASE_URL !== '' && startsWith($requestPath, APP_BASE_URL)) {
+if (APP_BASE_URL !== '' && starts_with($requestPath, APP_BASE_URL)) {
     $requestPath = substr($requestPath, strlen(APP_BASE_URL)) ?: '/';
 }
 $path = '/' . ltrim($requestPath, '/');

@@ -14,7 +14,7 @@ function url(string $path = '/'): string {
     if ($path === '') {
         $path = '/';
     }
-    if (!startsWith($path, '/')) {
+    if (!starts_with($path, '/')) {
         $path = '/' . $path;
     }
     if ($base === '') {
@@ -26,12 +26,9 @@ function url(string $path = '/'): string {
 /**
  * Format a peso amount.
  *
- * @param int|float|string $amount Numeric amount to format
+ * @param int|float|string $amount Caller should pass a numeric amount
  */
 function peso($amount): string {
-    if (!is_numeric($amount)) {
-        $amount = 0;
-    }
     return '₱' . number_format($amount);
 }
 
@@ -59,7 +56,7 @@ function validateCsrf(): void {
  * @return void
  */
 function redirect(string $url) {
-    if (!startsWith($url, 'http://') && !startsWith($url, 'https://')) {
+    if (!starts_with($url, 'http://') && !starts_with($url, 'https://')) {
         $url = url($url);
     }
     header('Location: ' . $url);
@@ -67,7 +64,7 @@ function redirect(string $url) {
 }
 
 /** PHP 7/8-compatible string starts-with helper */
-function startsWith(string $haystack, string $needle): bool {
+function starts_with(string $haystack, string $needle): bool {
     // Keep parity with PHP's str_starts_with(): empty needle is always true.
     if ($needle === '') {
         return true;
