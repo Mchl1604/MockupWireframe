@@ -18,7 +18,7 @@ $projReports = projectReports($project['name'], $reports);
 require TEMPLATES . '/partials/dashboard-top.php';
 ?>
 
-<a href="/tech/projects" class="btn btn-outline-secondary btn-sm mb-4">
+<a href="<?= h(url('/tech/projects')) ?>" class="btn btn-outline-secondary btn-sm mb-4">
     <i class="bi bi-arrow-left me-1"></i>Back
 </a>
 
@@ -96,7 +96,7 @@ require TEMPLATES . '/partials/dashboard-top.php';
 <div class="card border-0 shadow-sm mt-4">
     <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <span class="fw-semibold">Reports for this Project</span>
-        <a href="/tech/reports" class="btn btn-primary btn-sm">
+        <a href="<?= h(url('/tech/reports')) ?>" class="btn btn-primary btn-sm">
             <i class="bi bi-plus-lg me-1"></i>Submit Report
         </a>
     </div>

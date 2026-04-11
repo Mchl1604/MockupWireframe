@@ -18,7 +18,7 @@ $sampleMaterials = [
     </div>
     <h3 class="fw-bold mb-2">Report Submitted!</h3>
     <p class="text-muted mb-4">Your report has been sent to the admin for review.</p>
-    <a href="/tech/reports" class="btn btn-primary">Submit Another Report</a>
+    <a href="<?= h(url('/tech/reports')) ?>" class="btn btn-primary">Submit Another Report</a>
 </div>
 <?php else: ?>
 
@@ -27,7 +27,7 @@ $sampleMaterials = [
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white fw-semibold">Create New Report</div>
             <div class="card-body">
-                <form method="POST" action="/tech/reports"
+                <form method="POST" action="<?= h(url('/tech/reports')) ?>"
                       class="needs-validation" novalidate enctype="multipart/form-data">
                     <?= csrfField() ?>
                     <input type="hidden" name="action" value="submit_report">

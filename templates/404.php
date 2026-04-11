@@ -11,7 +11,7 @@
     <p class="text-muted mb-4">
         The page you're looking for doesn't exist or has been moved.
     </p>
-    <a href="/" class="btn btn-primary">Go Home</a>
+    <a href="<?= h(url('/')) ?>" class="btn btn-primary">Go Home</a>
 </div>
 <?php require TEMPLATES . '/partials/footer.php'; ?>
 </body>

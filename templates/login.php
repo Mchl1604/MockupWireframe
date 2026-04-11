@@ -30,7 +30,7 @@
                     </div>
 
                     <!-- Form -->
-                    <form method="POST" action="/login" class="needs-validation" novalidate>
+                    <form method="POST" action="<?= h(url('/login')) ?>" class="needs-validation" novalidate>
                         <?= csrfField() ?>
                         <input type="hidden" name="action" value="login">
 
@@ -68,7 +68,7 @@
 
                     <p class="text-center text-muted small mt-3 mb-0">
                         Don't have an account?
-                        <a href="/register" class="text-primary fw-medium text-decoration-none">Register here</a>
+                        <a href="<?= h(url('/register')) ?>" class="text-primary fw-medium text-decoration-none">Register here</a>
                     </p>
                 </div>
             </div>

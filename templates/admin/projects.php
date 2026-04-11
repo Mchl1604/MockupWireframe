@@ -27,7 +27,7 @@ require TEMPLATES . '/partials/dashboard-top.php';
                         <td><?= h($p['serviceType']) ?></td>
                         <td><?= statusBadge($p['status']) ?></td>
                         <td class="text-end">
-                            <a href="/admin/project?id=<?= urlencode($p['id']) ?>"
+                            <a href="<?= h(url('/admin/project?id=' . urlencode($p['id']))) ?>"
                                class="btn btn-outline-secondary btn-sm">
                                 <i class="bi bi-eye me-1"></i>View
                             </a>
