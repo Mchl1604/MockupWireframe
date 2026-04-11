@@ -1,0 +1,6 @@
+Options -Indexes
+
+# Send all non-file requests through the PHP router
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
