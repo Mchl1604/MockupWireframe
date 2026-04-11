@@ -1,7 +1,7 @@
 # Coliconstruct Engineering Services (XAMPP Front-End Demo)
 
-This project is now simplified for **XAMPP Apache (`htdocs`)** use.
-It supports **PHP 7.4+** (including older XAMPP PHP releases).
+This project is simplified for **XAMPP Apache (`htdocs`)** use.
+It supports **PHP 7.4+**.
 
 ## XAMPP Setup
 
@@ -12,12 +12,6 @@ It supports **PHP 7.4+** (including older XAMPP PHP releases).
    - `http://localhost/MockupWireframe/`
 
 No database, Composer, or Node.js is required.
-
-### If routes like `/login` return 404 in XAMPP
-
-1. In Apache config, make sure `mod_rewrite` is enabled.
-2. Make sure your `htdocs` directory allows `.htaccess` overrides (`AllowOverride All`).
-3. Restart Apache from XAMPP Control Panel.
 
 ## Local PHP Server (optional)
 
@@ -31,10 +25,10 @@ Open `http://localhost:8000`.
 ## Simplified Structure
 
 ```
-index.php              # Main router + simple PHP page rendering
-.htaccess              # Apache rewrite to index.php
+index.php              # Simple router
+pages/                 # Main pages (index, login, register, 404)
+includes/              # Shared partials (head, navbar, footer)
 assets/                # CSS + JS
-src/                   # Helper/auth functions
 ```
 
 ## Navigation
@@ -43,8 +37,3 @@ Main pages:
 - `/`
 - `/login`
 - `/register`
-- `/client/projects`
-- `/admin/dashboard`
-- `/tech/schedule`
-
-All links are configured to work from a XAMPP subfolder URL.
