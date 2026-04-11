@@ -29,6 +29,9 @@ function url(string $path = '/'): string {
  * @param int|float|string $amount Numeric amount to format
  */
 function peso($amount): string {
+    if (!is_numeric($amount)) {
+        $amount = 0;
+    }
     return '₱' . number_format($amount);
 }
 
@@ -65,6 +68,7 @@ function redirect(string $url) {
 
 /** PHP 7/8-compatible string starts-with helper */
 function startsWith(string $haystack, string $needle): bool {
+    // Keep parity with PHP's str_starts_with(): empty needle is always true.
     if ($needle === '') {
         return true;
     }
