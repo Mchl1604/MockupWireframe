@@ -145,4 +145,9 @@ if (!isset($routes[$path])) {
 
 [$template, $requiredRole] = $routes[$path];
 
+if (!preg_match('/^[a-z0-9\\/-]+$/i', $template) || str_contains($template, '..')) {
+    http_response_code(400);
+    exit('Invalid route template.');
+}
+
 require TEMPLATES . '/' . $template . '.php';

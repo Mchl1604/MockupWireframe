@@ -14,7 +14,7 @@ function url(string $path = '/'): string {
     if ($path === '') {
         $path = '/';
     }
-    if ($path[0] !== '/') {
+    if (!str_starts_with($path, '/')) {
         $path = '/' . $path;
     }
     if ($base === '') {
