@@ -24,11 +24,10 @@ Open `http://localhost:8000`.
 ## Simplified Structure
 
 ```
-index.php              # Main router
+index.php              # Main router + simple PHP page rendering
 .htaccess              # Apache rewrite to index.php
 assets/                # CSS + JS
-templates/             # All page templates
-src/                   # Mock data + helper functions
+src/                   # Helper/auth functions
 ```
 
 ## Navigation
