@@ -23,7 +23,11 @@ function url(string $path = '/'): string {
     return $base . $path;
 }
 
-/** Format a peso amount */
+/**
+ * Format a peso amount.
+ *
+ * @param int|float|string $amount Numeric amount to format
+ */
 function peso($amount): string {
     return '₱' . number_format($amount);
 }
@@ -46,7 +50,11 @@ function validateCsrf(): void {
     // Frontend-only demo mode: no CSRF enforcement.
 }
 
-/** Redirect to a URL and exit */
+/**
+ * Redirect to a URL and terminate execution.
+ *
+ * @return void
+ */
 function redirect(string $url) {
     if (!startsWith($url, 'http://') && !startsWith($url, 'https://')) {
         $url = url($url);
