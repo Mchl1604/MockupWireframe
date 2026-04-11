@@ -14,7 +14,7 @@ function url(string $path = '/'): string {
     if ($path === '') {
         $path = '/';
     }
-    if (!str_starts_with($path, '/')) {
+    if (!startsWith($path, '/')) {
         $path = '/' . $path;
     }
     if ($base === '') {
@@ -24,7 +24,7 @@ function url(string $path = '/'): string {
 }
 
 /** Format a peso amount */
-function peso(int|float $amount): string {
+function peso($amount): string {
     return '₱' . number_format($amount);
 }
 
@@ -47,12 +47,20 @@ function validateCsrf(): void {
 }
 
 /** Redirect to a URL and exit */
-function redirect(string $url): never {
-    if (!str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
+function redirect(string $url): void {
+    if (!startsWith($url, 'http://') && !startsWith($url, 'https://')) {
         $url = url($url);
     }
     header('Location: ' . $url);
     exit;
+}
+
+/** PHP 7/8-compatible string starts-with helper */
+function startsWith(string $haystack, string $needle): bool {
+    if ($needle === '') {
+        return true;
+    }
+    return substr($haystack, 0, strlen($needle)) === $needle;
 }
 
 /** Return a Bootstrap badge for a given status string */

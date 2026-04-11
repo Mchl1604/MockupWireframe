@@ -37,11 +37,12 @@ $roleLabels = [
     'technician' => 'Technician Portal',
 ];
 
-$nav = match ($role) {
-    'admin'      => $adminNav,
-    'technician' => $techNav,
-    default      => $clientNav,
-};
+$nav = $clientNav;
+if ($role === 'admin') {
+    $nav = $adminNav;
+} elseif ($role === 'technician') {
+    $nav = $techNav;
+}
 $roleLabel = $roleLabels[$role] ?? '';
 ?>
 <!-- Sidebar -->
