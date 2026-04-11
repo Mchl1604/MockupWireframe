@@ -1,3 +1,7 @@
+<?php
+define('TEMPLATES', __DIR__);
+$pageTitle = 'Home';
+?>
 <?php $pageTitle = 'Home'; ?>
 <!DOCTYPE html>
 <html lang="en">
