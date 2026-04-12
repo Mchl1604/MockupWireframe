@@ -48,13 +48,14 @@ $quotes = [
 $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', 'PRJ-1006'];
 ?>
 <main class="container py-4 flex-grow-1">
-    <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center justify-content-between gap-3 mb-3 flex-wrap">
         <h2 class="h4 fw-bold mb-0">Quotations</h2>
-        <div class="d-flex gap-2">
-            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#quotationArchivesModal">
+        <div class="d-flex align-items-center justify-content-end gap-2 flex-nowrap ms-auto">
+            <input type="search" id="quotationSearch" class="form-control form-control-sm flex-shrink-0" placeholder="Search quotations..." style="width: 260px;">
+            <button type="button" class="btn btn-outline-secondary btn-sm flex-shrink-0" data-bs-toggle="modal" data-bs-target="#quotationArchivesModal">
                 <i class="bi bi-archive me-1"></i>View Archives
             </button>
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createQuotationModal">
+            <button type="button" class="btn btn-primary btn-sm flex-shrink-0" data-bs-toggle="modal" data-bs-target="#createQuotationModal">
                 <i class="bi bi-plus-circle me-1"></i>Create Quotation
             </button>
         </div>
@@ -77,7 +78,6 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
                                 <button type="button" class="btn btn-primary btn-sm" data-send-quote>Send Quotation</button>
                             <?php endif; ?>
                             <button type="button" class="btn btn-outline-secondary btn-sm" data-quote='<?php echo htmlspecialchars(json_encode($q), ENT_QUOTES, 'UTF-8'); ?>'>View Details</button>
-                            
                             <button type="button" class="btn btn-outline-danger btn-sm" data-archive-quote>Archive</button>
                         </div>
                     </td>
@@ -239,10 +239,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const qdLaborInput = document.getElementById('qd-labor-input');
     const qdSaveChanges = document.getElementById('qd-save-changes');
     const qdAddMaterial = document.getElementById('qd-add-material');
+    const quotationSearch = document.getElementById('quotationSearch');
 
     let activeQuote = null;
     let activeQuoteRow = null;
     let activeQuoteViewButton = null;
+
+    if (quotationSearch) {
+        quotationSearch.addEventListener('input', function () {
+            const query = this.value.toLowerCase().trim();
+            document.querySelectorAll('#activeQuotationsBody tr').forEach(function (row) {
+                row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
+            });
+        });
+    }
 
     function formatCurrency(value) {
         return '₱' + Number(value || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });

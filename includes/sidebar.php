@@ -10,12 +10,10 @@ $sidebarMenus = [
         ['label' => 'Service Requests', 'href' => '/admin/requests', 'icon' => 'bi-inbox'],
         ['label' => 'Quotations', 'href' => '/admin/quotations', 'icon' => 'bi-receipt'],
         ['label' => 'Projects', 'href' => '/admin/projects', 'icon' => 'bi-folder2-open'],
-        ['label' => 'Project Details', 'href' => '/admin/project', 'icon' => 'bi-file-earmark-text'],
         ['label' => 'Schedules', 'href' => '/admin/schedules', 'icon' => 'bi-calendar-event'],
         ['label' => 'Technicians', 'href' => '/admin/technicians', 'icon' => 'bi-tools'],
         ['label' => 'Reports', 'href' => '/admin/reports', 'icon' => 'bi-graph-up'],
-        ['label' => 'Materials', 'href' => '/admin/materials', 'icon' => 'bi-box-seam'],
-        ['label' => 'Users', 'href' => '/admin/users', 'icon' => 'bi-people'],
+        ['label' => 'Configuration', 'href' => '/admin/configuration', 'icon' => 'bi-sliders2'],
         ['label' => 'Chat', 'href' => '/admin/chat', 'icon' => 'bi-chat-dots'],
     ],
     'client' => [

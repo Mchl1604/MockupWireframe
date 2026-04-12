@@ -87,6 +87,7 @@ $routes = [
     '/admin/project' => __DIR__ . '/pages/admin/project.php',
     '/admin/schedules' => __DIR__ . '/pages/admin/schedules.php',
     '/admin/technicians' => __DIR__ . '/pages/admin/technicians.php',
+    '/admin/configuration' => __DIR__ . '/pages/admin/configuration.php',
     '/admin/reports' => __DIR__ . '/pages/admin/reports.php',
     '/admin/materials' => __DIR__ . '/pages/admin/materials.php',
     '/admin/users' => __DIR__ . '/pages/admin/users.php',

@@ -58,11 +58,14 @@ $requests = [
 ];
 ?>
 <main class="container py-4 flex-grow-1">
-    <h2 class="h4 fw-bold mb-3">Service Requests</h2>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h2 class="h4 fw-bold mb-0">Service Requests</h2>
+        <input type="search" id="requestSearch" class="form-control form-control-sm" placeholder="Search requests..." style="max-width: 280px;">
+    </div>
     <div class="table-responsive card border-0 shadow-sm">
         <table class="table table-hover mb-0">
             <thead class="table-light"><tr><th>ID</th><th>Client</th><th>Service</th><th>Date</th><th>Status</th><th class="text-end">Action</th></tr></thead>
-            <tbody>
+            <tbody id="requestsTableBody">
             <?php foreach ($requests as $item): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($item['id'], ENT_QUOTES, 'UTF-8'); ?></td>
@@ -118,6 +121,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (status === 'Approved') return 'badge request-status-badge bg-success';
         if (status === 'Rejected') return 'badge request-status-badge bg-danger';
         return 'badge request-status-badge bg-warning text-dark';
+    }
+
+    const requestSearch = document.getElementById('requestSearch');
+    if (requestSearch) {
+        requestSearch.addEventListener('input', function () {
+            const query = this.value.toLowerCase().trim();
+            document.querySelectorAll('#requestsTableBody tr').forEach(function (row) {
+                row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
+            });
+        });
     }
 
     document.querySelectorAll('button[data-request-action]').forEach(function (button) {
