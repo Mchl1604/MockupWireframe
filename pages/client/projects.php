@@ -11,12 +11,12 @@
     $projects = [
         [
             'id' => 'PRJ-1001',
-            'name' => 'Makati Office VRF',
+            'name' => 'Makati Office Aircon Installation',
             'serviceType' => 'AC Installation',
             'status' => 'Ongoing',
             'timeline' => 'Apr 10 - Apr 18',
             'address' => 'Makati Business District',
-            'description' => 'Installation of VRF system for multi-floor office spaces.',
+            'description' => 'Installation of aircon units for multi-floor office spaces.',
             'quotation' => [
                 'materials' => [
                     ['name' => 'Copper Pipe', 'qty' => 3, 'unit' => 'roll', 'cost' => 4500],

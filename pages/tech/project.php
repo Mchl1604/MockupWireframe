@@ -20,7 +20,7 @@ $statusClassMap = [
 $canViewQuotation = in_array($statusKey, ['ongoing', 'completed', 'to be approved', 'quotation to be approved', 'pending'], true);
 
 $projectMetadata = [
-    'PRJ-1001' => ['client' => 'ACME Holdings', 'service' => 'VRF System Installation', 'timeline' => 'Apr 14', 'target' => 'Apr 14, 2026'],
+    'PRJ-1001' => ['client' => 'ACME Holdings', 'service' => 'Aircon Installation', 'timeline' => 'Apr 14', 'target' => 'Apr 14, 2026'],
     'PRJ-1002' => ['client' => 'J. Dela Cruz', 'service' => 'AC Unit Repair', 'timeline' => 'Apr 05 - Apr 10', 'target' => 'Apr 10, 2026'],
     'PRJ-1003' => ['client' => 'Metro Storage', 'service' => 'Ductwork Installation', 'timeline' => 'Apr 15 - Apr 25', 'target' => 'Apr 25, 2026'],
     'PRJ-1004' => ['client' => 'Northline Foods', 'service' => 'Split-Type AC Unit Installation', 'timeline' => 'Apr 27 - Apr 30', 'target' => 'April 30, 2026'],
@@ -120,7 +120,8 @@ $assessmentByProject = [
     'PRJ-1001' => [
         'date' => 'Apr 08, 2026',
         'technician' => 'Engr. Mark Santos',
-        'summary' => 'VRF system assessment completed. Building has 3 zones requiring individual indoor units. Existing electrical capacity adequate. Installation timeline: 8 days.',
+        'requiredTechnicians' => 2,
+        'summary' => 'Aircon system assessment completed. Building has 3 zones requiring individual indoor units. Existing electrical capacity adequate. Installation timeline: 8 days.',
         'photos' => ['imageSample.png', 'imageSample.png', 'imageSample.png'],
         'findings' => [
             'Optimal placement for indoor units identified',
@@ -137,6 +138,7 @@ $assessmentByProject = [
     'PRJ-1002' => [
         'date' => 'Apr 07, 2026',
         'technician' => 'Tech. Lito Ramos',
+        'requiredTechnicians' => 1,
         'summary' => 'AC unit repair assessment. Identified failing capacitor and worn fan motor. Parts in stock. Estimated repair time: 3 hours.',
         'photos' => ['imageSample.png'],
         'findings' => [
@@ -153,6 +155,7 @@ $assessmentByProject = [
     'PRJ-1003' => [
         'date' => 'Apr 09, 2026',
         'technician' => 'Engr. Mario Santos',
+        'requiredTechnicians' => 3,
         'summary' => 'Warehouse ducting assessment. Measurements completed for all zones. Existing ductwork requires partial replacement due to rust and deterioration.',
         'photos' => ['imageSample.png', 'imageSample.png'],
         'findings' => [
@@ -170,6 +173,7 @@ $assessmentByProject = [
     'PRJ-1006' => [
         'date' => 'Apr 10, 2026',
         'technician' => 'Tech. Anne Mendoza',
+        'requiredTechnicians' => 2,
         'summary' => 'Lobby ventilation system assessment. System is undersized for current usage. Recommend upgrade to handle increased occupancy.',
         'photos' => ['imageSample.png'],
         'findings' => [
@@ -324,6 +328,7 @@ $canViewAssessment = $statusKey !== 'for assessment';
                     <div class="row g-3 mb-3">
                         <div class="col-md-6"><small class="text-muted d-block">Assessed By</small><strong><?php echo htmlspecialchars($projectAssessment['technician'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         <div class="col-md-6"><small class="text-muted d-block">Assessment Date</small><strong><?php echo htmlspecialchars($projectAssessment['date'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div class="col-md-6"><small class="text-muted d-block">Required Number of Technicians</small><strong><?php echo htmlspecialchars((string) ($projectAssessment['requiredTechnicians'] ?? 1), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         <div class="col-12"><small class="text-muted d-block">Assessment Summary</small><p class="mb-0"><?php echo htmlspecialchars($projectAssessment['summary'], ENT_QUOTES, 'UTF-8'); ?></p></div>
                     </div>
 

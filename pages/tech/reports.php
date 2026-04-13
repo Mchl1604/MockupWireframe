@@ -17,7 +17,7 @@
                     <label class="form-label">Project</label>
                     <select class="form-select" name="project" required>
                         <option value="">Select project</option>
-                        <option value="PRJ-1001">PRJ-1001 - Makati Office VRF</option>
+                        <option value="PRJ-1001">PRJ-1001 - Makati Office Aircon Installation</option>
                         <option value="PRJ-1003">PRJ-1003 - Warehouse Ducting</option>
                         <option value="PRJ-1004">PRJ-1004 - Condo Split-Type - Unit Installation</option>
                         <option value="PRJ-1005">PRJ-1005 - Server Room AC - Preventive Maintenance</option>
@@ -38,6 +38,10 @@
                     <div class="border rounded-3 p-3 bg-light-subtle">
                         <h3 class="h6 mb-3">Assessment Report Details</h3>
                         <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Number of Technicians</label>
+                                <input type="number" class="form-control" min="1" step="1" id="requiredTechnicians" name="required_technicians" disabled>
+                            </div>
                             <div class="col-md-4">
                                 <label class="form-label">Estimated Working Days</label>
                                 <input type="number" class="form-control" min="1" step="1" id="estimatedDays" name="estimated_days" disabled>
@@ -107,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const reportType = document.getElementById('reportType');
     const assessmentFields = document.getElementById('assessmentFields');
     const workReportFields = document.getElementById('workReportFields');
+    const requiredTechnicians = document.getElementById('requiredTechnicians');
     const estimatedDays = document.getElementById('estimatedDays');
     const assessmentDescription = document.getElementById('assessmentDescription');
     const workDescription = document.getElementById('workDescription');
@@ -131,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setSectionState(assessmentFields, isAssessment);
         setSectionState(workReportFields, isWorkReport);
 
+        if (requiredTechnicians) requiredTechnicians.required = isAssessment;
         if (estimatedDays) estimatedDays.required = isAssessment;
         if (assessmentDescription) assessmentDescription.required = isAssessment;
         if (workDescription) workDescription.required = isWorkReport;

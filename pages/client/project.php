@@ -7,7 +7,7 @@
 <?php
 $project = [
     'id' => $_GET['id'] ?? 'PRJ-1001',
-    'name' => 'Makati Office VRF',
+    'name' => 'Makati Office Aircon Installation',
     'status' => 'Ongoing',
     'timeline' => 'Apr 10 - Apr 18',
     'serviceType' => 'AC Installation',

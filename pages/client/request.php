@@ -252,6 +252,9 @@
                                     <option value="ac-cleaning">AC Cleaning</option>
                                 </select>
                             </div>
+                            <div class="col-md-6" id="airconUnitsWrap" style="display:none;">
+                                <input type="number" min="1" step="1" name="aircon_units" id="airconUnits" class="form-control request-field" placeholder="How many units?">
+                            </div>
                             <div class="col-12" id="ductingServiceTypeWrap" style="display:none;">
                                 <select name="ducting_service_type" id="ductingServiceType" class="form-select request-field">
                                     <option value="" selected disabled>Select ducting service type</option>
@@ -282,6 +285,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const projectTypeSelect = document.querySelector('select[name="project_type"]');
     const airconServiceTypeWrap = document.getElementById('airconServiceTypeWrap');
     const airconServiceType = document.getElementById('airconServiceType');
+    const airconUnitsWrap = document.getElementById('airconUnitsWrap');
+    const airconUnits = document.getElementById('airconUnits');
     const ductingServiceTypeWrap = document.getElementById('ductingServiceTypeWrap');
     const ductingServiceType = document.getElementById('ductingServiceType');
 
@@ -296,6 +301,12 @@ document.addEventListener('DOMContentLoaded', function () {
             airconServiceTypeWrap.style.display = isAircon ? '' : 'none';
             airconServiceType.required = isAircon;
             if (!isAircon) airconServiceType.value = '';
+        }
+
+        if (airconUnitsWrap && airconUnits) {
+            airconUnitsWrap.style.display = isAircon ? '' : 'none';
+            airconUnits.required = isAircon;
+            if (!isAircon) airconUnits.value = '';
         }
 
         if (ductingServiceTypeWrap && ductingServiceType) {

@@ -7,7 +7,7 @@
 $schedules = [
     [
         'projectId' => 'PRJ-1001',
-        'projectName' => 'Makati Office VRF System Installation',
+        'projectName' => 'Makati Office Aircon Installation',
         'startDate' => 12,
         'endDate' => 22,
         'leadTechnician' => 'Engr. Mario Santos',
@@ -65,7 +65,7 @@ foreach ($schedules as $schedule) {
 
 // Available projects for scheduling
 $availableProjects = [
-    ['id' => 'PRJ-1001', 'name' => 'Makati Office VRF System Installation', 'service' => 'VRF System Installation'],
+    ['id' => 'PRJ-1001', 'name' => 'Makati Office Aircon Installation', 'service' => 'Aircon Installation'],
     ['id' => 'PRJ-1003', 'name' => 'Warehouse Ductwork Installation', 'service' => 'Ductwork Installation'],
     ['id' => 'PRJ-1004', 'name' => 'Pasig Split-Type AC Upgrade', 'service' => 'Split-Type AC Unit Installation'],
     ['id' => 'PRJ-1005', 'name' => 'Server Room Ventilation Retrofit', 'service' => 'Ventilation System Retrofit'],
@@ -74,8 +74,8 @@ $availableProjects = [
 
 // All technicians with their skills
 $technicians = [
-    ['name' => 'Engr. Mario Santos', 'skills' => ['VRF System Installation', 'Ductwork Installation', 'Ventilation System Retrofit']],
-    ['name' => 'Tech. Carlo Reyes', 'skills' => ['VRF System Installation', 'Ductwork Installation']],
+    ['name' => 'Engr. Mario Santos', 'skills' => ['Aircon Installation', 'Ductwork Installation', 'Ventilation System Retrofit']],
+    ['name' => 'Tech. Carlo Reyes', 'skills' => ['Aircon Installation', 'Ductwork Installation']],
     ['name' => 'Tech. Lito Ramos', 'skills' => ['AC Unit Repair', 'Ventilation System Retrofit']],
     ['name' => 'Tech. Carl Dominguez', 'skills' => ['Split-Type AC Unit Installation']],
     ['name' => 'Tech. Anne Mendoza', 'skills' => ['Ductwork Installation', 'Ventilation System Inspection']],
