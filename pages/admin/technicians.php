@@ -24,22 +24,22 @@ $techs = [
 $skillOptions = ['Aircon Installation', 'Aircon Maintenance', 'Aircon Cleaning', 'Ducting Installation', 'Ducting Fabrication'];
 $attendanceByTech = [
     'Mario Santos' => [
-        ['date' => 'Apr 1, 2026', 'project' => 'PRJ-1001 - Makati Office VRF System Installation'],
-        ['date' => 'Apr 3, 2026', 'project' => 'PRJ-1003 - Warehouse Ductwork Installation'],
-        ['date' => 'Apr 4, 2026', 'project' => 'PRJ-1001 - Makati Office VRF System Installation'],
-        ['date' => 'Apr 8, 2026', 'project' => 'PRJ-1005 - Makati Complex Ventilation System Retrofit'],
-        ['date' => 'Apr 12, 2026', 'project' => 'PRJ-1001 - Makati Office VRF System Installation'],
+        ['date' => 'Apr 1, 2026', 'project' => 'PRJ-1001'],
+        ['date' => 'Apr 3, 2026', 'project' => 'PRJ-1003'],
+        ['date' => 'Apr 4, 2026', 'project' => 'PRJ-1001'],
+        ['date' => 'Apr 8, 2026', 'project' => 'PRJ-1005'],
+        ['date' => 'Apr 12, 2026', 'project' => 'PRJ-1001'],
     ],
     'Carlo Reyes' => [
-        ['date' => 'Apr 1, 2026', 'project' => 'PRJ-1001 - Makati Office VRF System Installation'],
-        ['date' => 'Apr 2, 2026', 'project' => 'PRJ-1004 - Pasig Split-Type AC Upgrade'],
-        ['date' => 'Apr 5, 2026', 'project' => 'PRJ-1005 - Makati Complex Ventilation System Retrofit'],
-        ['date' => 'Apr 9, 2026', 'project' => 'PRJ-1003 - Warehouse Ductwork Installation'],
+        ['date' => 'Apr 1, 2026', 'project' => 'PRJ-1001'],
+        ['date' => 'Apr 2, 2026', 'project' => 'PRJ-1004'],
+        ['date' => 'Apr 5, 2026', 'project' => 'PRJ-1005'],
+        ['date' => 'Apr 9, 2026', 'project' => 'PRJ-1003'],
     ],
     'Jude Flores' => [
-        ['date' => 'Apr 2, 2026', 'project' => 'PRJ-1006 - Grand Arc Tower Lobby Ventilation'],
-        ['date' => 'Apr 6, 2026', 'project' => 'PRJ-1003 - Warehouse Ductwork Installation'],
-        ['date' => 'Apr 10, 2026', 'project' => 'PRJ-1006 - Grand Arc Tower Lobby Ventilation'],
+        ['date' => 'Apr 2, 2026', 'project' => 'PRJ-1006'],
+        ['date' => 'Apr 6, 2026', 'project' => 'PRJ-1003'],
+        ['date' => 'Apr 10, 2026', 'project' => 'PRJ-1006'],
     ],
     'Lito Ramos' => [],
     'Carl Dominguez' => [],
@@ -153,7 +153,7 @@ $attendanceByTech = [
                         <thead class="table-light">
                             <tr>
                                 <th>Date Present</th>
-                                <th>Project</th>
+                                <th>Project ID</th>
                             </tr>
                         </thead>
                         <tbody id="attendanceTableBody">

@@ -47,7 +47,7 @@ $techSchedules = [
 <main class="container py-4 flex-grow-1">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="h4 fw-bold mb-0">My Schedule</h2>
-        <span class="badge text-bg-primary" id="liveClock"></span>
+        
     </div>
 
     <div class="card border-0 shadow-sm tech-calendar-card">

@@ -7,7 +7,7 @@
 $attendanceProjects = ['PRJ-1001', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005'];
 ?>
 <main class="container py-4 flex-grow-1">
-    <div class="d-flex justify-content-between align-items-center mb-3"><h2 class="h4 fw-bold mb-0">Attendance</h2><span class="badge text-bg-primary" id="liveClock"></span></div>
+    <div class="d-flex justify-content-between align-items-center mb-3"><h2 class="h4 fw-bold mb-0">Attendance</h2></div>
 
     <div class="card border-0 shadow-sm mb-3">
         <div class="card-body d-flex gap-2 flex-wrap">
@@ -57,7 +57,7 @@ $attendanceProjects = ['PRJ-1001', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005'];
             <div class="modal-body">
                 <form id="logAttendanceForm">
                     <div class="mb-3">
-                        <label for="attendanceProject" class="form-label">Project</label>
+                        <label for="attendanceProject" class="form-label">Project ID</label>
                         <select id="attendanceProject" class="form-select" required>
                             <option value="">Select project</option>
                             <?php foreach ($attendanceProjects as $projectId): ?>
@@ -65,12 +65,16 @@ $attendanceProjects = ['PRJ-1001', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005'];
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="mb-0">
+                    <div class="mb-3">
                         <label for="attendanceStatus" class="form-label">Status</label>
                         <select id="attendanceStatus" class="form-select" required>
                             <option value="Present">Present</option>
                             <option value="Absent">Absent</option>
                         </select>
+                    </div>
+                    <div class="mb-0">
+                        <label for="attendanceRemarks" class="form-label">Remarks</label>
+                        <input id="attendanceRemarks" class="form-control" type="text" value="Confirmed" readonly>
                     </div>
                 </form>
             </div>
@@ -92,7 +96,7 @@ $attendanceProjects = ['PRJ-1001', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005'];
             <div class="modal-body">
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
-                        <label for="confirmProject" class="form-label">Project</label>
+                        <label for="confirmProject" class="form-label">Project ID</label>
                         <select id="confirmProject" class="form-select">
                             <option value="">Select project</option>
                             <?php foreach ($attendanceProjects as $projectId): ?>
@@ -217,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
         row.innerHTML = '<td>' + projectId + '</td>'
             + '<td>' + dateLabel + '</td>'
             + '<td>' + statusBadgeHtml(status) + '</td>'
-            + '<td class="remarks-cell">' + remarksBadgeHtml('Pending') + '</td>';
+            + '<td class="remarks-cell">' + remarksBadgeHtml('Confirmed') + '</td>';
         tableBody.prepend(row);
 
         projectSelect.value = '';
