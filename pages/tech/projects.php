@@ -5,10 +5,10 @@
 <?php include __DIR__ . '/../../includes/sidebar.php'; ?>
 <?php
 $projects = [
-    ['id' => 'PRJ-1001', 'name' => 'Makati Office Aircon Installation', 'status' => 'For Assessment'],
-    ['id' => 'PRJ-1003', 'name' => 'Warehouse Ducting', 'status' => 'Assigned'],
-    ['id' => 'PRJ-1004', 'name' => 'Condo Split-Type - Unit Installation', 'status' => 'Assigned'],
-    ['id' => 'PRJ-1005', 'name' => 'Server Room AC - Preventive Maintenance', 'status' => 'Assigned'],
+    ['id' => 'PRJ-1001', 'name' => 'Aircon Installation - ACME Holdings', 'status' => 'For Assessment'],
+    ['id' => 'PRJ-1003', 'name' => 'Ductwork Installation - Metro Storage', 'status' => 'Assigned'],
+    ['id' => 'PRJ-1004', 'name' => 'Split-Type AC Unit Installation - Northline Foods', 'status' => 'Assigned'],
+    ['id' => 'PRJ-1005', 'name' => 'Ventilation System Retrofit - BluePeak IT', 'status' => 'Assigned'],
 ];
 
 $statusClassMap = [

@@ -7,7 +7,7 @@
 $schedules = [
     [
         'projectId' => 'PRJ-1001',
-        'projectName' => 'Makati Office Aircon Installation',
+        'projectName' => 'Aircon Installation - ACME Holdings',
         'startDate' => 12,
         'endDate' => 22,
         'leadTechnician' => 'Engr. Mario Santos',
@@ -16,7 +16,7 @@ $schedules = [
     ],
     [
         'projectId' => 'PRJ-1004',
-        'projectName' => 'Pasig Split-Type AC Upgrade',
+        'projectName' => 'Split-Type AC Unit Installation - Northline Foods',
         'startDate' => 18,
         'endDate' => 21,
         'leadTechnician' => 'Tech. Carl Dominguez',
@@ -25,7 +25,7 @@ $schedules = [
     ],
     [
         'projectId' => 'PRJ-1003',
-        'projectName' => 'Warehouse Ductwork Installation',
+        'projectName' => 'Ductwork Installation - Metro Storage',
         'startDate' => 23,
         'endDate' => 26,
         'leadTechnician' => 'Engr. Mario Santos',
@@ -34,7 +34,7 @@ $schedules = [
     ],
     [
         'projectId' => 'PRJ-1006',
-        'projectName' => 'Grand Arc Tower Lobby Ventilation',
+        'projectName' => 'Ventilation System Inspection - Grand Arc Tower',
         'startDate' => 27,
         'endDate' => 30,
         'leadTechnician' => 'Tech. Anne Mendoza',
@@ -43,7 +43,7 @@ $schedules = [
     ],
     [
         'projectId' => 'PRJ-1005',
-        'projectName' => 'Makati Complex Ventilation System Retrofit',
+        'projectName' => 'Ventilation System Retrofit - BluePeak IT',
         'startDate' => 8,
         'endDate' => 11,
         'leadTechnician' => 'Tech. Lito Ramos',
@@ -65,11 +65,11 @@ foreach ($schedules as $schedule) {
 
 // Available projects for scheduling
 $availableProjects = [
-    ['id' => 'PRJ-1001', 'name' => 'Makati Office Aircon Installation', 'service' => 'Aircon Installation'],
-    ['id' => 'PRJ-1003', 'name' => 'Warehouse Ductwork Installation', 'service' => 'Ductwork Installation'],
-    ['id' => 'PRJ-1004', 'name' => 'Pasig Split-Type AC Upgrade', 'service' => 'Split-Type AC Unit Installation'],
-    ['id' => 'PRJ-1005', 'name' => 'Server Room Ventilation Retrofit', 'service' => 'Ventilation System Retrofit'],
-    ['id' => 'PRJ-1006', 'name' => 'Grand Arc Tower Lobby Ventilation', 'service' => 'Ventilation System Inspection'],
+    ['id' => 'PRJ-1001', 'name' => 'Aircon Installation - ACME Holdings', 'service' => 'Aircon Installation'],
+    ['id' => 'PRJ-1003', 'name' => 'Ductwork Installation - Metro Storage', 'service' => 'Ductwork Installation'],
+    ['id' => 'PRJ-1004', 'name' => 'Split-Type AC Unit Installation - Northline Foods', 'service' => 'Split-Type AC Unit Installation'],
+    ['id' => 'PRJ-1005', 'name' => 'Ventilation System Retrofit - BluePeak IT', 'service' => 'Ventilation System Retrofit'],
+    ['id' => 'PRJ-1006', 'name' => 'Ventilation System Inspection - Grand Arc Tower', 'service' => 'Ventilation System Inspection'],
 ];
 
 // All technicians with their skills

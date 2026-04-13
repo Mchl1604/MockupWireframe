@@ -12,17 +12,17 @@ $statusClassMap = [
     'completed' => 'bg-success',
     'to be approved' => 'bg-warning text-dark',
     'quotation to be approved' => 'bg-warning text-dark',
-    'pending' => 'bg-danger',
+    'scheduled' => 'bg-danger',
     'for assessment' => 'bg-info text-dark',
     'drafting quotation' => 'bg-secondary',
 ];
-$canViewQuotation = in_array($statusKey, ['ongoing', 'completed', 'to be approved', 'quotation to be approved', 'pending'], true);
+$canViewQuotation = in_array($statusKey, ['ongoing', 'scheduled', 'completed', 'to be approved', 'quotation to be approved'], true);
 
 $projectMetadata = [
     'PRJ-1001' => ['client' => 'ACME Holdings', 'service' => 'Aircon Installation', 'timeline' => 'Apr 10 - Apr 18', 'target' => 'Apr 18, 2026'],
     'PRJ-1002' => ['client' => 'J. Dela Cruz', 'service' => 'AC Unit Repair', 'timeline' => 'Apr 05 - Apr 10', 'target' => 'Apr 10, 2026'],
     'PRJ-1003' => ['client' => 'Metro Storage', 'service' => 'Ductwork Installation', 'timeline' => 'Apr 15 - Apr 25', 'target' => 'Apr 25, 2026'],
-    'PRJ-1004' => ['client' => 'Northline Foods', 'service' => 'Split-Type AC Unit Installation', 'timeline' => 'Pending Assessment', 'target' => 'TBD'],
+    'PRJ-1004' => ['client' => 'Northline Foods', 'service' => 'Split-Type AC Unit Installation', 'timeline' => 'Apr 14 - Apr 22', 'target' => 'Apr 22, 2026'],
     'PRJ-1005' => ['client' => 'BluePeak IT', 'service' => 'Ventilation System Retrofit', 'timeline' => 'May 01 - May 10', 'target' => 'May 10, 2026'],
     'PRJ-1006' => ['client' => 'Grand Arc Tower', 'service' => 'Ventilation System Inspection', 'timeline' => 'Apr 12 - Apr 14', 'target' => 'Apr 14, 2026'],
 ];
@@ -61,10 +61,21 @@ $quotationByProject = [
             ['name' => 'Duct Sealant', 'qty' => 7, 'unit' => 'tube', 'unitCost' => 900],
         ],
     ],
+    'PRJ-1004' => [
+        'id' => 'QT-105',
+        'client' => 'Northline Foods',
+        'status' => 'Sent',
+        'laborCost' => 38500,
+        'materials' => [
+            ['name' => 'Split-Type Indoor Unit Bracket', 'qty' => 4, 'unit' => 'set', 'unitCost' => 2800],
+            ['name' => 'Copper Tubing Kit', 'qty' => 6, 'unit' => 'set', 'unitCost' => 5200],
+            ['name' => 'Drain Hose', 'qty' => 8, 'unit' => 'pc', 'unitCost' => 650],
+        ],
+    ],
     'PRJ-1006' => [
         'id' => 'QT-104',
         'client' => 'Grand Arc Tower',
-        'status' => 'Pending',
+        'status' => 'Scheduled',
         'laborCost' => 22000,
         'materials' => [
             ['name' => 'Flexible Duct', 'qty' => 5, 'unit' => 'roll', 'unitCost' => 3600],
@@ -73,6 +84,10 @@ $quotationByProject = [
     ],
 ];
 $projectQuotation = $quotationByProject[$id] ?? null;
+
+if ($projectQuotation !== null && in_array($statusKey, ['ongoing', 'scheduled'], true)) {
+    $projectQuotation['status'] = 'Approved';
+}
 
 if ($projectQuotation !== null) {
     $materialsTotal = 0;
@@ -101,6 +116,15 @@ $reportsByProject = [
             'technician' => 'Tech. Lito Ramos',
             'summary' => 'Condenser fan motor replacement completed and cooling performance normalized.',
             'photos' => ['imageSample.png'],
+        ],
+    ],
+    'PRJ-1004' => [
+        [
+            'type' => 'Progress Report',
+            'date' => 'Apr 16, 2026',
+            'technician' => 'Tech. Carl Dominguez',
+            'summary' => 'Two indoor units were mounted and refrigerant lines were pressure-tested. No leaks detected and electrical rough-ins are complete for remaining units.',
+            'photos' => ['imageSample.png', 'imageSample.png'],
         ],
     ],
     'PRJ-1006' => [
@@ -169,6 +193,24 @@ $assessmentByProject = [
             ['name' => 'Duct Sealant', 'qty' => 7, 'unit' => 'tube'],
         ],
         'estimatedDays' => 10,
+    ],
+    'PRJ-1004' => [
+        'date' => 'Apr 13, 2026',
+        'technician' => 'Tech. Carl Dominguez',
+        'requiredTechnicians' => 2,
+        'summary' => 'Site assessment completed for split-type AC upgrade. Wall locations are suitable for four indoor units and condenser placement is clear of obstructions.',
+        'photos' => ['imageSample.png', 'imageSample.png'],
+        'findings' => [
+            'Existing electrical trunk line can support added AC load',
+            'Condensate drainage path is available on both floors',
+            'Minor wall patching required after bracket anchoring',
+        ],
+        'materials' => [
+            ['name' => 'Copper Tubing Kit', 'qty' => 6, 'unit' => 'set'],
+            ['name' => 'Drain Hose', 'qty' => 8, 'unit' => 'pc'],
+            ['name' => 'Wall Bracket', 'qty' => 4, 'unit' => 'set'],
+        ],
+        'estimatedDays' => 9,
     ],
     'PRJ-1005' => [
         'date' => 'Apr 11, 2026',

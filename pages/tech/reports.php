@@ -17,10 +17,10 @@
                     <label class="form-label">Project</label>
                     <select class="form-select" name="project" required>
                         <option value="">Select project</option>
-                        <option value="PRJ-1001">PRJ-1001 - Makati Office Aircon Installation</option>
-                        <option value="PRJ-1003">PRJ-1003 - Warehouse Ducting</option>
-                        <option value="PRJ-1004">PRJ-1004 - Condo Split-Type - Unit Installation</option>
-                        <option value="PRJ-1005">PRJ-1005 - Server Room AC - Preventive Maintenance</option>
+                        <option value="PRJ-1001">PRJ-1001 - Aircon Installation - ACME Holdings</option>
+                        <option value="PRJ-1003">PRJ-1003 - Ductwork Installation - Metro Storage</option>
+                        <option value="PRJ-1004">PRJ-1004 - Split-Type AC Unit Installation - Northline Foods</option>
+                        <option value="PRJ-1005">PRJ-1005 - Ventilation System Retrofit - BluePeak IT</option>
                     </select>
                 </div>
 

@@ -5,13 +5,13 @@
 <?php include __DIR__ . '/../../includes/sidebar.php'; ?>
 
 <main class="container py-4 flex-grow-1">
-    <h2 class="h4 fw-bold mb-3">My Projects</h2>
+    <h2 class="h4 fw-bold mb-3">My Services</h2>
 
     <?php
     $projects = [
         [
             'id' => 'PRJ-1001',
-            'name' => 'Makati Office Aircon Installation',
+            'name' => 'AC Installation - ACME Holdings',
             'serviceType' => 'AC Installation',
             'status' => 'Ongoing',
             'timeline' => 'Apr 10 - Apr 18',
@@ -42,7 +42,7 @@
         ],
         [
             'id' => 'PRJ-1002',
-            'name' => 'Condo Split-Type Repair',
+            'name' => 'AC Repair - J. Dela Cruz',
             'serviceType' => 'AC Repair',
             'status' => 'Completed',
             'timeline' => 'Apr 1 - Apr 2',
@@ -72,7 +72,7 @@
         ],
         [
             'id' => 'PRJ-1003',
-            'name' => 'Warehouse Ducting',
+            'name' => 'Ducting Systems - Metro Storage',
             'serviceType' => 'Ducting Systems',
             'status' => 'Awaiting Quotation Approval',
             'timeline' => 'Apr 20 - Apr 27',
@@ -92,7 +92,7 @@
         ],
         [
             'id' => 'PRJ-1004',
-            'name' => 'Mall Aircon Cleanup',
+            'name' => 'Aircon Services - Northline Foods',
             'serviceType' => 'Aircon Services',
             'status' => 'For Assessment',
             'timeline' => 'Apr 15 - Apr 17',
@@ -103,7 +103,7 @@
         ],
         [
             'id' => 'PRJ-1005',
-            'name' => 'Hotel Ventilation Upgrade',
+            'name' => 'Ducting Systems - BluePeak IT',
             'serviceType' => 'Ducting Systems',
             'status' => 'Pending',
             'timeline' => 'Apr 22 - Apr 30',
@@ -123,7 +123,7 @@
         ],
         [
             'id' => 'PRJ-1006',
-            'name' => 'Office AC Replacement',
+            'name' => 'AC Installation - Grand Arc Tower',
             'serviceType' => 'AC Installation',
             'status' => 'For Approval',
             'timeline' => 'Apr 25 - Apr 29',

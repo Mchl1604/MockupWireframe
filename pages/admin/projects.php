@@ -5,12 +5,12 @@
 <?php include __DIR__ . '/../../includes/sidebar.php'; ?>
 <?php
 $projects = [
-    ['id' => 'PRJ-1001', 'name' => 'Makati Office Aircon Installation', 'client' => 'ACME Holdings', 'status' => 'For Assessment', 'service' => 'Aircon Installation'],
-    ['id' => 'PRJ-1002', 'name' => 'Condo AC Unit Repair', 'client' => 'J. Dela Cruz', 'status' => 'Completed', 'service' => 'AC Unit Repair'],
-    ['id' => 'PRJ-1003', 'name' => 'Warehouse Ductwork Installation', 'client' => 'Metro Storage', 'status' => 'Quotation to be approved', 'service' => 'Ductwork Installation'],
-    ['id' => 'PRJ-1004', 'name' => 'Pasig Split-Type AC Upgrade', 'client' => 'Northline Foods', 'status' => 'For Assessment', 'service' => 'Split-Type AC Unit Installation'],
-    ['id' => 'PRJ-1005', 'name' => 'Server Room Ventilation Retrofit', 'client' => 'BluePeak IT', 'status' => 'Drafting Quotation', 'service' => 'Ventilation System Retrofit'],
-    ['id' => 'PRJ-1006', 'name' => 'Grand Arc Tower Lobby Ventilation', 'client' => 'Grand Arc Tower', 'status' => 'Pending', 'service' => 'Ventilation System Inspection'],
+    ['id' => 'PRJ-1001', 'name' => 'Aircon Installation - ACME Holdings', 'client' => 'ACME Holdings', 'status' => 'For Assessment', 'service' => 'Aircon Installation'],
+    ['id' => 'PRJ-1002', 'name' => 'AC Unit Repair - J. Dela Cruz', 'client' => 'J. Dela Cruz', 'status' => 'Completed', 'service' => 'AC Unit Repair'],
+    ['id' => 'PRJ-1003', 'name' => 'Ductwork Installation - Metro Storage', 'client' => 'Metro Storage', 'status' => 'Quotation to be approved', 'service' => 'Ductwork Installation'],
+    ['id' => 'PRJ-1004', 'name' => 'Split-Type AC Unit Installation - Northline Foods', 'client' => 'Northline Foods', 'status' => 'Ongoing', 'service' => 'Split-Type AC Unit Installation'],
+    ['id' => 'PRJ-1005', 'name' => 'Ventilation System Retrofit - BluePeak IT', 'client' => 'BluePeak IT', 'status' => 'Drafting Quotation', 'service' => 'Ventilation System Retrofit'],
+    ['id' => 'PRJ-1006', 'name' => 'Ventilation System Inspection - Grand Arc Tower', 'client' => 'Grand Arc Tower', 'status' => 'Scheduled', 'service' => 'Ventilation System Inspection'],
 ];
 
 $statusClassMap = [
@@ -19,13 +19,17 @@ $statusClassMap = [
     'quotation to be approved' => 'text-bg-warning',
     'for assessment' => 'text-bg-info',
     'drafting quotation' => 'text-bg-secondary',
-    'pending' => 'text-bg-danger',
+    'scheduled' => 'text-bg-danger',
 ];
 ?>
 <main class="container py-4 flex-grow-1">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h2 class="h4 fw-bold mb-0">Projects</h2>
-        <input type="search" id="projectSearch" class="form-control form-control-sm" placeholder="Search projects..." style="max-width: 280px;">
+        <div class="d-flex flex-nowrap align-items-center gap-2 ms-auto">
+            
+            <input type="search" id="projectSearch" class="form-control form-control-sm" placeholder="Search projects..." style="width: 280px; max-width: 100%;">
+            <a class="btn btn-outline-secondary btn-sm" href="<?php echo htmlspecialchars(app_url('/admin/projects', ['view' => 'archives']), ENT_QUOTES, 'UTF-8'); ?>">View Archives</a>
+        </div>
     </div>
     <div class="table-responsive card border-0 shadow-sm">
         <table class="table table-hover mb-0">
@@ -34,7 +38,7 @@ $statusClassMap = [
             <?php foreach ($projects as $p): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($p['id'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td><?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?></td>
+                    <td><?php echo htmlspecialchars($p['service'] . ' - ' . $p['client'], ENT_QUOTES, 'UTF-8'); ?></td>
                     <td><?php echo htmlspecialchars($p['client'], ENT_QUOTES, 'UTF-8'); ?></td>
                     <td>
                         <?php $statusKey = strtolower(trim($p['status'])); ?>
@@ -42,7 +46,12 @@ $statusClassMap = [
                             <?php echo htmlspecialchars($p['status'], ENT_QUOTES, 'UTF-8'); ?>
                         </span>
                     </td>
-                    <td><a class="btn btn-sm btn-outline-primary" href="<?php echo htmlspecialchars(app_url('/admin/project', ['id' => $p['id'], 'status' => $p['status']]), ENT_QUOTES, 'UTF-8'); ?>">View Details</a></td>
+                    <td>
+                        <div class="d-flex flex-wrap gap-1">
+                            <a class="btn btn-sm btn-outline-primary" href="<?php echo htmlspecialchars(app_url('/admin/project', ['id' => $p['id'], 'status' => $p['status']]), ENT_QUOTES, 'UTF-8'); ?>">View Details</a>
+                            <button type="button" class="btn btn-sm btn-outline-danger">Archive</button>
+                        </div>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

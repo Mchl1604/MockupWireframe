@@ -17,7 +17,7 @@ $sidebarMenus = [
         ['label' => 'Chat', 'href' => '/admin/chat', 'icon' => 'bi-chat-dots'],
     ],
     'client' => [
-        ['label' => 'My Projects', 'href' => '/client/projects', 'icon' => 'bi-folder2-open'],
+        ['label' => 'My Services', 'href' => '/client/projects', 'icon' => 'bi-folder2-open'],
         ['label' => 'Request Service', 'href' => '/client/request', 'icon' => 'bi-plus-circle'],
         ['label' => 'Chat', 'href' => '/client/chat', 'icon' => 'bi-chat-dots'],
     ],

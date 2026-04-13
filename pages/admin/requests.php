@@ -60,7 +60,11 @@ $requests = [
 <main class="container py-4 flex-grow-1">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h2 class="h4 fw-bold mb-0">Service Requests</h2>
-        <input type="search" id="requestSearch" class="form-control form-control-sm" placeholder="Search requests..." style="max-width: 280px;">
+        <div class="d-flex flex-nowrap align-items-center gap-2 ms-auto">
+            
+            <input type="search" id="requestSearch" class="form-control form-control-sm" placeholder="Search requests..." style="width: 280px; max-width: 100%;">
+            <a class="btn btn-outline-secondary btn-sm" href="<?php echo htmlspecialchars(app_url('/admin/requests', ['view' => 'archives']), ENT_QUOTES, 'UTF-8'); ?>">View Archives</a>
+        </div>
     </div>
     <div class="table-responsive card border-0 shadow-sm">
         <table class="table table-hover mb-0">
@@ -80,6 +84,7 @@ $requests = [
                     <td class="text-end">
                         <div class="d-flex justify-content-end flex-wrap gap-1">
                             <button type="button" class="btn btn-outline-secondary btn-sm" data-request='<?php echo htmlspecialchars(json_encode($item), ENT_QUOTES, 'UTF-8'); ?>'>View Details</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-request-action="archive">Archive</button>
                             <?php if ($item['status'] === 'Pending'): ?>
                             <button type="button" class="btn btn-success btn-sm" data-request-action="approve">Approve</button>
                             <button type="button" class="btn btn-danger btn-sm" data-request-action="reject">Reject</button>
@@ -137,10 +142,15 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function () {
             const row = button.closest('tr');
             if (!row) return;
-            const badge = row.querySelector('.request-status-badge');
-            if (!badge) return;
 
             const action = button.dataset.requestAction;
+            if (action === 'archive') {
+                row.remove();
+                return;
+            }
+
+            const badge = row.querySelector('.request-status-badge');
+            if (!badge) return;
             const nextStatus = action === 'approve' ? 'Approved' : 'Rejected';
             badge.textContent = nextStatus;
             badge.className = statusClasses(nextStatus);
