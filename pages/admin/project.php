@@ -440,8 +440,6 @@ $canViewAssessment = $statusKey !== 'for assessment';
                         <div class="col-md-4"><small class="text-muted d-block">Quotation ID</small><strong><?php echo htmlspecialchars($projectQuotation['id'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         <div class="col-md-4"><small class="text-muted d-block">Client</small><strong><?php echo htmlspecialchars($projectQuotation['client'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         <div class="col-md-4"><small class="text-muted d-block">Status</small><span class="badge <?php echo htmlspecialchars($projectQuotation['status'] === 'Approved' ? 'bg-success' : ($projectQuotation['status'] === 'Sent' ? 'bg-primary' : 'bg-secondary'), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($projectQuotation['status'], ENT_QUOTES, 'UTF-8'); ?></span></div>
-                        <div class="col-md-6"><small class="text-muted d-block">Labor Cost</small><strong class="d-block">PHP <?php echo number_format((float) $projectQuotation['laborCost'], 2); ?></strong></div>
-                        <div class="col-md-6 text-md-end"><small class="text-muted d-block">Total</small><strong class="d-block">PHP <?php echo number_format((float) $quotationTotal, 2); ?></strong></div>
                     </div>
 
                     <div class="table-responsive border rounded">
@@ -457,6 +455,14 @@ $canViewAssessment = $statusKey !== 'for assessment';
                                     <td class="text-end">PHP <?php echo number_format((float) $material['qty'] * (float) $material['unitCost'], 2); ?></td>
                                 </tr>
                             <?php endforeach; ?>
+                                <tr class="table-light fw-bold">
+                                    <td colspan="3">Labor Cost</td>
+                                    <td class="text-end" colspan="2">PHP <?php echo number_format((float) $projectQuotation['laborCost'], 2); ?></td>
+                                </tr>
+                                <tr class="table-light fw-bold">
+                                    <td colspan="3">Total</td>
+                                    <td class="text-end" colspan="2">PHP <?php echo number_format((float) $quotationTotal, 2); ?></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

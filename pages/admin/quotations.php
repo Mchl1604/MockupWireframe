@@ -183,7 +183,13 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
                             <div class="col-md-6">
                                 <label class="form-label">Assessment</label>
                                 <button type="button" class="btn btn-outline-primary w-100">
-                                    <i class="bi bi-magic me-1"></i>Auto Generate using Assessment Report
+                                    <i class="bi bi-file-text me-1"></i>View Assessment Report
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Auto Generate</label>
+                                <button type="button" class="btn btn-outline-primary w-100">
+                                    <i class="bi bi-magic me-1"></i>Auto Generate Quotation
                                 </button>
                             </div>
                             <div class="col-12">

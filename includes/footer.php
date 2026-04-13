@@ -10,7 +10,7 @@ $isPanelRoute = in_array($pathSegments[0] ?? '', ['admin', 'client', 'tech'], tr
         <div class="row g-4">
             <div class="col-md-4">
                 <h5 class="fw-bold mb-2">Coliconstruct Engineering</h5>
-                <p class="text-white-50 small mb-0">Professional HVAC solutions since 2015.</p>
+                <p class="text-white-50 small mb-0">Professional HVAC solutions since 2018.</p>
             </div>
             <div class="col-md-4">
                 <h6 class="fw-semibold mb-2">Contact</h6>
@@ -19,7 +19,9 @@ $isPanelRoute = in_array($pathSegments[0] ?? '', ['admin', 'client', 'tech'], tr
             </div>
             <div class="col-md-4">
                 <h6 class="fw-semibold mb-2">Address</h6>
-                <p class="text-white-50 small mb-0">123 Engineering Ave, Makati City, Philippines</p>
+                <p class="text-white-50 small mb-0">20 NHA Commercial and
+Industrial Compound, Barangay Gavino Maderan, Luzon Avenue, General Mariano
+Alvarez, Cavite.</p>
             </div>
         </div>
         <hr class="border-white border-opacity-10 my-4">
