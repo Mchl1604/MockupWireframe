@@ -5,7 +5,7 @@
 <?php include __DIR__ . '/../../includes/sidebar.php'; ?>
 <?php
 $projects = [
-    ['id' => 'PRJ-1001', 'name' => 'Makati Office VRF System Installation', 'client' => 'ACME Holdings', 'status' => 'Ongoing', 'service' => 'VRF System Installation'],
+    ['id' => 'PRJ-1001', 'name' => 'Makati Office VRF System Installation', 'client' => 'ACME Holdings', 'status' => 'For Assessment', 'service' => 'VRF System Installation'],
     ['id' => 'PRJ-1002', 'name' => 'Condo AC Unit Repair', 'client' => 'J. Dela Cruz', 'status' => 'Completed', 'service' => 'AC Unit Repair'],
     ['id' => 'PRJ-1003', 'name' => 'Warehouse Ductwork Installation', 'client' => 'Metro Storage', 'status' => 'Quotation to be approved', 'service' => 'Ductwork Installation'],
     ['id' => 'PRJ-1004', 'name' => 'Pasig Split-Type AC Upgrade', 'client' => 'Northline Foods', 'status' => 'For Assessment', 'service' => 'Split-Type AC Unit Installation'],

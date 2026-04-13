@@ -24,7 +24,6 @@ $sidebarMenus = [
     'tech' => [
         ['label' => 'My Schedule', 'href' => '/tech/schedule', 'icon' => 'bi-calendar2-week'],
         ['label' => 'My Projects', 'href' => '/tech/projects', 'icon' => 'bi-folder2-open'],
-        ['label' => 'Project Details', 'href' => '/tech/project', 'icon' => 'bi-file-earmark-text'],
         ['label' => 'Reports', 'href' => '/tech/reports', 'icon' => 'bi-graph-up'],
         ['label' => 'Attendance', 'href' => '/tech/attendance', 'icon' => 'bi-clock-history'],
     ],

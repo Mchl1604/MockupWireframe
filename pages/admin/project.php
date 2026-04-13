@@ -94,22 +94,6 @@ $teamByProject = [
 $projectTeam = $teamByProject[$id] ?? [];
 
 $reportsByProject = [
-    'PRJ-1001' => [
-        [
-            'type' => 'Progress Report',
-            'date' => 'Apr 11, 2026',
-            'technician' => 'Engr. Mario Santos',
-            'summary' => 'Indoor units mounted and refrigerant lines pressure-tested. No leakage found.',
-            'photos' => ['imageSample.png', 'imageSample.png'],
-        ],
-        [
-            'type' => 'Incident Report',
-            'date' => 'Apr 12, 2026',
-            'technician' => 'Engr. Mario Santos',
-            'summary' => 'Found refrigerant leak on third unit. Immediate repair required.',
-            'photos' => ['imageSample.png'],
-        ],
-    ],
     'PRJ-1002' => [
         [
             'type' => 'Progress Report',
