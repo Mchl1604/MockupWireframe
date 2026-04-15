@@ -82,18 +82,6 @@ $technicians = [
     ['name' => 'Tech. John Gonzales', 'skills' => ['Ventilation System Retrofit']],
 ];
 
-// Calculate latest available date for each technician based on schedules
-$technicianAvailability = [];
-foreach ($technicians as $tech) {
-    $latestDate = 0;
-    foreach ($schedules as $schedule) {
-        if (in_array($tech['name'], $schedule['technicians'])) {
-            $latestDate = max($latestDate, $schedule['endDate']);
-        }
-    }
-    $availableDay = $latestDate > 0 ? $latestDate + 1 : 1;
-    $technicianAvailability[$tech['name']] = ['availableDate' => $availableDay, 'skills' => $tech['skills']];
-}
 ?>
 <main class="container py-4 flex-grow-1">
     <h2 class="h4 fw-bold mb-3">Project Schedules</h2>
@@ -240,18 +228,12 @@ foreach ($technicians as $tech) {
 <script>
 const availableProjects = <?php echo json_encode($availableProjects); ?>;
 const technicians = <?php echo json_encode($technicians); ?>;
-const technicianAvailability = <?php echo json_encode($technicianAvailability); ?>;
 const scheduleData = <?php echo json_encode($schedules); ?>;
 const selectedTechnicians = [];
 let leadTechnician = '';
 let currentDetailProjectId = '';
 let detailLeadTechnician = '';
 let detailSelectedTechnicians = [];
-
-function formatAvailability(name) {
-    const availability = technicianAvailability[name];
-    return availability ? `Apr ${availability.availableDate}, 2026` : 'N/A';
-}
 
 function dayToDateValue(day) {
     const dayString = String(day).padStart(2, '0');
@@ -332,7 +314,7 @@ function buildDetailLeadDropdown(projectId) {
     if (suggested.length > 0) {
         html += '<optgroup label="Suggested Leads">';
         suggested.forEach(tech => {
-            html += `<option value="${tech.name}">${tech.name} (Suggested) - Latest available: ${formatAvailability(tech.name)}</option>`;
+            html += `<option value="${tech.name}">${tech.name} (Suggested)</option>`;
         });
         html += '</optgroup>';
     }
@@ -340,7 +322,7 @@ function buildDetailLeadDropdown(projectId) {
     if (others.length > 0) {
         html += '<optgroup label="Other Technicians">';
         others.forEach(tech => {
-            html += `<option value="${tech.name}">${tech.name} - Latest available: ${formatAvailability(tech.name)}</option>`;
+            html += `<option value="${tech.name}">${tech.name}</option>`;
         });
         html += '</optgroup>';
     }
@@ -358,7 +340,7 @@ function buildDetailTechnicianPicker(projectId) {
         html += '<optgroup label="Suggested Technicians">';
         suggested.forEach(tech => {
             if (!detailSelectedTechnicians.includes(tech.name)) {
-                html += `<option value="${tech.name}">${tech.name} (Suggested) - Latest available: ${formatAvailability(tech.name)}</option>`;
+                html += `<option value="${tech.name}">${tech.name} (Suggested)</option>`;
             }
         });
         html += '</optgroup>';
@@ -368,7 +350,7 @@ function buildDetailTechnicianPicker(projectId) {
         html += '<optgroup label="Other Technicians">';
         others.forEach(tech => {
             if (!detailSelectedTechnicians.includes(tech.name)) {
-                html += `<option value="${tech.name}">${tech.name} - Latest available: ${formatAvailability(tech.name)}</option>`;
+                html += `<option value="${tech.name}">${tech.name}</option>`;
             }
         });
         html += '</optgroup>';
@@ -507,7 +489,7 @@ function buildLeadDropdown(requiredService) {
     if (suggestedTechs.length > 0) {
         html += '<optgroup label="Suggested Leads">';
         suggestedTechs.forEach(tech => {
-            html += `<option value="${tech.name}">${tech.name} (Suggested) - Latest available: ${formatAvailability(tech.name)}</option>`;
+            html += `<option value="${tech.name}">${tech.name} (Suggested)</option>`;
         });
         html += '</optgroup>';
     }
@@ -515,7 +497,7 @@ function buildLeadDropdown(requiredService) {
     if (otherTechs.length > 0) {
         html += '<optgroup label="Other Technicians">';
         otherTechs.forEach(tech => {
-            html += `<option value="${tech.name}">${tech.name} - Latest available: ${formatAvailability(tech.name)}</option>`;
+            html += `<option value="${tech.name}">${tech.name}</option>`;
         });
         html += '</optgroup>';
     }
@@ -532,7 +514,7 @@ function buildTechnicianPicker(requiredService) {
         pickerHtml += '<optgroup label="Suggested Technicians">';
         suggestedTechs.forEach(tech => {
             if (tech.name !== leadTechnician) {
-                pickerHtml += `<option value="${tech.name}">${tech.name} (Suggested) - Latest available: ${formatAvailability(tech.name)}</option>`;
+                pickerHtml += `<option value="${tech.name}">${tech.name} (Suggested)</option>`;
             }
         });
         pickerHtml += '</optgroup>';
@@ -542,7 +524,7 @@ function buildTechnicianPicker(requiredService) {
         pickerHtml += '<optgroup label="Other Technicians">';
         otherTechs.forEach(tech => {
             if (tech.name !== leadTechnician) {
-                pickerHtml += `<option value="${tech.name}">${tech.name} - Latest available: ${formatAvailability(tech.name)}</option>`;
+                pickerHtml += `<option value="${tech.name}">${tech.name}</option>`;
             }
         });
         pickerHtml += '</optgroup>';
@@ -560,10 +542,9 @@ function renderSelectedTechnicians() {
 
     selectedList.innerHTML = selectedTechnicians.map((name, index) => {
         const isLead = name === leadTechnician && index === 0;
-        const availDate = formatAvailability(name);
         return `
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span>${name} ${isLead ? '<span class="badge bg-primary ms-2">Lead</span>' : ''} <span class="badge bg-secondary ms-2">Latest available: ${availDate}</span></span>
+                <span>${name} ${isLead ? '<span class="badge bg-primary ms-2">Lead</span>' : ''}</span>
                 ${isLead ? '<span class="text-muted small">Lead is required</span>' : `<button type="button" class="btn btn-sm btn-outline-danger" data-tech-index="${index}">Remove</button>`}
             </li>
         `;

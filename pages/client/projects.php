@@ -164,7 +164,7 @@
                     <th>Service</th>
                     <th>Status</th>
                     <th>Timeline</th>
-                    <th class="text-end">Action</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -193,7 +193,7 @@
                         <span class="badge <?php echo htmlspecialchars($statusClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8'); ?></span>
                     </td>
                     <td><?php echo htmlspecialchars($project['timeline'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td class="text-end">
+                    <td>
                         <button
                             type="button"
                             class="btn btn-outline-primary btn-sm"
@@ -201,6 +201,12 @@
                         >
                             View
                         </button>
+                        <?php if ($status === 'Completed'): ?>
+                            <button type="button" class="btn btn-success btn-sm ms-2">
+                                Confirm Completion
+                            </button>
+                        <?php endif; ?>
+                        
                     </td>
                 </tr>
             <?php endforeach; ?>
