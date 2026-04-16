@@ -115,6 +115,14 @@
         min-height: 185px;
         resize: vertical;
     }
+    .request-label {
+    display: block;
+    margin: 0 0 0.45rem 0.35rem;
+    color: #1d476f;
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
 
     .request-submit {
         border: 0;
@@ -235,6 +243,7 @@
                             <div class="col-12">
                                 <input required type="text" name="address" class="form-control request-field" placeholder="Address">
                             </div>
+                            
                             <div class="col-12">
                                 <select required name="project_type" class="form-select request-field">
                                     <option value="" selected disabled>Project type</option>
@@ -262,6 +271,10 @@
                                     <option value="installation">Installation</option>
                                 </select>
                             </div>
+                            <div class="col-md-6">
+    <label for="preferredDate" class="request-label">Assessment Date</label>
+    <input required type="date" name="preferred_date" id="preferredDate" class="form-control request-field" aria-label="Assessment Date">
+</div>
                             <div class="col-12">
                                 <textarea class="form-control request-field request-textarea" rows="6" name="notes" placeholder="Description"></textarea>
                             </div>
@@ -289,6 +302,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const airconUnits = document.getElementById('airconUnits');
     const ductingServiceTypeWrap = document.getElementById('ductingServiceTypeWrap');
     const ductingServiceType = document.getElementById('ductingServiceType');
+    const preferredDateInput = document.getElementById('preferredDate');
+
+    if (preferredDateInput) {
+        const now = new Date();
+        const tzOffsetMs = now.getTimezoneOffset() * 60000;
+        const todayLocal = new Date(now.getTime() - tzOffsetMs).toISOString().split('T')[0];
+        preferredDateInput.min = todayLocal;
+    }
 
     function toggleServiceSubtypeFields() {
         if (!projectTypeSelect) return;

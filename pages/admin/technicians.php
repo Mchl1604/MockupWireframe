@@ -82,8 +82,10 @@ $attendanceByTech = [
                                 data-address="<?php echo htmlspecialchars($tech['address'], ENT_QUOTES, 'UTF-8'); ?>"
                                 data-phone="<?php echo htmlspecialchars($tech['phone'], ENT_QUOTES, 'UTF-8'); ?>"
                                 data-email="<?php echo htmlspecialchars($tech['email'], ENT_QUOTES, 'UTF-8'); ?>"
+                                title="View Details"
+                                aria-label="View Details"
                             >
-                                View Details
+                                <i class="bi bi-eye"></i>
                             </button>
                             <button
                                 type="button"

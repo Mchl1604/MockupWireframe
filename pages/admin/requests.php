@@ -63,12 +63,12 @@ $requests = [
         <div class="d-flex flex-nowrap align-items-center gap-2 ms-auto">
             
             <input type="search" id="requestSearch" class="form-control form-control-sm" placeholder="Search requests..." style="width: 280px; max-width: 100%;">
-            <a class="btn btn-outline-secondary btn-sm" href="<?php echo htmlspecialchars(app_url('/admin/requests', ['view' => 'archives']), ENT_QUOTES, 'UTF-8'); ?>">View Archives</a>
+            <a class="btn btn-danger btn-sm" href="<?php echo htmlspecialchars(app_url('/admin/requests', ['view' => 'archives']), ENT_QUOTES, 'UTF-8'); ?>"><i class="bi bi-trash"></i></a>
         </div>
     </div>
     <div class="table-responsive card border-0 shadow-sm">
         <table class="table table-hover mb-0">
-            <thead class="table-light"><tr><th>ID</th><th>Client</th><th>Service</th><th>Date</th><th>Status</th><th class="text-end">Action</th></tr></thead>
+            <thead class="table-light"><tr><th>ID</th><th>Client</th><th>Service</th><th>Date</th><th>Status</th><th class="text-start">Action</th></tr></thead>
             <tbody id="requestsTableBody">
             <?php foreach ($requests as $item): ?>
                 <tr>
@@ -81,14 +81,10 @@ $requests = [
                             <?php echo htmlspecialchars($item['status'], ENT_QUOTES, 'UTF-8'); ?>
                         </span>
                     </td>
-                    <td class="text-end">
-                        <div class="d-flex justify-content-end flex-wrap gap-1">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" data-request='<?php echo htmlspecialchars(json_encode($item), ENT_QUOTES, 'UTF-8'); ?>'>View Details</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-request-action="archive">Archive</button>
-                            <?php if ($item['status'] === 'Pending'): ?>
-                            <button type="button" class="btn btn-success btn-sm" data-request-action="approve">Approve</button>
-                            <button type="button" class="btn btn-danger btn-sm" data-request-action="reject">Reject</button>
-                            <?php endif; ?>
+                    <td class="text-start">
+                        <div class="d-flex justify-content-start flex-wrap gap-1">
+                            <button type="button" class="btn btn-primary btn-sm" title="View Details" aria-label="View Details" data-request='<?php echo htmlspecialchars(json_encode($item), ENT_QUOTES, 'UTF-8'); ?>'><i class="bi bi-eye"></i></button>
+                            <button type="button" class="btn btn-danger btn-sm" title="Archive" aria-label="Archive" data-request-action="archive"><i class="bi bi-trash"></i></button>
                         </div>
                     </td>
                 </tr>
@@ -115,6 +111,13 @@ $requests = [
                         <div class="col-12"><small class="text-muted d-block">Description</small><p class="mb-0" id="req-desc"></p></div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <div class="gap-2" id="reqPendingActions" hidden>
+                        <button type="button" class="btn btn-danger btn-sm" data-modal-request-action="reject">Reject</button>
+                        <button type="button" class="btn btn-success btn-sm" data-modal-request-action="approve">Approve</button>
+                    </div>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -129,6 +132,73 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const requestSearch = document.getElementById('requestSearch');
+    const requestsTableBody = document.getElementById('requestsTableBody');
+    const requestModalEl = document.getElementById('requestModal');
+    const reqPendingActions = document.getElementById('reqPendingActions');
+    const reqId = document.getElementById('req-id');
+    const reqClient = document.getElementById('req-client');
+    const reqService = document.getElementById('req-service');
+    const reqDate = document.getElementById('req-date');
+    const reqPhone = document.getElementById('req-phone');
+    const reqAddress = document.getElementById('req-address');
+    const reqDesc = document.getElementById('req-desc');
+
+    let activeRow = null;
+    let requestModal = null;
+
+    if (requestModalEl && typeof bootstrap !== 'undefined') {
+        requestModal = bootstrap.Modal.getOrCreateInstance(requestModalEl);
+    }
+
+    function cleanupModalArtifacts() {
+        const hasOpenModal = document.querySelector('.modal.show') !== null;
+        if (hasOpenModal) return;
+
+        document.querySelectorAll('.modal-backdrop').forEach(function (backdrop) {
+            backdrop.remove();
+        });
+
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('padding-right');
+    }
+
+    function isPendingStatus(status) {
+        const normalized = String(status || '').trim().toLowerCase();
+        return normalized === 'pending';
+    }
+
+    function fillRequestModal(request) {
+        if (reqId) reqId.textContent = request.id || '';
+        if (reqClient) reqClient.textContent = request.client || '';
+        if (reqService) reqService.textContent = request.service || '';
+        if (reqDate) reqDate.textContent = request.date || '';
+        if (reqPhone) reqPhone.textContent = request.phone || '';
+        if (reqAddress) reqAddress.textContent = request.address || '';
+        if (reqDesc) reqDesc.textContent = request.description || '';
+
+        if (reqPendingActions) {
+            const showPendingActions = isPendingStatus(request.status);
+            reqPendingActions.hidden = !showPendingActions;
+            reqPendingActions.classList.toggle('d-inline-flex', showPendingActions);
+        }
+    }
+
+    function updateRowStatus(row, nextStatus) {
+        const badge = row ? row.querySelector('.request-status-badge') : null;
+        if (badge) {
+            badge.textContent = nextStatus;
+            badge.className = statusClasses(nextStatus);
+        }
+
+        const viewButton = row ? row.querySelector('button[data-request]') : null;
+        if (viewButton) {
+            const request = JSON.parse(viewButton.dataset.request || '{}');
+            request.status = nextStatus;
+            viewButton.dataset.request = JSON.stringify(request);
+        }
+    }
+
     if (requestSearch) {
         requestSearch.addEventListener('input', function () {
             const query = this.value.toLowerCase().trim();
@@ -138,28 +208,55 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    document.querySelectorAll('button[data-request-action]').forEach(function (button) {
-        button.addEventListener('click', function () {
-            const row = button.closest('tr');
-            if (!row) return;
+    if (requestModalEl) {
+        requestModalEl.addEventListener('hidden.bs.modal', cleanupModalArtifacts);
+    }
 
-            const action = button.dataset.requestAction;
-            if (action === 'archive') {
-                row.remove();
+    if (requestsTableBody) {
+        requestsTableBody.addEventListener('click', function (event) {
+            const viewButton = event.target.closest('button[data-request]');
+            if (viewButton) {
+                const row = viewButton.closest('tr');
+                const request = JSON.parse(viewButton.dataset.request || '{}');
+                activeRow = row;
+                fillRequestModal(request);
+                cleanupModalArtifacts();
+                if (requestModal) requestModal.show();
                 return;
             }
 
-            const badge = row.querySelector('.request-status-badge');
-            if (!badge) return;
-            const nextStatus = action === 'approve' ? 'Approved' : 'Rejected';
-            badge.textContent = nextStatus;
-            badge.className = statusClasses(nextStatus);
+            const actionButton = event.target.closest('button[data-request-action]');
+            if (!actionButton) return;
 
-            row.querySelectorAll('button[data-request-action]').forEach(function (actionBtn) {
-                actionBtn.remove();
-            });
+            const row = actionButton.closest('tr');
+            if (!row) return;
+
+            const action = actionButton.dataset.requestAction;
+            if (action === 'archive') {
+                row.remove();
+                if (activeRow === row) {
+                    activeRow = null;
+                    if (requestModal) requestModal.hide();
+                    cleanupModalArtifacts();
+                }
+            }
         });
-    });
+    }
+
+    if (reqPendingActions) {
+        reqPendingActions.addEventListener('click', function (event) {
+            const actionButton = event.target.closest('button[data-modal-request-action]');
+            if (!actionButton || !activeRow) return;
+
+            const nextStatus = actionButton.dataset.modalRequestAction === 'approve' ? 'Approved' : 'Rejected';
+            updateRowStatus(activeRow, nextStatus);
+            const updatedViewButton = activeRow.querySelector('button[data-request]');
+            if (updatedViewButton) {
+                const updatedRequest = JSON.parse(updatedViewButton.dataset.request || '{}');
+                fillRequestModal(updatedRequest);
+            }
+        });
+    }
 });
 </script>
 <?php include __DIR__ . '/../../includes/footer.php'; ?>

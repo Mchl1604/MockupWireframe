@@ -144,7 +144,7 @@ $activityLogs = [
                                             <div class="d-flex gap-2">
                                                 <button type="button" class="btn btn-sm btn-outline-primary editUserBtn" data-id="<?php echo htmlspecialchars($u['id'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($u['name'], ENT_QUOTES, 'UTF-8'); ?>" data-email="<?php echo htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8'); ?>" data-role="<?php echo htmlspecialchars($u['role'], ENT_QUOTES, 'UTF-8'); ?>" data-bs-toggle="modal" data-bs-target="#editUserModal">Edit</button>
                                                 <button type="button" class="btn btn-sm btn-outline-warning">Deactivate</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger">Archive</button>
+                                                <button type="button" class="btn btn-sm btn-outline-danger" title="Archive" aria-label="Archive"><i class="bi bi-trash"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -189,7 +189,7 @@ $activityLogs = [
                                             <div class="d-flex gap-2">
                                                 <button type="button" class="btn btn-sm btn-outline-primary editUserBtn" data-id="<?php echo htmlspecialchars($u['id'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($u['name'], ENT_QUOTES, 'UTF-8'); ?>" data-email="<?php echo htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8'); ?>" data-role="<?php echo htmlspecialchars($u['role'], ENT_QUOTES, 'UTF-8'); ?>" data-bs-toggle="modal" data-bs-target="#editUserModal">Edit</button>
                                                 <button type="button" class="btn btn-sm btn-outline-warning">Deactivate</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger">Archive</button>
+                                                <button type="button" class="btn btn-sm btn-outline-danger" title="Archive" aria-label="Archive"><i class="bi bi-trash"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -274,7 +274,7 @@ $activityLogs = [
                                     <td>
                                         <div class="d-flex gap-2">
                                             <button class="btn btn-sm btn-outline-primary editMaterialBtn" data-id="<?php echo htmlspecialchars($mat['id'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($mat['name'], ENT_QUOTES, 'UTF-8'); ?>" data-cost="<?php echo htmlspecialchars($mat['cost'], ENT_QUOTES, 'UTF-8'); ?>" data-unit="<?php echo htmlspecialchars($mat['unit'], ENT_QUOTES, 'UTF-8'); ?>" data-service="<?php echo htmlspecialchars($mat['service'], ENT_QUOTES, 'UTF-8'); ?>" data-bs-toggle="modal" data-bs-target="#editMaterialModal">Edit Details</button>
-                                            <button class="btn btn-sm btn-outline-danger" data-material-id="<?php echo htmlspecialchars($mat['id'], ENT_QUOTES, 'UTF-8'); ?>" onclick="archiveMaterial(this)">Archive</button>
+                                            <button class="btn btn-sm btn-outline-danger" title="Archive" aria-label="Archive" data-material-id="<?php echo htmlspecialchars($mat['id'], ENT_QUOTES, 'UTF-8'); ?>" onclick="archiveMaterial(this)"><i class="bi bi-trash"></i></button>
                                         </div>
                                     </td>
                                 </tr>

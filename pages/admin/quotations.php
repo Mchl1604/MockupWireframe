@@ -77,8 +77,8 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
                             <?php if ($q['status'] === 'Draft'): ?>
                                 <button type="button" class="btn btn-primary btn-sm" data-send-quote>Send Quotation</button>
                             <?php endif; ?>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" data-quote='<?php echo htmlspecialchars(json_encode($q), ENT_QUOTES, 'UTF-8'); ?>'>View Details</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-archive-quote>Archive</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" title="View Details" aria-label="View Details" data-quote='<?php echo htmlspecialchars(json_encode($q), ENT_QUOTES, 'UTF-8'); ?>'><i class="bi bi-eye"></i></button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" title="Archive" aria-label="Archive" data-archive-quote><i class="bi bi-trash"></i></button>
                         </div>
                     </td>
                 </tr>

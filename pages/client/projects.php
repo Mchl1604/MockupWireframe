@@ -126,7 +126,6 @@
             'name' => 'AC Installation - Grand Arc Tower',
             'serviceType' => 'AC Installation',
             'status' => 'For Approval',
-            'timeline' => 'Apr 25 - Apr 29',
             'address' => 'Ortigas Center',
             'description' => 'Replacement project awaiting final approval before mobilization.',
             'quotation' => [],
@@ -163,7 +162,6 @@
                     <th>Name</th>
                     <th>Service</th>
                     <th>Status</th>
-                    <th>Timeline</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -192,14 +190,15 @@
                     <td>
                         <span class="badge <?php echo htmlspecialchars($statusClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8'); ?></span>
                     </td>
-                    <td><?php echo htmlspecialchars($project['timeline'], ENT_QUOTES, 'UTF-8'); ?></td>
                     <td>
                         <button
                             type="button"
                             class="btn btn-outline-primary btn-sm"
+                            title="View Details"
+                            aria-label="View Details"
                             data-project='<?php echo htmlspecialchars(json_encode($project), ENT_QUOTES, 'UTF-8'); ?>'
                         >
-                            View
+                            <i class="bi bi-eye"></i>
                         </button>
                         <?php if ($status === 'Completed'): ?>
                             <button type="button" class="btn btn-success btn-sm ms-2">
@@ -223,14 +222,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="row g-3">
-                        <div class="col-md-6"><small class="text-muted d-block">Status</small><span id="pv-status" class="badge"></span></div>
+                        
                         <div class="col-md-6"><small class="text-muted d-block">Project Name</small><strong id="pv-name"></strong></div>
+                        <div class="col-md-6"><small class="text-muted d-block">Status</small><span id="pv-status" class="badge"></span></div>
                         <div class="col-md-6"><small class="text-muted d-block">Service</small><strong id="pv-service"></strong></div>
-                        <div class="col-md-6"><small class="text-muted d-block">Timeline</small><strong id="pv-timeline"></strong></div>
+                        <div class="col-md-6" id="pv-timeline-wrap"><small class="text-muted d-block" id="pv-timeline-label">Estimated Timeline</small><strong id="pv-timeline"></strong></div>
                         <div class="col-md-6"><small class="text-muted d-block">Address</small><strong id="pv-address"></strong></div>
                         <div class="col-12"><small class="text-muted d-block">Description</small><p class="mb-0" id="pv-description"></p></div>
-                        <div class="col-12 d-flex justify-content-end">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" id="pv-view-quotation">View Quotation</button>
+                        <div class="col-12 d-flex justify-content-start" id="pv-view-quotation-wrap">
+                            <button type="button" class="btn btn-primary btn-sm" id="pv-view-quotation">View Quotation</button>
                         </div>
                         <div class="col-12" id="pv-quotation-section" style="display:none;">
                             <hr class="my-2">
@@ -256,7 +256,7 @@
                             </div>
                             <div class="d-flex justify-content-end gap-2 mt-3" id="pv-quotation-actions" style="display:none;"></div>
                         </div>
-                        <div class="col-12 mt-2">
+                        <div class="col-12 mt-2" id="pv-progress-section">
                             <hr class="my-2">
                             <small class="text-muted d-block mb-2">Progress Reports (Technicians)</small>
                             <div class="table-responsive border rounded">
@@ -266,6 +266,7 @@
                                             <th style="width: 140px;">Date</th>
                                             <th style="width: 190px;">Technician</th>
                                             <th>Report</th>
+                                            <th style="width: 120px;">Picture</th>
                                         </tr>
                                     </thead>
                                     <tbody id="pv-progress-body"></tbody>
@@ -287,6 +288,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!modalEl || typeof bootstrap === 'undefined') return;
 
     const modal = new bootstrap.Modal(modalEl);
+    const viewQuotationWrap = modalEl.querySelector('#pv-view-quotation-wrap');
     const viewQuotationBtn = modalEl.querySelector('#pv-view-quotation');
     const quotationSection = modalEl.querySelector('#pv-quotation-section');
     const quotationMaterials = modalEl.querySelector('#pv-quotation-materials');
@@ -296,6 +298,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const laborCostEl = modalEl.querySelector('#pv-labor-cost');
     const totalCostEl = modalEl.querySelector('#pv-total-cost');
     const quotationActions = modalEl.querySelector('#pv-quotation-actions');
+    const timelineWrap = modalEl.querySelector('#pv-timeline-wrap');
+    const timelineLabel = modalEl.querySelector('#pv-timeline-label');
+    const timelineValue = modalEl.querySelector('#pv-timeline');
+    const progressSection = modalEl.querySelector('#pv-progress-section');
+    const progressBody = modalEl.querySelector('#pv-progress-body');
+    const progressEmpty = modalEl.querySelector('#pv-progress-empty');
+    const progressImagePath = '<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/imageSample.png', ENT_QUOTES, 'UTF-8'); ?>';
     let activeProjectData = null;
     let activeProjectButton = null;
 
@@ -319,6 +328,57 @@ document.addEventListener('DOMContentLoaded', function () {
         else statusEl.classList.add('bg-warning', 'text-dark');
     }
 
+    function normalizeStatus(status) {
+        return String(status || '').trim().toLowerCase();
+    }
+
+    function oneDayFromTimeline(timeline) {
+        const value = String(timeline || '').trim();
+        if (!value) return '';
+        if (value.indexOf('-') === -1) return value;
+        return value.split('-')[0].trim();
+    }
+
+    function renderTimelineField(status, timeline) {
+        if (!timelineWrap || !timelineLabel || !timelineValue) return;
+
+        const statusKey = normalizeStatus(status);
+        const hideTimeline = statusKey === 'for approval' || statusKey === 'awaiting quotation approval';
+
+        if (hideTimeline) {
+            timelineWrap.style.display = 'none';
+            timelineValue.textContent = '';
+            return;
+        }
+
+        timelineWrap.style.display = '';
+
+        if (statusKey === 'for assessment') {
+            timelineLabel.textContent = 'Assessment Schedule';
+            timelineValue.textContent = oneDayFromTimeline(timeline) || 'TBD';
+            return;
+        }
+
+        timelineLabel.textContent = 'Estimated Timeline';
+        timelineValue.textContent = String(timeline || '').trim() || 'TBD';
+    }
+
+    function shouldShowQuotationButton(status) {
+        const statusKey = normalizeStatus(status);
+        const hideStatuses = ['for approval', 'for assessment'];
+        return !hideStatuses.includes(statusKey);
+    }
+
+    function shouldShowProgressSection(status) {
+        const statusKey = normalizeStatus(status);
+        return statusKey === 'ongoing' || statusKey === 'completed';
+    }
+
+    function parseProgressDate(value) {
+        const parsed = Date.parse(String(value || '').trim());
+        return Number.isNaN(parsed) ? 0 : parsed;
+    }
+
     function updateProjectStatus(nextStatus) {
         if (!activeProjectData) return;
         activeProjectData.status = nextStatus;
@@ -332,6 +392,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         renderQuotationActions();
+        if (viewQuotationWrap) {
+            viewQuotationWrap.style.display = shouldShowQuotationButton(nextStatus) ? '' : 'none';
+        }
+        if (quotationSection && !shouldShowQuotationButton(nextStatus)) {
+            quotationSection.style.display = 'none';
+        }
+        if (progressSection) {
+            progressSection.style.display = shouldShowProgressSection(nextStatus) ? '' : 'none';
+        }
     }
 
     function renderQuotationActions() {
@@ -345,8 +414,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         quotationActions.innerHTML = '' +
-            '<button type="button" class="btn btn-outline-danger btn-sm" data-quotation-action="reject">Reject Quotation</button>' +
-            '<button type="button" class="btn btn-success btn-sm" data-quotation-action="approve">Approve Quotation</button>';
+            '<button type="button" class="btn btn-danger btn-sm" data-quotation-action="reject">Decline</button>' +
+            '<button type="button" class="btn btn-success btn-sm" data-quotation-action="approve">Accept</button>';
         quotationActions.style.display = '';
     }
 
@@ -407,19 +476,35 @@ document.addEventListener('DOMContentLoaded', function () {
             activeProjectButton = btn;
             const statusEl = modalEl.querySelector('#pv-status');
             const status = data.status || '';
-            const progressBody = modalEl.querySelector('#pv-progress-body');
-            const progressEmpty = modalEl.querySelector('#pv-progress-empty');
-            const progressReports = Array.isArray(data.progressReports) ? data.progressReports : [];
+            const progressReports = Array.isArray(data.progressReports) ? data.progressReports.slice() : [];
 
             if (quotationSection) quotationSection.style.display = 'none';
             if (viewQuotationBtn) viewQuotationBtn.textContent = 'View Quotation';
             if (quotationActions) quotationActions.innerHTML = '';
 
+            const showQuotationButton = shouldShowQuotationButton(status);
+            if (viewQuotationWrap) {
+                viewQuotationWrap.style.display = showQuotationButton ? '' : 'none';
+                viewQuotationWrap.hidden = !showQuotationButton;
+            }
+            if (viewQuotationBtn) {
+                viewQuotationBtn.style.display = showQuotationButton ? '' : 'none';
+                viewQuotationBtn.hidden = !showQuotationButton;
+            }
+
             modalEl.querySelector('#pv-name').textContent = data.name || '';
             modalEl.querySelector('#pv-service').textContent = data.serviceType || '';
-            modalEl.querySelector('#pv-timeline').textContent = data.timeline || '';
             modalEl.querySelector('#pv-address').textContent = data.address || '';
             modalEl.querySelector('#pv-description').textContent = data.description || '';
+            renderTimelineField(status, data.timeline || '');
+
+            if (progressSection) {
+                progressSection.style.display = shouldShowProgressSection(status) ? '' : 'none';
+            }
+
+            progressReports.sort(function (left, right) {
+                return parseProgressDate(right.date) - parseProgressDate(left.date);
+            });
 
             if (progressBody) {
                 if (progressReports.length === 0) {
@@ -429,9 +514,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (progressEmpty) progressEmpty.style.display = 'none';
                     progressBody.innerHTML = progressReports.map(function (entry) {
                         return '<tr>' +
-                            '<td class="small">' + (entry.date || '') + '</td>' +
-                            '<td class="small">' + (entry.technician || '') + '</td>' +
-                            '<td class="small">' + (entry.report || '') + '</td>' +
+                            '<td class="small">' + esc(entry.date || '') + '</td>' +
+                            '<td class="small">' + esc(entry.technician || '') + '</td>' +
+                            '<td class="small">' + esc(entry.report || '') + '</td>' +
+                            '<td class="small"><img src="' + esc(progressImagePath) + '" alt="Progress report photo" class="img-thumbnail" style="width:72px;height:72px;object-fit:cover;"></td>' +
                             '</tr>';
                     }).join('');
                 }

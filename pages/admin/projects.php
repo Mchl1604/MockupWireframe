@@ -48,8 +48,8 @@ $statusClassMap = [
                     </td>
                     <td>
                         <div class="d-flex flex-wrap gap-1">
-                            <a class="btn btn-sm btn-outline-primary" href="<?php echo htmlspecialchars(app_url('/admin/project', ['id' => $p['id'], 'status' => $p['status']]), ENT_QUOTES, 'UTF-8'); ?>">View Details</a>
-                            <button type="button" class="btn btn-sm btn-outline-danger">Archive</button>
+                            <a class="btn btn-sm btn-outline-primary" title="View Details" aria-label="View Details" href="<?php echo htmlspecialchars(app_url('/admin/project', ['id' => $p['id'], 'status' => $p['status']]), ENT_QUOTES, 'UTF-8'); ?>"><i class="bi bi-eye"></i></a>
+                            <button type="button" class="btn btn-sm btn-outline-danger" title="Archive" aria-label="Archive"><i class="bi bi-trash"></i></button>
                         </div>
                     </td>
                 </tr>

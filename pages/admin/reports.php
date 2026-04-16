@@ -141,7 +141,7 @@
                                                     data-image="<?php echo htmlspecialchars($report['image'], ENT_QUOTES, 'UTF-8'); ?>"
                                                     data-materials="<?php echo htmlspecialchars(json_encode($report['materials']), ENT_QUOTES, 'UTF-8'); ?>"
                                                     data-estimated-days="<?php echo htmlspecialchars($report['estimatedDays'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
-                                                    data-bs-toggle="modal" data-bs-target="#viewReportModal">View Details</button>
+                                                    data-bs-toggle="modal" data-bs-target="#viewReportModal" title="View Details" aria-label="View Details"><i class="bi bi-eye"></i></button>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

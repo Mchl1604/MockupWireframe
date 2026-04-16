@@ -38,7 +38,7 @@ $statusClassMap = [
                         </span>
                     </td>
                     <td>
-                        <a class="btn btn-sm btn-outline-primary" title="View Project Details" href="<?php echo htmlspecialchars(app_url('/tech/project', ['id' => $p['id'], 'status' => $p['status']]), ENT_QUOTES, 'UTF-8'); ?>">View Details</a>
+                        <a class="btn btn-sm btn-outline-primary" title="View Details" aria-label="View Details" href="<?php echo htmlspecialchars(app_url('/tech/project', ['id' => $p['id'], 'status' => $p['status']]), ENT_QUOTES, 'UTF-8'); ?>"><i class="bi bi-eye"></i></a>
                         <?php if ($statusKey === 'ongoing'): ?>
                             <button
                                 type="button"
