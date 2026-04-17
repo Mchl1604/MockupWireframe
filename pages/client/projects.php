@@ -10,11 +10,11 @@
     <?php
     $projects = [
         [
-            'id' => 'PRJ-1001',
-            'name' => 'AC Installation - ACME Holdings',
-            'serviceType' => 'AC Installation',
-            'status' => 'Ongoing',
-            'timeline' => 'Apr 10 - Apr 18',
+            'id' => 'COL-2026-0001',
+            'name' => 'Airon Installation - ACME Holdings',
+            'serviceType' => 'Airon Installation',
+            'status' => 'In Progress',
+            'timeline' => 'Apr 10, 2026 - Apr 18, 2026',
             'address' => 'Makati Business District',
             'description' => 'Installation of aircon units for multi-floor office spaces.',
             'quotation' => [
@@ -41,11 +41,11 @@
             ],
         ],
         [
-            'id' => 'PRJ-1002',
+            'id' => 'COL-2026-0002',
             'name' => 'AC Repair - J. Dela Cruz',
-            'serviceType' => 'AC Repair',
+            'serviceType' => 'Aircon Repair',
             'status' => 'Completed',
-            'timeline' => 'Apr 1 - Apr 2',
+            'timeline' => 'Apr 1, 2026 - Apr 2, 2026',
             'address' => 'Taguig City Residential Tower',
             'description' => 'Troubleshooting and repair of split-type condenser and indoor unit.',
             'quotation' => [
@@ -71,11 +71,11 @@
             ],
         ],
         [
-            'id' => 'PRJ-1003',
+            'id' => 'COL-2026-0003',
             'name' => 'Ducting Systems - Metro Storage',
             'serviceType' => 'Ducting Systems',
             'status' => 'Awaiting Quotation Approval',
-            'timeline' => 'Apr 20 - Apr 27',
+            'timeline' => 'Apr 20, 2026 - Apr 27, 2026',
             'address' => 'Caloocan Industrial Park',
             'description' => 'Fabrication and installation of rectangular ducts for ventilation.',
             'quotation' => [
@@ -91,22 +91,55 @@
             'progressReports' => [],
         ],
         [
-            'id' => 'PRJ-1004',
-            'name' => 'Aircon Services - Northline Foods',
-            'serviceType' => 'Aircon Services',
+            'id' => 'COL-2026-0007',
+            'name' => 'Aircon Installation - Greenfield Offices',
+            'serviceType' => 'Aircon Installation',
+            'status' => 'Pending Schedule',
+            'timeline' => '',
+            'address' => 'Bonifacio Global City',
+            'description' => 'Awaiting schedule confirmation before onsite service deployment.',
+            'quotation' => [],
+            'progressReports' => [],
+        ],
+        [
+            'id' => 'COL-2026-0008',
+            'name' => 'Ventilation Upgrade - Zenith Tower',
+            'serviceType' => 'Ducting Systems',
+            'status' => 'In Progress',
+            'timeline' => 'May 6, 2026 - May 14, 2026',
+            'address' => 'Mandaluyong Business Park',
+            'description' => 'Ongoing ducting retrofit for improved ventilation efficiency.',
+            'quotation' => [],
+            'progressReports' => [
+                [
+                    'date' => 'May 7, 2026',
+                    'technician' => 'Tech. Paolo Mendoza',
+                    'report' => 'Main trunk line supports were installed and alignment checks passed on floors 8 to 10.',
+                ],
+                [
+                    'date' => 'May 9, 2026',
+                    'technician' => 'Tech. Nina Velasco',
+                    'report' => 'Branch duct sections connected and initial airflow balancing started for east wing zones.',
+                ],
+            ],
+        ],
+        [
+            'id' => 'COL-2026-0004',
+            'name' => 'Airon Repair - Northline Foods',
+            'serviceType' => 'Airon Repair',
             'status' => 'For Assessment',
-            'timeline' => 'Apr 15 - Apr 17',
+            'timeline' => 'April 15, 2026',
             'address' => 'Quezon City Mall Complex',
             'description' => 'Initial site assessment for multiple air-conditioning units in the mall.',
             'quotation' => [],
             'progressReports' => [],
         ],
         [
-            'id' => 'PRJ-1005',
+            'id' => 'COL-2026-0005',
             'name' => 'Ducting Systems - BluePeak IT',
             'serviceType' => 'Ducting Systems',
             'status' => 'Pending',
-            'timeline' => 'Apr 22 - Apr 30',
+            'timeline' => 'Apr 22, 2026 - Apr 30, 2026',
             'address' => 'Pasay Hotel District',
             'description' => 'Waiting for schedule confirmation and start date approval.',
             'quotation' => [
@@ -122,10 +155,11 @@
             'progressReports' => [],
         ],
         [
-            'id' => 'PRJ-1006',
-            'name' => 'AC Installation - Grand Arc Tower',
-            'serviceType' => 'AC Installation',
+            'id' => 'COL-2026-0006',
+            'name' => 'Airon Installation - Grand Arc Tower',
+            'serviceType' => 'Airon Installation',
             'status' => 'For Approval',
+            'timeline' => 'Apr 24, 2026 - Apr 30, 2026',
             'address' => 'Ortigas Center',
             'description' => 'Replacement project awaiting final approval before mobilization.',
             'quotation' => [],
@@ -137,10 +171,11 @@
         'For Approval' => 1,
         'For Assessment' => 2,
         'Awaiting Quotation Approval' => 3,
-        'Pending' => 4,
-        'Ongoing' => 5,
-        'Completed' => 6,
-        'Quotation Rejected' => 7,
+        'Pending Schedule' => 4,
+        'Pending' => 5,
+        'In Progress' => 6,
+        'Completed' => 7,
+        'Quotation Rejected' => 8,
     ];
 
     usort($projects, function ($left, $right) use ($statusOrder) {
@@ -153,64 +188,218 @@
 
         return $leftRank <=> $rightRank;
     });
+
+    $requestStatuses = [
+        'For Approval',
+    ];
+
+    $requestProjects = array_values(array_filter($projects, function ($project) use ($requestStatuses) {
+        return in_array($project['status'], $requestStatuses, true);
+    }));
+
+    $ongoingStatuses = [
+        'In Progress',
+        'For Assessment',
+        'Awaiting Quotation Approval',
+        'Pending Schedule',
+        'Pending',
+    ];
+
+    $ongoingProjects = array_values(array_filter($projects, function ($project) use ($ongoingStatuses) {
+        return in_array($project['status'], $ongoingStatuses, true);
+    }));
+
+    $completedProjects = array_values(array_filter($projects, function ($project) {
+        return $project['status'] === 'Completed';
+    }));
+
+    $badgeClassForStatus = function ($status) {
+        if ($status === 'In Progress') {
+            return 'bg-primary';
+        }
+        if ($status === 'Completed') {
+            return 'bg-success';
+        }
+        if ($status === 'Quotation Rejected' || $status === 'Cancelled') {
+            return 'bg-danger';
+        }
+        if ($status === 'For Assessment') {
+            return 'bg-info text-dark';
+        }
+        if ($status === 'Pending' || $status === 'Pending Schedule' || $status === 'Scheduled') {
+            return 'bg-secondary';
+        }
+
+        return 'bg-warning text-dark';
+    };
     ?>
 
-    <div class="table-responsive card border-0 shadow-sm">
-        <table class="table table-hover mb-0">
-            <thead class="table-light">
-                <tr>
-                    <th>Name</th>
-                    <th>Service</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($projects as $project): ?>
-                <?php
-                $status = $project['status'];
-                $statusClass = 'bg-warning text-dark';
-                if ($status === 'Ongoing') {
-                    $statusClass = 'bg-primary';
-                } elseif ($status === 'Completed') {
-                    $statusClass = 'bg-success';
-                } elseif ($status === 'Quotation Rejected') {
-                    $statusClass = 'bg-danger';
-                } elseif ($status === 'For Assessment') {
-                    $statusClass = 'bg-info text-dark';
-                } elseif ($status === 'For Approval') {
-                    $statusClass = 'bg-warning text-dark';
-                } elseif ($status === 'Pending') {
-                    $statusClass = 'bg-secondary';
-                }
-                ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($project['name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td><?php echo htmlspecialchars($project['serviceType'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td>
-                        <span class="badge <?php echo htmlspecialchars($statusClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8'); ?></span>
-                    </td>
-                    <td>
-                        <button
-                            type="button"
-                            class="btn btn-outline-primary btn-sm"
-                            title="View Details"
-                            aria-label="View Details"
-                            data-project='<?php echo htmlspecialchars(json_encode($project), ENT_QUOTES, 'UTF-8'); ?>'
-                        >
-                            <i class="bi bi-eye"></i>
-                        </button>
-                        <?php if ($status === 'Completed'): ?>
-                            <button type="button" class="btn btn-success btn-sm ms-2">
-                                Confirm Completion
-                            </button>
+    <div class="card border-0 shadow-sm">
+        <div class="card-body pb-0">
+            <ul class="nav nav-tabs" id="clientProjectTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="requests-tab" data-bs-toggle="tab" data-bs-target="#requests-pane" type="button" role="tab" aria-controls="requests-pane" aria-selected="true">
+                        Requests
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="ongoing-tab" data-bs-toggle="tab" data-bs-target="#ongoing-pane" type="button" role="tab" aria-controls="ongoing-pane" aria-selected="false">
+                        Ongoing
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed-pane" type="button" role="tab" aria-controls="completed-pane" aria-selected="false">
+                        Completed
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content" id="clientProjectTabsContent">
+            <div class="tab-pane fade show active" id="requests-pane" role="tabpanel" aria-labelledby="requests-tab" tabindex="0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Reference No</th>
+                                <th>Service Type</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php if (empty($requestProjects)): ?>
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">No requests found.</td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($requestProjects as $project): ?>
+                                <?php $status = $project['status']; ?>
+                                <?php $displayStatus = $status === 'For Approval' ? 'Pending' : $status; ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($project['id'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($project['serviceType'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td>
+                                        <span class="badge <?php echo htmlspecialchars($badgeClassForStatus($displayStatus), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($displayStatus, ENT_QUOTES, 'UTF-8'); ?></span>
+                                    </td>
+                                    <td>
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-primary btn-sm"
+                                            title="View Details"
+                                            aria-label="View Details"
+                                            data-project='<?php echo htmlspecialchars(json_encode($project), ENT_QUOTES, 'UTF-8'); ?>'
+                                        >
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-danger btn-sm ms-2"
+                                            data-cancel-project
+                                        >
+                                            Cancel
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         <?php endif; ?>
-                        
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="ongoing-pane" role="tabpanel" aria-labelledby="ongoing-tab" tabindex="0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Reference No</th>
+                                <th>Service Type</th>
+                                <th>Status</th>
+                                <th>Estimated Timeline</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ongoing-projects-body">
+                        <?php if (empty($ongoingProjects)): ?>
+                            <tr class="js-empty-ongoing-row">
+                                <td colspan="5" class="text-center text-muted py-4">No in progress projects found.</td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($ongoingProjects as $project): ?>
+                                <?php $status = $project['status']; ?>
+                                <?php $displayStatus = $status === 'Pending' ? 'Scheduled' : $status; ?>
+                                <?php $timelineDisplay = $status === 'Awaiting Quotation Approval' ? '' : ($project['timeline'] ?? 'TBD'); ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($project['id'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($project['serviceType'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td>
+                                        <span class="badge <?php echo htmlspecialchars($badgeClassForStatus($displayStatus), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($displayStatus, ENT_QUOTES, 'UTF-8'); ?></span>
+                                    </td>
+                                    <td><?php echo htmlspecialchars($timelineDisplay, ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td>
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-primary btn-sm"
+                                            title="View Details"
+                                            aria-label="View Details"
+                                            data-project='<?php echo htmlspecialchars(json_encode($project), ENT_QUOTES, 'UTF-8'); ?>'
+                                        >
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <?php if (($project['id'] ?? '') === 'COL-2026-0008' && $status === 'In Progress'): ?>
+                                            <button type="button" class="btn btn-success btn-sm ms-2 js-service-complete" data-service-complete>Service Completed</button>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="completed-pane" role="tabpanel" aria-labelledby="completed-tab" tabindex="0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Reference No</th>
+                                <th>Service Type</th>
+                                <th>Service Timeline</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="completed-projects-body">
+                        <?php if (empty($completedProjects)): ?>
+                            <tr class="js-empty-completed-row">
+                                <td colspan="4" class="text-center text-muted py-4">No completed projects found.</td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($completedProjects as $project): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($project['id'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($project['serviceType'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($project['timeline'] ?? 'TBD', ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td>
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-primary btn-sm"
+                                            title="View Details"
+                                            aria-label="View Details"
+                                            data-project='<?php echo htmlspecialchars(json_encode($project), ENT_QUOTES, 'UTF-8'); ?>'
+                                        >
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="modal fade" id="projectViewModal" tabindex="-1" aria-hidden="true">
@@ -258,13 +447,12 @@
                         </div>
                         <div class="col-12 mt-2" id="pv-progress-section">
                             <hr class="my-2">
-                            <small class="text-muted d-block mb-2">Progress Reports (Technicians)</small>
+                            <div class="fw-bold mb-2">Progress Report</div>
                             <div class="table-responsive border rounded">
                                 <table class="table table-sm mb-0 align-middle">
                                     <thead class="table-light">
                                         <tr>
                                             <th style="width: 140px;">Date</th>
-                                            <th style="width: 190px;">Technician</th>
                                             <th>Report</th>
                                             <th style="width: 120px;">Picture</th>
                                         </tr>
@@ -284,6 +472,9 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const projectButtons = document.querySelectorAll('[data-project]');
+    const cancelButtons = document.querySelectorAll('[data-cancel-project]');
+    const ongoingBody = document.getElementById('ongoing-projects-body');
+    const completedBody = document.getElementById('completed-projects-body');
     const modalEl = document.getElementById('projectViewModal');
     if (!modalEl || typeof bootstrap === 'undefined') return;
 
@@ -323,8 +514,9 @@ document.addEventListener('DOMContentLoaded', function () {
         statusEl.textContent = status;
         statusEl.className = 'badge';
         if (status === 'Completed') statusEl.classList.add('bg-success');
-        else if (status === 'Ongoing') statusEl.classList.add('bg-primary');
-        else if (status === 'Quotation Rejected') statusEl.classList.add('bg-danger');
+        else if (status === 'In Progress') statusEl.classList.add('bg-primary');
+        else if (status === 'Quotation Rejected' || status === 'Cancelled') statusEl.classList.add('bg-danger');
+        else if (status === 'Pending' || status === 'Pending Schedule' || status === 'Scheduled') statusEl.classList.add('bg-secondary');
         else statusEl.classList.add('bg-warning', 'text-dark');
     }
 
@@ -371,12 +563,123 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function shouldShowProgressSection(status) {
         const statusKey = normalizeStatus(status);
-        return statusKey === 'ongoing' || statusKey === 'completed';
+        return statusKey === 'in progress' || statusKey === 'completed';
     }
 
     function parseProgressDate(value) {
         const parsed = Date.parse(String(value || '').trim());
         return Number.isNaN(parsed) ? 0 : parsed;
+    }
+
+    function createViewButton(projectData) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-outline-primary btn-sm';
+        button.title = 'View Details';
+        button.setAttribute('aria-label', 'View Details');
+        button.dataset.project = JSON.stringify(projectData);
+        button.innerHTML = '<i class="bi bi-eye"></i>';
+
+        button.addEventListener('click', function () {
+            const data = JSON.parse(button.dataset.project || '{}');
+            activeProjectData = data;
+            activeProjectButton = button;
+            const statusEl = modalEl.querySelector('#pv-status');
+            const status = data.status || '';
+            const progressReports = Array.isArray(data.progressReports) ? data.progressReports.slice() : [];
+
+            if (quotationSection) quotationSection.style.display = 'none';
+            if (viewQuotationBtn) viewQuotationBtn.textContent = 'View Quotation';
+            if (quotationActions) quotationActions.innerHTML = '';
+
+            const showQuotationButton = shouldShowQuotationButton(status);
+            if (viewQuotationWrap) {
+                viewQuotationWrap.style.display = showQuotationButton ? '' : 'none';
+                viewQuotationWrap.hidden = !showQuotationButton;
+            }
+            if (viewQuotationBtn) {
+                viewQuotationBtn.style.display = showQuotationButton ? '' : 'none';
+                viewQuotationBtn.hidden = !showQuotationButton;
+            }
+
+            modalEl.querySelector('#pv-name').textContent = data.name || '';
+            modalEl.querySelector('#pv-service').textContent = data.serviceType || '';
+            modalEl.querySelector('#pv-address').textContent = data.address || '';
+            modalEl.querySelector('#pv-description').textContent = data.description || '';
+            renderTimelineField(status, data.timeline || '');
+
+            if (progressSection) {
+                progressSection.style.display = shouldShowProgressSection(status) ? '' : 'none';
+            }
+
+            progressReports.sort(function (left, right) {
+                return parseProgressDate(right.date) - parseProgressDate(left.date);
+            });
+
+            if (progressBody) {
+                if (progressReports.length === 0) {
+                    progressBody.innerHTML = '';
+                    if (progressEmpty) progressEmpty.style.display = '';
+                } else {
+                    if (progressEmpty) progressEmpty.style.display = 'none';
+                    progressBody.innerHTML = progressReports.map(function (entry) {
+                        return '<tr>' +
+                            '<td class="small">' + esc(entry.date || '') + '</td>' +
+                            '<td class="small">' + esc(entry.report || '') + '</td>' +
+                            '<td class="small"><img src="' + esc(progressImagePath) + '" alt="Progress report photo" class="img-thumbnail" style="width:72px;height:72px;object-fit:cover;"></td>' +
+                            '</tr>';
+                    }).join('');
+                }
+            }
+
+            applyStatusBadge(statusEl, status);
+            renderQuotationActions();
+
+            modal.show();
+        });
+
+        return button;
+    }
+
+    function ensureOngoingEmptyRow() {
+        if (!ongoingBody) return;
+        const hasRows = ongoingBody.querySelectorAll('tr:not(.js-empty-ongoing-row)').length > 0;
+        const existing = ongoingBody.querySelector('.js-empty-ongoing-row');
+        if (hasRows && existing) {
+            existing.remove();
+            return;
+        }
+        if (!hasRows && !existing) {
+            ongoingBody.innerHTML = '<tr class="js-empty-ongoing-row"><td colspan="5" class="text-center text-muted py-4">No in progress projects found.</td></tr>';
+        }
+    }
+
+    function addCompletedRow(projectData) {
+        if (!completedBody) return;
+        const emptyRow = completedBody.querySelector('.js-empty-completed-row');
+        if (emptyRow) emptyRow.remove();
+
+        const row = document.createElement('tr');
+        const timeline = String(projectData.timeline || '').trim() || 'TBD';
+
+        const refCell = document.createElement('td');
+        refCell.textContent = projectData.id || '';
+        row.appendChild(refCell);
+
+        const serviceCell = document.createElement('td');
+        serviceCell.textContent = projectData.serviceType || '';
+        row.appendChild(serviceCell);
+
+        const timelineCell = document.createElement('td');
+        timelineCell.textContent = timeline;
+        row.appendChild(timelineCell);
+
+        const actionCell = document.createElement('td');
+        const viewButton = createViewButton(projectData);
+        actionCell.appendChild(viewButton);
+        row.appendChild(actionCell);
+
+        completedBody.appendChild(row);
     }
 
     function updateProjectStatus(nextStatus) {
@@ -515,7 +818,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     progressBody.innerHTML = progressReports.map(function (entry) {
                         return '<tr>' +
                             '<td class="small">' + esc(entry.date || '') + '</td>' +
-                            '<td class="small">' + esc(entry.technician || '') + '</td>' +
                             '<td class="small">' + esc(entry.report || '') + '</td>' +
                             '<td class="small"><img src="' + esc(progressImagePath) + '" alt="Progress report photo" class="img-thumbnail" style="width:72px;height:72px;object-fit:cover;"></td>' +
                             '</tr>';
@@ -529,6 +831,51 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.show();
         });
     });
+
+    cancelButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const row = btn.closest('tr');
+            if (!row) return;
+
+            const viewButton = row.querySelector('[data-project]');
+            if (!viewButton) return;
+
+            const shouldCancel = window.confirm('Cancel this request?');
+            if (!shouldCancel) return;
+
+            const data = JSON.parse(viewButton.dataset.project || '{}');
+            data.status = 'Cancelled';
+            viewButton.dataset.project = JSON.stringify(data);
+
+            const statusBadge = row.querySelector('span.badge');
+            applyStatusBadge(statusBadge, 'Cancelled');
+
+            btn.disabled = true;
+            btn.textContent = 'Cancelled';
+        });
+    });
+
+    if (ongoingBody) {
+        ongoingBody.addEventListener('click', function (event) {
+            const completeButton = event.target.closest('[data-service-complete]');
+            if (!completeButton) return;
+
+            const row = completeButton.closest('tr');
+            if (!row) return;
+
+            const viewButton = row.querySelector('[data-project]');
+            if (!viewButton) return;
+
+            const data = JSON.parse(viewButton.dataset.project || '{}');
+            if (data.status !== 'In Progress') return;
+
+            data.status = 'Completed';
+            addCompletedRow(data);
+            row.remove();
+
+            ensureOngoingEmptyRow();
+        });
+    }
 });
 </script>
 

@@ -184,7 +184,6 @@
                                 <p class="mb-2">Installation, maintenance, and cleaning of air-conditioning units for homes, offices, and commercial buildings.</p>
                                 <ul class="service-points">
                                     <li>Installation</li>
-                                    <li>Maintenance</li>
                                     <li>AC Repair</li>
                                     <li>AC Cleaning</li>
                                 </ul>
@@ -195,7 +194,7 @@
                     <div class="accordion-item service-panel service-card" data-service-id="ducting" data-service-name="Ducting">
                         <h2 class="accordion-header" id="serviceHeadingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#serviceCollapseTwo" aria-expanded="false" aria-controls="serviceCollapseTwo">
-                                Ducting
+                                Ducting Services
                             </button>
                         </h2>
                         <div id="serviceCollapseTwo" class="accordion-collapse collapse" aria-labelledby="serviceHeadingTwo" data-bs-parent="#serviceAccordion">
@@ -209,18 +208,6 @@
                         </div>
                     </div>
 
-                    <div class="accordion-item service-panel service-card" data-service-id="preventive-maintenance" data-service-name="Preventive Maintenance">
-                        <h2 class="accordion-header" id="serviceHeadingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#serviceCollapseThree" aria-expanded="false" aria-controls="serviceCollapseThree">
-                                Preventive Maintenance
-                            </button>
-                        </h2>
-                        <div id="serviceCollapseThree" class="accordion-collapse collapse" aria-labelledby="serviceHeadingThree" data-bs-parent="#serviceAccordion">
-                            <div class="accordion-body">
-                                <p class="mb-2">Routine inspection and upkeep plan that minimizes downtime and extends system life.</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -256,7 +243,6 @@
                                 <select name="aircon_service_type" id="airconServiceType" class="form-select request-field">
                                     <option value="" selected disabled>Select aircon service type</option>
                                     <option value="installation">Installation</option>
-                                    <option value="maintenance">Maintenance</option>
                                     <option value="ac-repair">AC Repair</option>
                                     <option value="ac-cleaning">AC Cleaning</option>
                                 </select>
