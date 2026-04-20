@@ -1,4 +1,4 @@
-<?php $pageTitle = 'My Schedule'; ?>
+<?php $pageTitle = 'Technician Schedule'; ?>
 <?php include __DIR__ . '/../../includes/head.php'; ?>
 <?php
 $techSchedules = [

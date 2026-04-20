@@ -2,7 +2,7 @@
 $baseUrl = $baseUrl ?? '';
 $requestPath = app_current_path();
 $segments = explode('/', trim($requestPath, '/'));
-$sidebarRole = in_array($segments[0] ?? '', ['admin', 'client', 'tech'], true) ? $segments[0] : '';
+$sidebarRole = in_array($segments[0] ?? '', ['admin', 'client', 'tech', 'lead-technician'], true) ? $segments[0] : '';
 
 $sidebarMenus = [
     'admin' => [
@@ -24,8 +24,13 @@ $sidebarMenus = [
     'tech' => [
         ['label' => 'My Schedule', 'href' => '/tech/schedule', 'icon' => 'bi-calendar2-week'],
         ['label' => 'My Projects', 'href' => '/tech/projects', 'icon' => 'bi-folder2-open'],
-        ['label' => 'Reports', 'href' => '/tech/reports', 'icon' => 'bi-graph-up'],
         ['label' => 'Attendance', 'href' => '/tech/attendance', 'icon' => 'bi-clock-history'],
+    ],
+    'lead-technician' => [
+        ['label' => 'My Schedule', 'href' => '/lead-technician/schedule', 'icon' => 'bi-calendar2-week'],
+        ['label' => 'My Projects', 'href' => '/lead-technician/projects', 'icon' => 'bi-folder2-open'],
+        ['label' => 'Reports', 'href' => '/lead-technician/reports', 'icon' => 'bi-graph-up'],
+        ['label' => 'Attendance', 'href' => '/lead-technician/attendance', 'icon' => 'bi-clock-history'],
     ],
 ];
 
@@ -33,7 +38,7 @@ if ($sidebarRole === '') {
     return;
 }
 
-$roleLabel = ucfirst($sidebarRole);
+$roleLabel = $sidebarRole === 'lead-technician' ? 'Lead Technician' : ucfirst($sidebarRole);
 $currentPage = $requestPath;
 ?>
 <aside class="sidebar" id="sidebar" aria-label="<?php echo htmlspecialchars($roleLabel, ENT_QUOTES, 'UTF-8'); ?> navigation">

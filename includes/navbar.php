@@ -2,15 +2,16 @@
 $baseUrl = $baseUrl ?? '';
 $requestPath = app_current_path();
 $segments = explode('/', trim($requestPath, '/'));
-$sidebarRole = in_array($segments[0] ?? '', ['admin', 'client', 'tech'], true) ? $segments[0] : '';
+$sidebarRole = in_array($segments[0] ?? '', ['admin', 'client', 'tech', 'lead-technician'], true) ? $segments[0] : '';
 
 $panelUserByRole = [
     'admin' => 'Michael Capanayan',
     'client' => 'Juan Dela Cruz',
-    'tech' => 'Mark Santos',
+    'tech' => 'Carlos Reyes',
+    'lead-technician' => 'Mark Santos',
 ];
 $panelUserName = $panelUserByRole[$sidebarRole] ?? 'User';
-$panelRoleLabel = ucfirst($sidebarRole);
+$panelRoleLabel = $sidebarRole === 'lead-technician' ? 'Lead Technician' : ucfirst($sidebarRole);
 ?>
 <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top app-navbar">
     <div class="container-fluid px-3 px-lg-4 d-flex align-items-center">
@@ -36,6 +37,7 @@ $panelRoleLabel = ucfirst($sidebarRole);
             <a href="<?php echo htmlspecialchars(app_url('/client/projects'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Client</a>
             <a href="<?php echo htmlspecialchars(app_url('/admin/dashboard'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Admin</a>
             <a href="<?php echo htmlspecialchars(app_url('/tech/schedule'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Technician</a>
+            <a href="<?php echo htmlspecialchars(app_url('/lead-technician/schedule'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Lead Technician</a>
             <a href="<?php echo htmlspecialchars(app_url('/login'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-primary btn-sm">Login</a>
             <a href="<?php echo htmlspecialchars(app_url('/register'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-primary btn-sm">Register</a>
         </div>

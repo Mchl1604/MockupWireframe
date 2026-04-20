@@ -55,6 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ' . app_url('/tech/reports', ['submitted' => 1]));
         exit;
     }
+
+    if ($path === '/lead-technician/reports' && $action === 'submit_report') {
+        header('Location: ' . app_url('/lead-technician/reports', ['submitted' => 1]));
+        exit;
+    }
 }
 
 if ($path === '/client') {
@@ -69,6 +74,11 @@ if ($path === '/admin') {
 
 if ($path === '/tech') {
     header('Location: ' . app_url('/tech/schedule'));
+    exit;
+}
+
+if ($path === '/lead-technician') {
+    header('Location: ' . app_url('/lead-technician/schedule'));
     exit;
 }
 
@@ -97,6 +107,11 @@ $routes = [
     '/tech/project' => __DIR__ . '/pages/tech/project.php',
     '/tech/reports' => __DIR__ . '/pages/tech/reports.php',
     '/tech/attendance' => __DIR__ . '/pages/tech/attendance.php',
+    '/lead-technician/schedule' => __DIR__ . '/pages/lead-technician/schedule.php',
+    '/lead-technician/projects' => __DIR__ . '/pages/lead-technician/projects.php',
+    '/lead-technician/project' => __DIR__ . '/pages/lead-technician/project.php',
+    '/lead-technician/reports' => __DIR__ . '/pages/lead-technician/reports.php',
+    '/lead-technician/attendance' => __DIR__ . '/pages/lead-technician/attendance.php',
 ];
 
 if (isset($routes[$path])) {

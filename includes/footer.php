@@ -1,7 +1,7 @@
 <?php
 $currentPath = app_current_path();
 $pathSegments = explode('/', trim($currentPath, '/'));
-$isPanelRoute = in_array($pathSegments[0] ?? '', ['admin', 'client', 'tech'], true);
+$isPanelRoute = in_array($pathSegments[0] ?? '', ['admin', 'client', 'tech', 'lead-technician'], true);
 ?>
 
 <?php if (!$isPanelRoute): ?>

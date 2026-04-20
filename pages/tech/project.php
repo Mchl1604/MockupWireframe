@@ -85,12 +85,12 @@ if ($projectQuotation !== null) {
 
 $assetBasePath = ($baseUrl !== '' ? $baseUrl : '') . '/assets/img/';
 $teamByProject = [
-    'PRJ-1001' => ['Engr. Mark Santos', 'Tech. Carlo Reyes'],
-    'PRJ-1002' => ['Engr. Mark Santos', 'Tech. Lito Ramos'],
-    'PRJ-1003' => ['Engr. Mark Santos', 'Tech. Carlo Reyes', 'Tech. Anne Mendoza'],
-    'PRJ-1004' => ['Engr. Mark Santos', 'Tech. Carl Dominguez'],
-    'PRJ-1005' => ['Engr. Mark Santos', 'Tech. John Gonzales'],
-    'PRJ-1006' => ['Engr. Mark Santos', 'Tech. Anne Mendoza', 'Tech. Lito Ramos'],
+    'PRJ-1001' => ['Tech. Mark Santos', 'Tech. Carlo Reyes'],
+    'PRJ-1002' => ['Tech. Mark Santos', 'Tech. Carlo Reyes'],
+    'PRJ-1003' => ['Tech. Mark Santos', 'Tech. Carlo Reyes', 'Tech. Anne Mendoza'],
+    'PRJ-1004' => ['Tech. Mark Santos', 'Tech. Carlo Reyes'],
+    'PRJ-1005' => ['Tech. Mark Santos', 'Tech. Carlo Reyes'],
+    'PRJ-1006' => ['Tech. Mark Santos', 'Tech. Carlo Reyes', 'Tech. Lito Ramos'],
 ];
 $projectTeam = $teamByProject[$id] ?? [];
 
@@ -116,10 +116,57 @@ $reportsByProject = [
 ];
 $projectReports = $reportsByProject[$id] ?? [];
 
+if ($statusKey === 'ongoing') {
+    $projectReports = [
+        [
+            'type' => 'Progress Report',
+            'date' => 'Apr 19, 2026',
+            'technician' => 'Tech. Mark Santos',
+            'summary' => 'Indoor unit mounting completed for Zones 1 and 2. Routing for drain lines finalized.',
+            'photos' => ['imageSample.png'],
+        ],
+        [
+            'type' => 'Progress Report',
+            'date' => 'Apr 18, 2026',
+            'technician' => 'Tech. Carlo Reyes',
+            'summary' => 'Copper piping for main trunk installed and pressure test passed with no leakage detected.',
+            'photos' => ['imageSample.png'],
+        ],
+        [
+            'type' => 'Progress Report',
+            'date' => 'Apr 17, 2026',
+            'technician' => 'Tech. Anne Mendoza',
+            'summary' => 'Electrical rough-in completed and breaker assignments labeled for all aircon circuits.',
+            'photos' => ['imageSample.png'],
+        ],
+        [
+            'type' => 'Incident Report',
+            'date' => 'Apr 16, 2026',
+            'technician' => 'Tech. Mark Santos',
+            'summary' => 'Minor ceiling access delay due to blocked service hatch. Resolved after coordination with site admin.',
+            'photos' => ['imageSample.png'],
+        ],
+    ];
+}
+
+$progressReports = array_values(array_filter($projectReports, function ($report) {
+    return $report['type'] === 'Progress Report';
+}));
+usort($progressReports, function ($a, $b) {
+    return strtotime($b['date']) <=> strtotime($a['date']);
+});
+
+$incidentReports = array_values(array_filter($projectReports, function ($report) {
+    return $report['type'] === 'Incident Report';
+}));
+usort($incidentReports, function ($a, $b) {
+    return strtotime($b['date']) <=> strtotime($a['date']);
+});
+
 $assessmentByProject = [
     'PRJ-1001' => [
         'date' => 'Apr 08, 2026',
-        'technician' => 'Engr. Mark Santos',
+        'technician' => 'Tech. Mark Santos',
         'requiredTechnicians' => 2,
         'summary' => 'Aircon system assessment completed. Building has 3 zones requiring individual indoor units. Existing electrical capacity adequate. Installation timeline: 8 days.',
         'photos' => ['imageSample.png', 'imageSample.png', 'imageSample.png'],
@@ -154,7 +201,7 @@ $assessmentByProject = [
     ],
     'PRJ-1003' => [
         'date' => 'Apr 09, 2026',
-        'technician' => 'Engr. Mario Santos',
+        'technician' => 'Tech. Mark Santos',
         'requiredTechnicians' => 3,
         'summary' => 'Warehouse ducting assessment. Measurements completed for all zones. Existing ductwork requires partial replacement due to rust and deterioration.',
         'photos' => ['imageSample.png', 'imageSample.png'],
@@ -190,6 +237,12 @@ $assessmentByProject = [
 ];
 $projectAssessment = $assessmentByProject[$id] ?? null;
 $canViewAssessment = $statusKey !== 'for assessment';
+$projectTitle = $currentProject['service'] . ' - ' . $currentProject['client'];
+$showTasksTab = $statusKey !== 'for assessment';
+$projectTimeline = $currentProject['timeline'];
+if (!preg_match('/\b\d{4}\b/', $projectTimeline)) {
+    $projectTimeline .= ', 2026';
+}
 ?>
 <main class="container py-4 flex-grow-1">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -198,238 +251,320 @@ $canViewAssessment = $statusKey !== 'for assessment';
     </div>
 
     <div class="card border-0 shadow-sm mb-3">
-        <div class="card-body row g-3 align-items-start">
-            <div class="col-md-4"><small class="text-muted d-block">Project ID</small><strong><?php echo htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?></strong></div>
-            <div class="col-md-4"><small class="text-muted d-block">Client</small><strong><?php echo htmlspecialchars($currentProject['client'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-            <div class="col-md-4"><small class="text-muted d-block">Status</small><span class="badge <?php echo htmlspecialchars($statusClassMap[$statusKey] ?? 'bg-light text-dark', ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8'); ?></span></div>
-            <div class="col-md-4"><small class="text-muted d-block">Service Type</small><strong><?php echo htmlspecialchars($currentProject['service'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-            <div class="col-md-4"><small class="text-muted d-block">Timeline</small><strong class="d-block"><?php echo htmlspecialchars($currentProject['timeline'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-            <div class="col-md-4"><small class="text-muted d-block">Target Completion</small><strong class="d-block"><?php echo htmlspecialchars($currentProject['target'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-        </div>
-    </div>
-
-    <div class="row g-3">
-        <div class="col-lg-6">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <strong>Assigned Team</strong>
+        <div class="card-body py-3 px-3 px-md-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                <div>
+                    <h3 class="h5 fw-bold mb-2"><?php echo htmlspecialchars($projectTitle, ENT_QUOTES, 'UTF-8'); ?></h3>
+                    <div class="d-flex flex-wrap align-items-center gap-2 text-muted">
+                        <span><?php echo htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span>&bull;</span>
+                        <span><?php echo htmlspecialchars($projectTimeline, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge rounded-pill text-bg-light border"><?php echo htmlspecialchars($currentProject['service'], ENT_QUOTES, 'UTF-8'); ?></span>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <?php if (empty($projectTeam)): ?>
-                        <div class="text-muted small">No technicians assigned yet.</div>
-                    <?php else: ?>
-                        <ul class="list-group list-group-flush">
-                            <?php foreach ($projectTeam as $index => $tech): ?>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <?php echo htmlspecialchars($tech, ENT_QUOTES, 'UTF-8'); ?>
-                                        <?php if ($index === 0): ?>
-                                            <span class="badge bg-primary ms-2">Lead</span>
-                                        <?php endif; ?>
-                                    </div>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    <?php endif; ?>
-                </div>
+                <span class="badge <?php echo htmlspecialchars($statusClassMap[$statusKey] ?? 'bg-light text-dark', ENT_QUOTES, 'UTF-8'); ?> px-3 py-2 align-self-start"><?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8'); ?></span>
             </div>
         </div>
     </div>
 
-    <div class="card border-0 shadow-sm mt-3">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-            <strong>Technician Reports</strong>
-        </div>
-        <div class="card-body">
-            <ul class="nav nav-tabs mb-3" role="tablist">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body pb-0">
+            <ul class="nav nav-tabs" id="projectDetailTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="progressTab" data-bs-toggle="tab" data-bs-target="#progressReports" type="button" role="tab" aria-controls="progressReports" aria-selected="true">Progress Report</button>
+                    <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details-pane" type="button" role="tab" aria-controls="details-pane" aria-selected="true">Project Details</button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="incidentTab" data-bs-toggle="tab" data-bs-target="#incidentReports" type="button" role="tab" aria-controls="incidentReports" aria-selected="false">Incident Report</button>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="progressReports" role="tabpanel" aria-labelledby="progressTab">
-                    <?php
-                        $progressReports = array_filter($projectReports, function($r) { return $r['type'] === 'Progress Report'; });
-                        if (!empty($progressReports)):
-                    ?>
-                        <div class="row g-3">
-                            <?php foreach ($progressReports as $report): ?>
-                                <div class="col-12">
-                                    <div class="border rounded p-3">
-                                        <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
-                                            <div>
-                                                <strong><?php echo htmlspecialchars($report['technician'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                                <div class="small text-muted">Submitted <?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                            </div>
-                                        </div>
-                                        <p class="mb-2 small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></p>
-                                        <div class="row g-2">
-                                            <?php foreach ($report['photos'] as $photo): ?>
-                                                <div class="col-6 col-md-4 col-lg-3">
-                                                    <img src="<?php echo htmlspecialchars($assetBasePath . $photo, ENT_QUOTES, 'UTF-8'); ?>" alt="Report photo" class="img-fluid rounded border report-photo">
-                                                </div>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php else: ?>
-                        <p class="mb-0 text-muted">No progress reports submitted yet.</p>
-                    <?php endif; ?>
-                </div>
-                <div class="tab-pane fade" id="incidentReports" role="tabpanel" aria-labelledby="incidentTab">
-                    <?php
-                        $incidentReports = array_filter($projectReports, function($r) { return $r['type'] === 'Incident Report'; });
-                        if (!empty($incidentReports)):
-                    ?>
-                        <div class="row g-3">
-                            <?php foreach ($incidentReports as $report): ?>
-                                <div class="col-12">
-                                    <div class="border rounded p-3">
-                                        <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
-                                            <div>
-                                                <strong><?php echo htmlspecialchars($report['technician'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                                <div class="small text-muted">Submitted <?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                            </div>
-                                        </div>
-                                        <p class="mb-2 small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></p>
-                                        <div class="row g-2">
-                                            <?php foreach ($report['photos'] as $photo): ?>
-                                                <div class="col-6 col-md-4 col-lg-3">
-                                                    <img src="<?php echo htmlspecialchars($assetBasePath . $photo, ENT_QUOTES, 'UTF-8'); ?>" alt="Report photo" class="img-fluid rounded border report-photo">
-                                                </div>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php else: ?>
-                        <p class="mb-0 text-muted">No incident reports submitted yet.</p>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <?php if ($canViewAssessment): ?>
-    <div class="mt-3">
-        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#assessmentPanel" aria-expanded="false" aria-controls="assessmentPanel">View Assessment Report</button>
-    </div>
-    <div class="collapse mt-3" id="assessmentPanel">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white"><strong>Assessment Report</strong></div>
-            <div class="card-body">
-                <?php if ($projectAssessment !== null): ?>
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6"><small class="text-muted d-block">Assessed By</small><strong><?php echo htmlspecialchars($projectAssessment['technician'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div class="col-md-6"><small class="text-muted d-block">Assessment Date</small><strong><?php echo htmlspecialchars($projectAssessment['date'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div class="col-md-6"><small class="text-muted d-block">Required Number of Technicians</small><strong><?php echo htmlspecialchars((string) ($projectAssessment['requiredTechnicians'] ?? 1), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div class="col-12"><small class="text-muted d-block">Assessment Summary</small><p class="mb-0"><?php echo htmlspecialchars($projectAssessment['summary'], ENT_QUOTES, 'UTF-8'); ?></p></div>
-                    </div>
-
-                    <div class="mb-3">
-                        <small class="text-muted d-block mb-2"><strong>Key Findings</strong></small>
-                        <ul class="small">
-                            <?php foreach ($projectAssessment['findings'] as $finding): ?>
-                                <li><?php echo htmlspecialchars($finding, ENT_QUOTES, 'UTF-8'); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <small class="text-muted d-block mb-2"><strong>Materials Needed</strong></small>
-                            <div class="table-responsive border rounded">
-                                <table class="table table-sm mb-0">
-                                    <thead class="table-light"><tr><th>Material</th><th>Qty</th><th>Unit</th></tr></thead>
-                                    <tbody>
-                                    <?php foreach ($projectAssessment['materials'] as $material): ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($material['name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                            <td><?php echo htmlspecialchars((string) $material['qty'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                            <td><?php echo htmlspecialchars($material['unit'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <small class="text-muted d-block mb-2"><strong>Project Timeline</strong></small>
-                            <div class="border rounded p-3 bg-light">
-                                <div class="text-center">
-                                    <div class="h5 mb-1"><?php echo htmlspecialchars((string) $projectAssessment['estimatedDays'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                    <small class="text-muted">Estimated Working Days</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <small class="text-muted d-block mb-2"><strong>Assessment Photos</strong></small>
-                        <div class="row g-2">
-                            <?php foreach ($projectAssessment['photos'] as $photo): ?>
-                                <div class="col-6 col-md-4 col-lg-3">
-                                    <img src="<?php echo htmlspecialchars($assetBasePath . $photo, ENT_QUOTES, 'UTF-8'); ?>" alt="Assessment photo" class="img-fluid rounded border report-photo">
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <p class="mb-0 text-muted">No assessment report is available for this project.</p>
+                <?php if ($showTasksTab): ?>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks-pane" type="button" role="tab" aria-controls="tasks-pane" aria-selected="false">My Tasks</button>
+                    </li>
                 <?php endif; ?>
-            </div>
+            </ul>
         </div>
-    </div>
-    <?php endif; ?>
 
-    <?php if ($canViewQuotation): ?>
-    <div class="mt-3">
-        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#projectQuotationPanel" aria-expanded="false" aria-controls="projectQuotationPanel">View Quotation</button>
-    </div>
-    <div class="collapse mt-3" id="projectQuotationPanel">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                <strong>Project Quotation</strong>
-            </div>
-            <div class="card-body">
-                <?php if ($projectQuotation !== null): ?>
-                    <div class="row g-3 mb-3 align-items-end">
-                        <div class="col-md-4"><small class="text-muted d-block">Quotation ID</small><strong><?php echo htmlspecialchars($projectQuotation['id'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div class="col-md-4"><small class="text-muted d-block">Client</small><strong><?php echo htmlspecialchars($projectQuotation['client'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div class="col-md-4"><small class="text-muted d-block">Status</small><span class="badge <?php echo htmlspecialchars($projectQuotation['status'] === 'Approved' ? 'bg-success' : ($projectQuotation['status'] === 'Sent' ? 'bg-primary' : 'bg-secondary'), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($projectQuotation['status'], ENT_QUOTES, 'UTF-8'); ?></span></div>
-                        <div class="col-md-6"><small class="text-muted d-block">Labor Cost</small><strong class="d-block">PHP <?php echo number_format((float) $projectQuotation['laborCost'], 2); ?></strong></div>
-                        <div class="col-md-6 text-md-end"><small class="text-muted d-block">Total</small><strong class="d-block">PHP <?php echo number_format((float) $quotationTotal, 2); ?></strong></div>
+        <div class="tab-content p-3 pt-3">
+            <div class="tab-pane fade show active" id="details-pane" role="tabpanel" aria-labelledby="details-tab" tabindex="0">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <small class="text-muted d-block mb-2"><strong>Assigned Team</strong></small>
+                        <?php if (empty($projectTeam)): ?>
+                            <div class="text-muted small">No technicians assigned.</div>
+                        <?php else: ?>
+                            <ul class="list-group list-group-flush">
+                                <?php foreach ($projectTeam as $index => $tech): ?>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between px-0">
+                                        <span><?php echo htmlspecialchars($tech, ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <?php if ($index === 0): ?>
+                                            <span class="badge bg-primary">Lead</span>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
                     </div>
+                </div>
 
-                    <div class="table-responsive border rounded">
-                        <table class="table table-sm mb-0">
-                            <thead class="table-light"><tr><th>Material</th><th>Qty</th><th>Unit</th><th class="text-end">Unit Cost</th><th class="text-end">Subtotal</th></tr></thead>
-                            <tbody>
-                            <?php foreach ($projectQuotation['materials'] as $material): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($material['name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><?php echo htmlspecialchars((string) $material['qty'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><?php echo htmlspecialchars($material['unit'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td class="text-end">PHP <?php echo number_format((float) $material['unitCost'], 2); ?></td>
-                                    <td class="text-end">PHP <?php echo number_format((float) $material['qty'] * (float) $material['unitCost'], 2); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                            </tbody>
+                <div class="mt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h3 class="h6 fw-bold mb-0">Reports</h3>
+                    </div>
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="progressTab" data-bs-toggle="tab" data-bs-target="#progressReports" type="button" role="tab" aria-controls="progressReports" aria-selected="true">Progress Report</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="incidentTab" data-bs-toggle="tab" data-bs-target="#incidentReports" type="button" role="tab" aria-controls="incidentReports" aria-selected="false">Incident Report</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="progressReports" role="tabpanel" aria-labelledby="progressTab">
+                            <?php
+                                if (!empty($progressReports)):
+                            ?>
+                                <div class="row g-3">
+                                    <?php foreach ($progressReports as $report): ?>
+                                        <div class="col-12">
+                                            <div class="border rounded p-3">
+                                                <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                                                    <div>
+                                                        <strong><?php echo htmlspecialchars($report['technician'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                                        <div class="small text-muted">Submitted <?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                                    </div>
+                                                </div>
+                                                <p class="mb-2 small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></p>
+                                                <div class="row g-2">
+                                                    <?php foreach ($report['photos'] as $photo): ?>
+                                                        <div class="col-6 col-md-4 col-lg-3">
+                                                            <img src="<?php echo htmlspecialchars($assetBasePath . $photo, ENT_QUOTES, 'UTF-8'); ?>" alt="Report photo" class="img-fluid rounded border report-photo">
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php else: ?>
+                                <p class="mb-0 text-muted">No progress reports submitted yet.</p>
+                            <?php endif; ?>
+                        </div>
+                        <div class="tab-pane fade" id="incidentReports" role="tabpanel" aria-labelledby="incidentTab">
+                            <?php
+                                if (!empty($incidentReports)):
+                            ?>
+                                <div class="row g-3">
+                                    <?php foreach ($incidentReports as $report): ?>
+                                        <div class="col-12">
+                                            <div class="border rounded p-3">
+                                                <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                                                    <div>
+                                                        <strong><?php echo htmlspecialchars($report['technician'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                                        <div class="small text-muted">Submitted <?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                                    </div>
+                                                </div>
+                                                <p class="mb-2 small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></p>
+                                                <div class="row g-2">
+                                                    <?php foreach ($report['photos'] as $photo): ?>
+                                                        <div class="col-6 col-md-4 col-lg-3">
+                                                            <img src="<?php echo htmlspecialchars($assetBasePath . $photo, ENT_QUOTES, 'UTF-8'); ?>" alt="Report photo" class="img-fluid rounded border report-photo">
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php else: ?>
+                                <p class="mb-0 text-muted">No incident reports submitted yet.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <?php if ($showTasksTab): ?>
+                <div class="tab-pane fade" id="tasks-pane" role="tabpanel" aria-labelledby="tasks-tab" tabindex="0">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead class="table-light"><tr><th>Task</th><th>Status</th><th>Date Created</th><th>Due</th><th>Action</th></tr></thead>
+                            <tbody id="taskTableBody"></tbody>
                         </table>
                     </div>
-                <?php else: ?>
-                    <p class="mb-0 text-muted">No quotation is tied to this project yet.</p>
-                <?php endif; ?>
+                    <div id="tasksEmptyState" class="text-muted small d-none mt-3">No tasks assigned to you on this project.</div>
+                </div>
+            <?php endif; ?>
+
+        </div>
+    </div>
+
+</main>
+
+<div class="modal fade" id="completeTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title">Complete Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="taskDescription" class="form-label">Completion Details</label>
+                    <textarea class="form-control" id="taskDescription" rows="4" placeholder="Describe the work completed..."></textarea>
+                </div>
+                <div class="mb-0">
+                    <label for="taskProofPhoto" class="form-label">Proof Photo</label>
+                    <input class="form-control" type="file" id="taskProofPhoto" accept="image/*">
+                    <div class="form-text">Upload a photo as proof of completion.</div>
+                </div>
+                <input type="hidden" id="completeTaskIndex" value="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="saveCompleteTaskBtn">Complete Task</button>
             </div>
         </div>
     </div>
-    <?php endif; ?>
-</main>
+</div>
+
+<div class="modal fade" id="viewTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title">Task Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="small text-muted mb-1">Task</div>
+                        <div id="viewTaskTitle" class="border rounded p-2 bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="small text-muted mb-1">Status</div>
+                        <div id="viewTaskStatus" class="border rounded p-2 bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="small text-muted mb-1">Date Created</div>
+                        <div id="viewTaskDateCreated" class="border rounded p-2 bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="small text-muted mb-1">Due Date</div>
+                        <div id="viewTaskDueDate" class="border rounded p-2 bg-light">-</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="small text-muted mb-1">Details</div>
+                        <div id="viewTaskDetails" class="border rounded p-2 bg-light">No additional details available.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const taskTableBody = document.getElementById('taskTableBody');
+    const tasksEmptyState = document.getElementById('tasksEmptyState');
+    const saveCompleteTaskBtn = document.getElementById('saveCompleteTaskBtn');
+    const taskDescription = document.getElementById('taskDescription');
+    const taskProofPhoto = document.getElementById('taskProofPhoto');
+    const completeTaskIndex = document.getElementById('completeTaskIndex');
+    const viewTaskTitle = document.getElementById('viewTaskTitle');
+    const viewTaskStatus = document.getElementById('viewTaskStatus');
+    const viewTaskDateCreated = document.getElementById('viewTaskDateCreated');
+    const viewTaskDueDate = document.getElementById('viewTaskDueDate');
+    const viewTaskDetails = document.getElementById('viewTaskDetails');
+
+    const tasks = [
+        { title: 'Deliver copper piping set', status: 'Incomplete', dateCreated: 'Apr 10, 2026', dueDate: 'Apr 21, 2026', details: 'Deliver copper piping materials to the site and verify quantities before installation.' },
+        { title: 'Check installation points', status: 'Incomplete', dateCreated: 'Apr 10, 2026', dueDate: 'Apr 22, 2026', details: 'Inspect and confirm all indoor and outdoor unit mounting points based on layout plan.' },
+        { title: 'Confirm retrofit layout', status: 'Incomplete', dateCreated: 'Apr 14, 2026', dueDate: 'Apr 24, 2026', details: 'Finalize retrofit layout with lead technician and mark revisions on site plan.' }
+    ];
+
+    function escapeHtml(value) {
+        return String(value || '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function taskStatusClass(status) {
+        const key = String(status || '').toLowerCase();
+        if (key === 'completed') return 'bg-success';
+        return 'bg-secondary';
+    }
+
+    function renderTasks() {
+        if (!taskTableBody) return;
+
+        taskTableBody.innerHTML = tasks.map(function (task, index) {
+            return '<tr>'
+                + '<td class="small">' + escapeHtml(task.title) + '</td>'
+                + '<td><span class="badge ' + taskStatusClass(task.status) + '">' + escapeHtml(task.status) + '</span></td>'
+                + '<td class="small">' + escapeHtml(task.dateCreated) + '</td>'
+                + '<td class="small">' + escapeHtml(task.dueDate || '-') + '</td>'
+                + '<td class="text-start">'
+                + '<button type="button" class="btn btn-sm btn-outline-primary view-task-btn me-1" data-task-index="' + index + '" data-bs-toggle="modal" data-bs-target="#viewTaskModal" title="View Details" aria-label="View Details"><i class="bi bi-eye"></i></button>'
+                + (String(task.status || '').toLowerCase() === 'completed'
+                    ? ''
+                    : '<button type="button" class="btn btn-sm btn-success complete-task-btn" data-task-index="' + index + '" data-bs-toggle="modal" data-bs-target="#completeTaskModal">Complete</button>')
+                + '</td>'
+                + '</tr>';
+        }).join('');
+
+        if (tasksEmptyState) {
+            tasksEmptyState.classList.toggle('d-none', tasks.length > 0);
+        }
+    }
+
+    if (taskTableBody) {
+        taskTableBody.addEventListener('click', function (event) {
+            const viewButton = event.target.closest('.view-task-btn');
+            if (viewButton) {
+                const taskIndex = Number(viewButton.getAttribute('data-task-index'));
+                if (!Number.isNaN(taskIndex) && tasks[taskIndex]) {
+                    const task = tasks[taskIndex];
+                    if (viewTaskTitle) viewTaskTitle.textContent = task.title || '-';
+                    if (viewTaskStatus) viewTaskStatus.textContent = task.status || '-';
+                    if (viewTaskDateCreated) viewTaskDateCreated.textContent = task.dateCreated || '-';
+                    if (viewTaskDueDate) viewTaskDueDate.textContent = task.dueDate || '-';
+                    if (viewTaskDetails) viewTaskDetails.textContent = task.details || 'No additional details available.';
+                }
+                return;
+            }
+
+            const button = event.target.closest('.complete-task-btn');
+            if (!button) return;
+            completeTaskIndex.value = button.getAttribute('data-task-index');
+        });
+    }
+
+    if (saveCompleteTaskBtn) {
+        saveCompleteTaskBtn.addEventListener('click', function () {
+            const taskIndex = Number(completeTaskIndex.value);
+            if (Number.isNaN(taskIndex) || !tasks[taskIndex]) return;
+
+            tasks[taskIndex].status = 'Completed';
+            renderTasks();
+
+            taskDescription.value = '';
+            taskProofPhoto.value = '';
+            completeTaskIndex.value = '';
+
+            const modalEl = document.getElementById('completeTaskModal');
+            if (modalEl && window.bootstrap && window.bootstrap.Modal) {
+                window.bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+            }
+        });
+    }
+
+    renderTasks();
+});
+</script>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
