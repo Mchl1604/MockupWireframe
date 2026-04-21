@@ -16,7 +16,7 @@ $schedules = [
     ],
     [
         'projectId' => 'PRJ-1004',
-        'projectName' => 'Split-Type AC Unit Installation - Northline Foods',
+        'projectName' => 'Aircon Installation - Northline Foods',
         'startDate' => 18,
         'endDate' => 21,
         'leadTechnician' => 'Tech. Carl Dominguez',
@@ -25,7 +25,7 @@ $schedules = [
     ],
     [
         'projectId' => 'PRJ-1003',
-        'projectName' => 'Ductwork Installation - Metro Storage',
+        'projectName' => 'Ducting Installation - Metro Storage',
         'startDate' => 23,
         'endDate' => 26,
         'leadTechnician' => 'Engr. Mario Santos',
@@ -34,7 +34,7 @@ $schedules = [
     ],
     [
         'projectId' => 'PRJ-1006',
-        'projectName' => 'Ventilation System Inspection - Grand Arc Tower',
+        'projectName' => 'Ducting Installation - Grand Arc Tower',
         'startDate' => 27,
         'endDate' => 30,
         'leadTechnician' => 'Tech. Anne Mendoza',
@@ -43,7 +43,7 @@ $schedules = [
     ],
     [
         'projectId' => 'PRJ-1005',
-        'projectName' => 'Ventilation System Retrofit - BluePeak IT',
+        'projectName' => 'Ducting Fabrication - BluePeak IT',
         'startDate' => 8,
         'endDate' => 11,
         'leadTechnician' => 'Tech. Lito Ramos',
@@ -66,20 +66,20 @@ foreach ($schedules as $schedule) {
 // Available projects for scheduling
 $availableProjects = [
     ['id' => 'PRJ-1001', 'name' => 'Aircon Installation - ACME Holdings', 'service' => 'Aircon Installation'],
-    ['id' => 'PRJ-1003', 'name' => 'Ductwork Installation - Metro Storage', 'service' => 'Ductwork Installation'],
-    ['id' => 'PRJ-1004', 'name' => 'Split-Type AC Unit Installation - Northline Foods', 'service' => 'Split-Type AC Unit Installation'],
-    ['id' => 'PRJ-1005', 'name' => 'Ventilation System Retrofit - BluePeak IT', 'service' => 'Ventilation System Retrofit'],
-    ['id' => 'PRJ-1006', 'name' => 'Ventilation System Inspection - Grand Arc Tower', 'service' => 'Ventilation System Inspection'],
+    ['id' => 'PRJ-1003', 'name' => 'Ducting Installation - Metro Storage', 'service' => 'Ducting Installation'],
+    ['id' => 'PRJ-1004', 'name' => 'Aircon Installation - Northline Foods', 'service' => 'Aircon Installation'],
+    ['id' => 'PRJ-1005', 'name' => 'Ducting Fabrication - BluePeak IT', 'service' => 'Ducting Fabrication'],
+    ['id' => 'PRJ-1006', 'name' => 'Ducting Installation - Grand Arc Tower', 'service' => 'Ducting Installation'],
 ];
 
 // All technicians with their skills
 $technicians = [
-    ['name' => 'Engr. Mario Santos', 'skills' => ['Aircon Installation', 'Ductwork Installation', 'Ventilation System Retrofit']],
-    ['name' => 'Tech. Carlo Reyes', 'skills' => ['Aircon Installation', 'Ductwork Installation']],
-    ['name' => 'Tech. Lito Ramos', 'skills' => ['AC Unit Repair', 'Ventilation System Retrofit']],
-    ['name' => 'Tech. Carl Dominguez', 'skills' => ['Split-Type AC Unit Installation']],
-    ['name' => 'Tech. Anne Mendoza', 'skills' => ['Ductwork Installation', 'Ventilation System Inspection']],
-    ['name' => 'Tech. John Gonzales', 'skills' => ['Ventilation System Retrofit']],
+    ['name' => 'Engr. Mario Santos', 'skills' => ['Aircon Installation', 'Ducting Installation', 'Ducting Fabrication']],
+    ['name' => 'Tech. Carlo Reyes', 'skills' => ['Aircon Installation', 'Ducting Installation']],
+    ['name' => 'Tech. Lito Ramos', 'skills' => ['Aircon Repair', 'Ducting Fabrication']],
+    ['name' => 'Tech. Carl Dominguez', 'skills' => ['Aircon Installation']],
+    ['name' => 'Tech. Anne Mendoza', 'skills' => ['Ducting Installation', 'Ducting Installation']],
+    ['name' => 'Tech. John Gonzales', 'skills' => ['Ducting Fabrication']],
 ];
 
 ?>
@@ -652,3 +652,5 @@ function saveSchedule() {
 </script>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

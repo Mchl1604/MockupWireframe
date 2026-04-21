@@ -242,6 +242,33 @@ body.dashboard-body.sidebar-collapsed > footer {
     font-size: 1.4rem;
 }
 
+/* ---- Project details: compact overview ---- */
+.compact-project-overview .card-body {
+    padding: 1rem 1.2rem;
+}
+
+.compact-project-overview h3 {
+    line-height: 1.2;
+}
+
+.compact-project-overview .badge.rounded-pill {
+    font-size: 0.95rem;
+}
+
+.compact-project-meta {
+    font-size: 0.82rem;
+}
+
+@media (max-width: 576px) {
+    .compact-project-overview .card-body {
+        padding: 0.9rem;
+    }
+
+    .compact-project-overview h3 {
+        font-size: 1.08rem;
+    }
+}
+
 /* ---- Chat ---- */
 .chat-wrapper {
     display: flex;

@@ -10,7 +10,7 @@
             'lastMessage' => 'Can we move the schedule to Friday?',
             'time' => '08:40 AM',
             'messages' => [
-                ['text' => 'Hi, I have a question about my AC installation', 'time' => '08:30 AM', 'isOwn' => false],
+                ['text' => 'Hi, I have a question about my Aircon Installation', 'time' => '08:30 AM', 'isOwn' => false],
                 ['text' => 'Can we move the schedule to Friday?', 'time' => '08:40 AM', 'isOwn' => false],
             ]
         ],
@@ -89,3 +89,5 @@
     });
 </script>
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

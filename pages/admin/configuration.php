@@ -5,36 +5,36 @@
 <?php include __DIR__ . '/../../includes/sidebar.php'; ?>
 <?php
 $materials = [
-    ['id' => 'MAT-001', 'name' => 'LG 2HP', 'cost' => 15000, 'unit' => 'pcs', 'service' => 'AC Units'],
-    ['id' => 'MAT-002', 'name' => 'Carrier 2HP', 'cost' => 16500, 'unit' => 'pcs', 'service' => 'AC Units'],
-    ['id' => 'MAT-003', 'name' => 'Daikin 2HP', 'cost' => 17000, 'unit' => 'pcs', 'service' => 'AC Units'],
-    ['id' => 'MAT-004', 'name' => 'Panasonic 2HP', 'cost' => 14500, 'unit' => 'pcs', 'service' => 'AC Units'],
-    ['id' => 'MAT-005', 'name' => 'Samsung 2HP', 'cost' => 15500, 'unit' => 'pcs', 'service' => 'AC Units'],
-    ['id' => 'MAT-006', 'name' => 'Midea 1.5HP', 'cost' => 12000, 'unit' => 'pcs', 'service' => 'AC Units'],
-    ['id' => 'MAT-007', 'name' => 'Fujitsu 2.5HP', 'cost' => 18000, 'unit' => 'pcs', 'service' => 'AC Units'],
-    ['id' => 'MAT-008', 'name' => 'Bracket', 'cost' => 500, 'unit' => 'pcs', 'service' => 'AC Installation'],
-    ['id' => 'MAT-009', 'name' => 'Copper Pipe', 'cost' => 800, 'unit' => 'meter', 'service' => 'AC Installation'],
-    ['id' => 'MAT-010', 'name' => 'Rubber Insulation', 'cost' => 300, 'unit' => 'meter', 'service' => 'AC Installation'],
-    ['id' => 'MAT-011', 'name' => 'Royal Cord', 'cost' => 200, 'unit' => 'meter', 'service' => 'AC Installation'],
-    ['id' => 'MAT-012', 'name' => 'Circuit Breaker', 'cost' => 1200, 'unit' => 'pcs', 'service' => 'AC Installation'],
-    ['id' => 'MAT-013', 'name' => 'Flexible PVC', 'cost' => 400, 'unit' => 'meter', 'service' => 'AC Installation'],
-    ['id' => 'MAT-014', 'name' => 'Pressure Washer', 'cost' => 25000, 'unit' => 'pcs', 'service' => 'AC Cleaning'],
-    ['id' => 'MAT-015', 'name' => 'Vacuum Cleaner', 'cost' => 8000, 'unit' => 'pcs', 'service' => 'AC Cleaning'],
-    ['id' => 'MAT-016', 'name' => 'Wash Bag', 'cost' => 500, 'unit' => 'pcs', 'service' => 'AC Cleaning'],
-    ['id' => 'MAT-017', 'name' => 'Water Container', 'cost' => 1000, 'unit' => 'pcs', 'service' => 'AC Cleaning'],
-    ['id' => 'MAT-018', 'name' => 'Blower', 'cost' => 3000, 'unit' => 'pcs', 'service' => 'AC Cleaning'],
-    ['id' => 'MAT-019', 'name' => 'Hand Tools', 'cost' => 2000, 'unit' => 'set', 'service' => 'AC Checkup'],
-    ['id' => 'MAT-020', 'name' => 'Manifold Gauge', 'cost' => 5000, 'unit' => 'pcs', 'service' => 'AC Checkup'],
-    ['id' => 'MAT-021', 'name' => 'Clamp Meter', 'cost' => 3500, 'unit' => 'pcs', 'service' => 'AC Checkup'],
-    ['id' => 'MAT-022', 'name' => 'Full Threaded Rod', 'cost' => 600, 'unit' => 'meter', 'service' => 'Ducting'],
-    ['id' => 'MAT-023', 'name' => 'Yero', 'cost' => 1500, 'unit' => 'sheet', 'service' => 'Ducting'],
-    ['id' => 'MAT-024', 'name' => 'Angle Bar', 'cost' => 800, 'unit' => 'meter', 'service' => 'Ducting'],
-    ['id' => 'MAT-025', 'name' => 'Duct Sealant', 'cost' => 400, 'unit' => 'tube', 'service' => 'Ducting'],
-    ['id' => 'MAT-026', 'name' => 'Duct Tape', 'cost' => 300, 'unit' => 'roll', 'service' => 'Ducting'],
-    ['id' => 'MAT-027', 'name' => 'Insulation Padding', 'cost' => 200, 'unit' => 'meter', 'service' => 'Ducting'],
-    ['id' => 'MAT-028', 'name' => 'Cleaning Solution', 'cost' => 500, 'unit' => 'liter', 'service' => 'Preventive Maintenance'],
-    ['id' => 'MAT-029', 'name' => 'Lubricating Oil', 'cost' => 800, 'unit' => 'liter', 'service' => 'Preventive Maintenance'],
-    ['id' => 'MAT-030', 'name' => 'Replacement Filter', 'cost' => 1200, 'unit' => 'pcs', 'service' => 'Preventive Maintenance'],
+    ['id' => 'MAT-001', 'name' => 'LG 2HP', 'cost' => 15000, 'unit' => 'pcs', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-002', 'name' => 'Carrier 2HP', 'cost' => 16500, 'unit' => 'pcs', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-003', 'name' => 'Daikin 2HP', 'cost' => 17000, 'unit' => 'pcs', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-004', 'name' => 'Panasonic 2HP', 'cost' => 14500, 'unit' => 'pcs', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-005', 'name' => 'Samsung 2HP', 'cost' => 15500, 'unit' => 'pcs', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-006', 'name' => 'Midea 1.5HP', 'cost' => 12000, 'unit' => 'pcs', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-007', 'name' => 'Fujitsu 2.5HP', 'cost' => 18000, 'unit' => 'pcs', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-008', 'name' => 'Bracket', 'cost' => 500, 'unit' => 'pcs', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-009', 'name' => 'Copper Pipe', 'cost' => 800, 'unit' => 'meter', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-010', 'name' => 'Rubber Insulation', 'cost' => 300, 'unit' => 'meter', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-011', 'name' => 'Royal Cord', 'cost' => 200, 'unit' => 'meter', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-012', 'name' => 'Circuit Breaker', 'cost' => 1200, 'unit' => 'pcs', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-013', 'name' => 'Flexible PVC', 'cost' => 400, 'unit' => 'meter', 'service' => 'Aircon Installation'],
+    ['id' => 'MAT-014', 'name' => 'Pressure Washer', 'cost' => 25000, 'unit' => 'pcs', 'service' => 'Aircon Cleaning'],
+    ['id' => 'MAT-015', 'name' => 'Vacuum Cleaner', 'cost' => 8000, 'unit' => 'pcs', 'service' => 'Aircon Cleaning'],
+    ['id' => 'MAT-016', 'name' => 'Wash Bag', 'cost' => 500, 'unit' => 'pcs', 'service' => 'Aircon Cleaning'],
+    ['id' => 'MAT-017', 'name' => 'Water Container', 'cost' => 1000, 'unit' => 'pcs', 'service' => 'Aircon Cleaning'],
+    ['id' => 'MAT-018', 'name' => 'Blower', 'cost' => 3000, 'unit' => 'pcs', 'service' => 'Aircon Cleaning'],
+    ['id' => 'MAT-019', 'name' => 'Hand Tools', 'cost' => 2000, 'unit' => 'set', 'service' => 'Aircon Repair'],
+    ['id' => 'MAT-020', 'name' => 'Manifold Gauge', 'cost' => 5000, 'unit' => 'pcs', 'service' => 'Aircon Repair'],
+    ['id' => 'MAT-021', 'name' => 'Clamp Meter', 'cost' => 3500, 'unit' => 'pcs', 'service' => 'Aircon Repair'],
+    ['id' => 'MAT-022', 'name' => 'Full Threaded Rod', 'cost' => 600, 'unit' => 'meter', 'service' => 'Ducting Fabrication'],
+    ['id' => 'MAT-023', 'name' => 'Yero', 'cost' => 1500, 'unit' => 'sheet', 'service' => 'Ducting Fabrication'],
+    ['id' => 'MAT-024', 'name' => 'Angle Bar', 'cost' => 800, 'unit' => 'meter', 'service' => 'Ducting Fabrication'],
+    ['id' => 'MAT-025', 'name' => 'Duct Sealant', 'cost' => 400, 'unit' => 'tube', 'service' => 'Ducting Fabrication'],
+    ['id' => 'MAT-026', 'name' => 'Duct Tape', 'cost' => 300, 'unit' => 'roll', 'service' => 'Ducting Fabrication'],
+    ['id' => 'MAT-027', 'name' => 'Insulation Padding', 'cost' => 200, 'unit' => 'meter', 'service' => 'Ducting Fabrication'],
+    ['id' => 'MAT-028', 'name' => 'Cleaning Solution', 'cost' => 500, 'unit' => 'liter', 'service' => 'Aircon Cleaning'],
+    ['id' => 'MAT-029', 'name' => 'Lubricating Oil', 'cost' => 800, 'unit' => 'liter', 'service' => 'Aircon Cleaning'],
+    ['id' => 'MAT-030', 'name' => 'Replacement Filter', 'cost' => 1200, 'unit' => 'pcs', 'service' => 'Aircon Cleaning'],
 ];
 
 $users = [
@@ -269,7 +269,7 @@ $activityLogs = [
                                     <td><code><?php echo htmlspecialchars($mat['id'], ENT_QUOTES, 'UTF-8'); ?></code></td>
                                     <td><?php echo htmlspecialchars($mat['name'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><span class="badge bg-info"><?php echo htmlspecialchars($mat['service'], ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                    <td>₱<?php echo number_format($mat['cost'], 2); ?></td>
+                                    <td>PHP <?php echo number_format($mat['cost'], 2); ?></td>
                                     <td><?php echo htmlspecialchars($mat['unit'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td>
                                         <div class="d-flex gap-2">
@@ -299,11 +299,11 @@ $activityLogs = [
                             <label class="form-label">Service</label>
                             <select class="form-select" id="materialService" required>
                                 <option value="">Select service</option>
-                                <option>AC Installation</option>
-                                <option>AC Cleaning</option>
-                                <option>AC Checkup</option>
-                                <option>Ducting</option>
-                                <option>Preventive Maintenance</option>
+                                <option>Aircon Installation</option>
+                                <option>Aircon Repair</option>
+                                <option>Aircon Cleaning</option>
+                                <option>Ducting Fabrication</option>
+                                <option>Ducting Installation</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -315,7 +315,7 @@ $activityLogs = [
                             <input class="form-control" id="materialName" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Cost (₱)</label>
+                            <label class="form-label">Cost (PHP)</label>
                             <input class="form-control" type="number" id="materialCost" min="0" step="0.01" required>
                         </div>
                         <div class="mb-3">
@@ -416,7 +416,7 @@ $activityLogs = [
                             <input class="form-control" id="editMaterialName" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Cost (₱)</label>
+                            <label class="form-label">Cost (PHP)</label>
                             <input class="form-control" type="number" id="editMaterialCost" min="0" step="0.01" required>
                         </div>
                         <div class="mb-3">
@@ -506,3 +506,4 @@ $activityLogs = [
     </script>
 </main>
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+

@@ -8,7 +8,7 @@ $reportsList = [
     ['id' => 'REP-001', 'project' => 'PRJ-1001', 'type' => 'Assessment Report', 'date' => 'Apr 18, 2026', 'status' => 'Submitted', 'description' => 'Initial assessment completed.', 'technicians' => 3, 'working_days' => 5, 'materials' => [['name' => 'Copper Tubing', 'quantity' => 50, 'unit' => 'meters'], ['name' => 'Refrigerant R-410A', 'quantity' => 10, 'unit' => 'kg'], ['name' => 'Installation Kit', 'quantity' => 2, 'unit' => 'set']]],
     ['id' => 'REP-002', 'project' => 'PRJ-1003', 'type' => 'Progress Report', 'date' => 'Apr 17, 2026', 'status' => 'Submitted', 'description' => 'Installation progress on schedule. 40% completion.', 'pictures' => ['./assets/img/imageSample.png', './assets/img/imageSample.png', './assets/img/imageSample.png']],
     ['id' => 'REP-003', 'project' => 'PRJ-1004', 'type' => 'Incident Report', 'date' => 'Apr 16, 2026', 'status' => 'Submitted', 'description' => 'Minor issue with Unit 2 connector. Resolved with spare parts.', 'pictures' => ['./assets/img/imageSample.png', './assets/img/imageSample.png']],
-    ['id' => 'REP-004', 'project' => 'PRJ-1005', 'type' => 'Progress Report', 'date' => 'Apr 15, 2026', 'status' => 'Submitted', 'description' => 'Ventilation system retrofit phase 2 initiated.', 'pictures' => ['./assets/img/imageSample.png']],
+    ['id' => 'REP-004', 'project' => 'PRJ-1005', 'type' => 'Progress Report', 'date' => 'Apr 15, 2026', 'status' => 'Submitted', 'description' => 'Ducting Fabrication phase 2 initiated.', 'pictures' => ['./assets/img/imageSample.png']],
     ['id' => 'REP-005', 'project' => 'PRJ-1001', 'type' => 'Progress Report', 'date' => 'Apr 14, 2026', 'status' => 'Submitted', 'description' => 'Installation started. Foundation preparation completed.', 'pictures' => ['./assets/img/imageSample.png', './assets/img/imageSample.png']],
 ];
 ?>
@@ -29,9 +29,9 @@ $reportsList = [
                     <select class="form-select" name="project" required>
                         <option value="">Select project</option>
                         <option value="PRJ-1001">PRJ-1001 - Aircon Installation - ACME Holdings</option>
-                        <option value="PRJ-1003">PRJ-1003 - Ductwork Installation - Metro Storage</option>
-                        <option value="PRJ-1004">PRJ-1004 - Split-Type AC Unit Installation - Northline Foods</option>
-                        <option value="PRJ-1005">PRJ-1005 - Ventilation System Retrofit - BluePeak IT</option>
+                        <option value="PRJ-1003">PRJ-1003 - Ducting Installation - Metro Storage</option>
+                        <option value="PRJ-1004">PRJ-1004 - Aircon Installation - Northline Foods</option>
+                        <option value="PRJ-1005">PRJ-1005 - Ducting Fabrication - BluePeak IT</option>
                     </select>
                 </div>
 
@@ -383,3 +383,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

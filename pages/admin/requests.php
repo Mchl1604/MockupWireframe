@@ -8,7 +8,7 @@ $requests = [
     [
         'id' => 'REQ-001',
         'client' => 'ACME Holdings',
-        'service' => 'AC Installation',
+        'service' => 'Aircon Installation',
         'date' => 'Apr 12, 2026',
         'status' => 'Pending',
         'address' => 'Makati Business Park',
@@ -18,7 +18,7 @@ $requests = [
     [
         'id' => 'REQ-002',
         'client' => 'J. Dela Cruz',
-        'service' => 'AC Repair',
+        'service' => 'Aircon Repair',
         'date' => 'Apr 13, 2026',
         'status' => 'Approved',
         'address' => 'Taguig City, Metro Manila',
@@ -28,7 +28,7 @@ $requests = [
     [
         'id' => 'REQ-003',
         'client' => 'Metro Storage',
-        'service' => 'Ducting',
+        'service' => 'Ducting Installation',
         'date' => 'Apr 14, 2026',
         'status' => 'Rejected',
         'address' => 'Caloocan Industrial Estate',
@@ -38,17 +38,17 @@ $requests = [
     [
         'id' => 'REQ-004',
         'client' => 'Northpoint Suites',
-        'service' => 'Preventive Maintenance',
+        'service' => 'Aircon Cleaning',
         'date' => 'Apr 15, 2026',
         'status' => 'Pending',
         'address' => 'Quezon Avenue, Quezon City',
         'phone' => '09175550123',
-        'description' => 'Quarterly preventive maintenance for lobby and function hall units.',
+        'description' => 'Quarterly Aircon Cleaning for lobby and function hall units.',
     ],
     [
         'id' => 'REQ-005',
         'client' => 'Prime Logistic Hub',
-        'service' => 'AC Cleaning',
+        'service' => 'Aircon Cleaning',
         'date' => 'Apr 16, 2026',
         'status' => 'Pending',
         'address' => 'Valenzuela Logistics Park',
@@ -260,3 +260,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

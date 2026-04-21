@@ -7,21 +7,21 @@
 <?php
 $techs = [
     ['name' => 'Mario Santos', 'skills' => ['Aircon Installation', 'Ducting Installation'], 'status' => 'Available', 'address' => '123 Sampaguita St., Makati City', 'phone' => '0917-555-0101', 'email' => 'mario.santos@example.com'],
-    ['name' => 'Carlo Reyes', 'skills' => ['Aircon Maintenance', 'Aircon Cleaning'], 'status' => 'Assigned', 'address' => '45 Rizal Ave., Pasig City', 'phone' => '0918-555-0202', 'email' => 'carlo.reyes@example.com'],
-    ['name' => 'Jude Flores', 'skills' => ['Aircon Installation', 'Aircon Maintenance'], 'status' => 'On Leave', 'address' => '88 Bonifacio Rd., Quezon City', 'phone' => '0919-555-0303', 'email' => 'jude.flores@example.com'],
+    ['name' => 'Carlo Reyes', 'skills' => ['Aircon Repair', 'Aircon Cleaning'], 'status' => 'Assigned', 'address' => '45 Rizal Ave., Pasig City', 'phone' => '0918-555-0202', 'email' => 'carlo.reyes@example.com'],
+    ['name' => 'Jude Flores', 'skills' => ['Aircon Installation', 'Aircon Repair'], 'status' => 'On Leave', 'address' => '88 Bonifacio Rd., Quezon City', 'phone' => '0919-555-0303', 'email' => 'jude.flores@example.com'],
     ['name' => 'Lito Ramos', 'skills' => ['Aircon Cleaning', 'Ducting Fabrication'], 'status' => 'Available', 'address' => '16 Laurel St., Taguig City', 'phone' => '0917-555-0404', 'email' => 'lito.ramos@example.com'],
     ['name' => 'Carl Dominguez', 'skills' => ['Aircon Installation', 'Aircon Cleaning'], 'status' => 'Assigned', 'address' => '22 Mabini Ave., Manila City', 'phone' => '0918-555-0505', 'email' => 'carl.dominguez@example.com'],
-    ['name' => 'Anne Mendoza', 'skills' => ['Aircon Maintenance', 'Ducting Installation'], 'status' => 'Available', 'address' => '77 Roxas Blvd., Pasay City', 'phone' => '0919-555-0606', 'email' => 'anne.mendoza@example.com'],
+    ['name' => 'Anne Mendoza', 'skills' => ['Aircon Repair', 'Ducting Installation'], 'status' => 'Available', 'address' => '77 Roxas Blvd., Pasay City', 'phone' => '0919-555-0606', 'email' => 'anne.mendoza@example.com'],
     ['name' => 'John Gonzales', 'skills' => ['Aircon Cleaning', 'Aircon Installation'], 'status' => 'Assigned', 'address' => '5 Aurora Blvd., Marikina City', 'phone' => '0917-555-0707', 'email' => 'john.gonzales@example.com'],
-    ['name' => 'Paolo Herrera', 'skills' => ['Aircon Maintenance', 'Ducting Fabrication'], 'status' => 'Available', 'address' => '104 Osmeña Hwy., Parañaque City', 'phone' => '0918-555-0808', 'email' => 'paolo.herrera@example.com'],
-    ['name' => 'Nina Cortez', 'skills' => ['Aircon Cleaning', 'Aircon Maintenance'], 'status' => 'On Leave', 'address' => '19 Kalayaan Ave., Makati City', 'phone' => '0919-555-0909', 'email' => 'nina.cortez@example.com'],
+    ['name' => 'Paolo Herrera', 'skills' => ['Aircon Repair', 'Ducting Fabrication'], 'status' => 'Available', 'address' => '104 Osmena Hwy., Paranaque City', 'phone' => '0918-555-0808', 'email' => 'paolo.herrera@example.com'],
+    ['name' => 'Nina Cortez', 'skills' => ['Aircon Cleaning', 'Aircon Repair'], 'status' => 'On Leave', 'address' => '19 Kalayaan Ave., Makati City', 'phone' => '0919-555-0909', 'email' => 'nina.cortez@example.com'],
     ['name' => 'Ben Navarro', 'skills' => ['Ducting Installation', 'Ducting Fabrication'], 'status' => 'Available', 'address' => '31 Macapagal Blvd., Pasig City', 'phone' => '0917-555-1010', 'email' => 'ben.navarro@example.com'],
     ['name' => 'Claire Santos', 'skills' => ['Aircon Installation', 'Aircon Cleaning'], 'status' => 'Assigned', 'address' => '58 Ortigas Ave., Quezon City', 'phone' => '0918-555-1111', 'email' => 'claire.santos@example.com'],
-    ['name' => 'Darren Uy', 'skills' => ['Aircon Maintenance', 'Aircon Installation'], 'status' => 'Available', 'address' => '9 Commonwealth Ave., Quezon City', 'phone' => '0919-555-1212', 'email' => 'darren.uy@example.com'],
-    ['name' => 'Elena Cruz', 'skills' => ['Ducting Fabrication', 'Aircon Maintenance'], 'status' => 'Assigned', 'address' => '64 Pedro Gil St., Manila City', 'phone' => '0917-555-1313', 'email' => 'elena.cruz@example.com'],
+    ['name' => 'Darren Uy', 'skills' => ['Aircon Repair', 'Aircon Installation'], 'status' => 'Available', 'address' => '9 Commonwealth Ave., Quezon City', 'phone' => '0919-555-1212', 'email' => 'darren.uy@example.com'],
+    ['name' => 'Elena Cruz', 'skills' => ['Ducting Fabrication', 'Aircon Repair'], 'status' => 'Assigned', 'address' => '64 Pedro Gil St., Manila City', 'phone' => '0917-555-1313', 'email' => 'elena.cruz@example.com'],
     ['name' => 'Francis Tan', 'skills' => ['Ducting Installation', 'Aircon Installation'], 'status' => 'Available', 'address' => '120 Taft Ave., Pasay City', 'phone' => '0918-555-1414', 'email' => 'francis.tan@example.com'],
 ];
-$skillOptions = ['Aircon Installation', 'Aircon Maintenance', 'Aircon Cleaning', 'Ducting Installation', 'Ducting Fabrication'];
+$skillOptions = ['Aircon Installation', 'Aircon Repair', 'Aircon Cleaning', 'Ducting Installation', 'Ducting Fabrication'];
 $attendanceByTech = [
     'Mario Santos' => [
         ['date' => 'Apr 1, 2026', 'project' => 'PRJ-1001'],
@@ -299,3 +299,5 @@ document.querySelectorAll('.view-tech-attendance').forEach(button => {
 });
 </script>
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

@@ -21,13 +21,13 @@ $canViewQuotation = in_array($statusKey, ['ongoing', 'completed', 'to be approve
 
 $projectMetadata = [
     'PRJ-1001' => ['client' => 'ACME Holdings', 'service' => 'Aircon Installation', 'timeline' => 'Apr 14', 'target' => 'Apr 14, 2026'],
-    'PRJ-1002' => ['client' => 'J. Dela Cruz', 'service' => 'AC Unit Repair', 'timeline' => 'Apr 05 - Apr 10', 'target' => 'Apr 10, 2026'],
-    'PRJ-1003' => ['client' => 'Metro Storage', 'service' => 'Ductwork Installation', 'timeline' => 'Apr 15 - Apr 25', 'target' => 'Apr 25, 2026'],
-    'PRJ-1004' => ['client' => 'Northline Foods', 'service' => 'Split-Type AC Unit Installation', 'timeline' => 'Apr 27 - Apr 30', 'target' => 'April 30, 2026'],
-    'PRJ-1005' => ['client' => 'BluePeak IT', 'service' => 'Ventilation System Retrofit', 'timeline' => 'May 01 - May 10', 'target' => 'May 10, 2026'],
-    'PRJ-1006' => ['client' => 'Grand Arc Tower', 'service' => 'Ventilation System Inspection', 'timeline' => 'Apr 12 - Apr 14', 'target' => 'Apr 14, 2026'],
+    'PRJ-1002' => ['client' => 'J. Dela Cruz', 'service' => 'Aircon Repair', 'timeline' => 'Apr 05 - Apr 10', 'target' => 'Apr 10, 2026'],
+    'PRJ-1003' => ['client' => 'Metro Storage', 'service' => 'Ducting Installation', 'timeline' => 'Apr 15 - Apr 25', 'target' => 'Apr 25, 2026'],
+    'PRJ-1004' => ['client' => 'Northline Foods', 'service' => 'Aircon Installation', 'timeline' => 'Apr 27 - Apr 30', 'target' => 'April 30, 2026'],
+    'PRJ-1005' => ['client' => 'BluePeak IT', 'service' => 'Ducting Fabrication', 'timeline' => 'May 01 - May 10', 'target' => 'May 10, 2026'],
+    'PRJ-1006' => ['client' => 'Grand Arc Tower', 'service' => 'Ducting Installation', 'timeline' => 'Apr 12 - Apr 14', 'target' => 'Apr 14, 2026'],
 ];
-$currentProject = $projectMetadata[$id] ?? ['client' => 'Unknown', 'service' => 'Service Type', 'timeline' => 'TBD', 'target' => 'TBD'];
+$currentProject = $projectMetadata[$id] ?? ['client' => 'Unknown', 'service' => 'Aircon Installation', 'timeline' => 'TBD', 'target' => 'TBD'];
 
 $quotationByProject = [
     'PRJ-1001' => [
@@ -186,7 +186,7 @@ $assessmentByProject = [
         'date' => 'Apr 07, 2026',
         'technician' => 'Tech. Lito Ramos',
         'requiredTechnicians' => 1,
-        'summary' => 'AC unit repair assessment. Identified failing capacitor and worn fan motor. Parts in stock. Estimated repair time: 3 hours.',
+        'summary' => 'Aircon Repair assessment. Identified failing capacitor and worn fan motor. Parts in stock. Estimated repair time: 3 hours.',
         'photos' => ['imageSample.png'],
         'findings' => [
             'Capacitor needs replacement',
@@ -568,3 +568,5 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

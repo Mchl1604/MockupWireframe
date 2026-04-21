@@ -7,10 +7,10 @@
 <?php
 $project = [
     'id' => $_GET['id'] ?? 'PRJ-1001',
-    'name' => 'AC Installation - ACME Holdings',
+    'name' => 'Aircon Installation - ACME Holdings',
     'status' => 'Ongoing',
     'timeline' => 'Apr 10 - Apr 18',
-    'serviceType' => 'AC Installation',
+    'serviceType' => 'Aircon Installation',
 ];
 $materials = [
     ['name' => 'Copper Pipe', 'qty' => 3, 'unit' => 'rolls'],
@@ -70,3 +70,5 @@ $materials = [
 </main>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

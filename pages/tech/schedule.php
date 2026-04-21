@@ -15,7 +15,7 @@ $techSchedules = [
         'projectId' => 'PRJ-1003',
         'startDate' => '2026-04-15',
         'endDate' => '2026-04-25',
-        'title' => 'Ductwork Installation - Metro Storage',
+        'title' => 'Ducting Installation - Metro Storage',
         'location' => 'Pasig Warehouse',
         'status' => 'Assigned',
         'color' => 'warning',
@@ -24,7 +24,7 @@ $techSchedules = [
         'projectId' => 'PRJ-1004',
         'startDate' => '2026-04-27',
         'endDate' => '2026-04-30',
-        'title' => 'Split-Type AC Unit Installation - Northline Foods',
+        'title' => 'Aircon Installation - Northline Foods',
         'location' => 'Ortigas, Pasig',
         'status' => 'Assigned',
         'color' => 'success',
@@ -33,7 +33,7 @@ $techSchedules = [
         'projectId' => 'PRJ-1005',
         'startDate' => '2026-05-01',
         'endDate' => '2026-05-10',
-        'title' => 'Ventilation System Retrofit - BluePeak IT',
+        'title' => 'Ducting Fabrication - BluePeak IT',
         'location' => 'Mandaluyong',
         'status' => 'Assigned',
         'color' => 'warning',
@@ -238,3 +238,5 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

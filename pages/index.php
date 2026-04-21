@@ -7,7 +7,7 @@
     <div class="container py-5 text-center">
         <h1 class="display-4 fw-bold mb-3">Professional HVAC Solutions</h1>
         <p class="lead mb-4 opacity-90 mx-auto" style="max-width:580px;">
-            Coliconstruct Engineering Services provides expert AC installation, maintenance,
+            Coliconstruct Engineering Services provides expert Aircon Installation, maintenance,
             ducting, and repair for residential and commercial clients.
         </p>
         <div class="d-flex gap-3 justify-content-center flex-wrap">
@@ -23,10 +23,10 @@
         <div class="row g-4">
             <?php
             $servicesOverview = [
-                ['icon' => 'bi-wind', 'title' => 'AC Installation', 'desc' => 'Professional split-type and window-type AC installation for residential and commercial spaces.'],
-                ['icon' => 'bi-wrench', 'title' => 'AC Repair', 'desc' => 'Expert diagnosis and repair services for all AC brands and models.'],
-                ['icon' => 'bi-clipboard-check', 'title' => 'Preventive Maintenance', 'desc' => 'Scheduled maintenance programs to keep your systems running efficiently.'],
-                ['icon' => 'bi-grid', 'title' => 'Ducting Systems', 'desc' => 'Custom fabrication and installation of ventilation duct systems.'],
+                ['icon' => 'bi-wind', 'title' => 'Aircon Installation', 'desc' => 'Professional split-type and window-type Aircon Installation for residential and commercial spaces.'],
+                ['icon' => 'bi-wrench', 'title' => 'Aircon Repair', 'desc' => 'Expert diagnosis and repair services for all AC brands and models.'],
+                ['icon' => 'bi-clipboard-check', 'title' => 'Aircon Cleaning', 'desc' => 'Scheduled maintenance programs to keep your systems running efficiently.'],
+                ['icon' => 'bi-grid', 'title' => 'Ducting Installation', 'desc' => 'Custom fabrication and installation of ventilation duct systems.'],
             ];
             foreach ($servicesOverview as $svc): ?>
             <div class="col-sm-6 col-lg-3">
@@ -75,3 +75,5 @@
 </section>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
+
+

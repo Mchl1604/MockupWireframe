@@ -18,9 +18,9 @@
                     <select class="form-select" name="project" required>
                         <option value="">Select project</option>
                         <option value="PRJ-1001">PRJ-1001 - Aircon Installation - ACME Holdings</option>
-                        <option value="PRJ-1003">PRJ-1003 - Ductwork Installation - Metro Storage</option>
-                        <option value="PRJ-1004">PRJ-1004 - Split-Type AC Unit Installation - Northline Foods</option>
-                        <option value="PRJ-1005">PRJ-1005 - Ventilation System Retrofit - BluePeak IT</option>
+                        <option value="PRJ-1003">PRJ-1003 - Ducting Installation - Metro Storage</option>
+                        <option value="PRJ-1004">PRJ-1004 - Aircon Installation - Northline Foods</option>
+                        <option value="PRJ-1005">PRJ-1005 - Ducting Fabrication - BluePeak IT</option>
                     </select>
                 </div>
 
@@ -186,3 +186,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

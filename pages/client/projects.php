@@ -11,8 +11,8 @@
     $projects = [
         [
             'id' => 'COL-2026-0001',
-            'name' => 'Airon Installation - ACME Holdings',
-            'serviceType' => 'Airon Installation',
+            'name' => 'Aircon Installation - ACME Holdings',
+            'serviceType' => 'Aircon Installation',
             'status' => 'In Progress',
             'timeline' => 'Apr 10, 2026 - Apr 18, 2026',
             'address' => 'Makati Business District',
@@ -42,7 +42,7 @@
         ],
         [
             'id' => 'COL-2026-0002',
-            'name' => 'AC Repair - J. Dela Cruz',
+            'name' => 'Aircon Repair - J. Dela Cruz',
             'serviceType' => 'Aircon Repair',
             'status' => 'Completed',
             'timeline' => 'Apr 1, 2026 - Apr 2, 2026',
@@ -72,8 +72,8 @@
         ],
         [
             'id' => 'COL-2026-0003',
-            'name' => 'Ducting Systems - Metro Storage',
-            'serviceType' => 'Ducting Systems',
+            'name' => 'Ducting Installation - Metro Storage',
+            'serviceType' => 'Ducting Installation',
             'status' => 'Awaiting Quotation Approval',
             'timeline' => 'Apr 20, 2026 - Apr 27, 2026',
             'address' => 'Caloocan Industrial Park',
@@ -103,8 +103,8 @@
         ],
         [
             'id' => 'COL-2026-0008',
-            'name' => 'Ventilation Upgrade - Zenith Tower',
-            'serviceType' => 'Ducting Systems',
+            'name' => 'Ducting Installation - Zenith Tower',
+            'serviceType' => 'Ducting Installation',
             'status' => 'In Progress',
             'timeline' => 'May 6, 2026 - May 14, 2026',
             'address' => 'Mandaluyong Business Park',
@@ -125,8 +125,8 @@
         ],
         [
             'id' => 'COL-2026-0004',
-            'name' => 'Airon Repair - Northline Foods',
-            'serviceType' => 'Airon Repair',
+            'name' => 'Aircon Repair - Northline Foods',
+            'serviceType' => 'Aircon Repair',
             'status' => 'For Assessment',
             'timeline' => 'April 15, 2026',
             'address' => 'Quezon City Mall Complex',
@@ -136,8 +136,8 @@
         ],
         [
             'id' => 'COL-2026-0005',
-            'name' => 'Ducting Systems - BluePeak IT',
-            'serviceType' => 'Ducting Systems',
+            'name' => 'Ducting Installation - BluePeak IT',
+            'serviceType' => 'Ducting Installation',
             'status' => 'Pending',
             'timeline' => 'Apr 22, 2026 - Apr 30, 2026',
             'address' => 'Pasay Hotel District',
@@ -156,8 +156,8 @@
         ],
         [
             'id' => 'COL-2026-0006',
-            'name' => 'Airon Installation - Grand Arc Tower',
-            'serviceType' => 'Airon Installation',
+            'name' => 'Aircon Installation - Grand Arc Tower',
+            'serviceType' => 'Aircon Installation',
             'status' => 'For Approval',
             'timeline' => 'Apr 24, 2026 - Apr 30, 2026',
             'address' => 'Ortigas Center',
@@ -880,3 +880,5 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

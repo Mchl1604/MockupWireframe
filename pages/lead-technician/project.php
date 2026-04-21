@@ -21,11 +21,11 @@ $statusClassMap = [
 
 $projectMetadata = [
     'PRJ-1001' => ['client' => 'ACME Holdings', 'service' => 'Aircon Installation', 'timeline' => 'Apr 14, 2026', 'target' => 'Apr 22, 2026', 'address' => '12 Jupiter Ave, Makati City'],
-    'PRJ-1002' => ['client' => 'J. Dela Cruz', 'service' => 'AC Unit Repair', 'timeline' => 'Apr 05 - Apr 10, 2026', 'target' => 'Apr 10, 2026', 'address' => '88 Sampaguita St, Pasig City'],
-    'PRJ-1003' => ['client' => 'Metro Storage', 'service' => 'Ductwork Installation', 'timeline' => 'Apr 15 - Apr 25, 2026', 'target' => 'Apr 25, 2026', 'address' => '45 Pioneer Rd, Mandaluyong City'],
-    'PRJ-1004' => ['client' => 'Northline Foods', 'service' => 'Split-Type AC Unit Installation', 'timeline' => 'Apr 27 - Apr 30, 2026', 'target' => 'Apr 30, 2026', 'address' => '102 Ortigas Ave, Quezon City'],
-    'PRJ-1005' => ['client' => 'BluePeak IT', 'service' => 'Ventilation System Retrofit', 'timeline' => 'May 01 - May 10, 2026', 'target' => 'May 10, 2026', 'address' => '7th Floor, Delta Tech Park, Taguig City'],
-    'PRJ-1006' => ['client' => 'Grand Arc Tower', 'service' => 'Ventilation System Inspection', 'timeline' => 'Apr 12 - Apr 14, 2026', 'target' => 'Apr 14, 2026', 'address' => 'Grand Arc Tower, BGC, Taguig City'],
+    'PRJ-1002' => ['client' => 'J. Dela Cruz', 'service' => 'Aircon Repair', 'timeline' => 'Apr 05 - Apr 10, 2026', 'target' => 'Apr 10, 2026', 'address' => '88 Sampaguita St, Pasig City'],
+    'PRJ-1003' => ['client' => 'Metro Storage', 'service' => 'Ducting Installation', 'timeline' => 'Apr 15 - Apr 25, 2026', 'target' => 'Apr 25, 2026', 'address' => '45 Pioneer Rd, Mandaluyong City'],
+    'PRJ-1004' => ['client' => 'Northline Foods', 'service' => 'Aircon Installation', 'timeline' => 'Apr 27 - Apr 30, 2026', 'target' => 'Apr 30, 2026', 'address' => '102 Ortigas Ave, Quezon City'],
+    'PRJ-1005' => ['client' => 'BluePeak IT', 'service' => 'Ducting Fabrication', 'timeline' => 'May 01 - May 10, 2026', 'target' => 'May 10, 2026', 'address' => '7th Floor, Delta Tech Park, Taguig City'],
+    'PRJ-1006' => ['client' => 'Grand Arc Tower', 'service' => 'Ducting Installation', 'timeline' => 'Apr 12 - Apr 14, 2026', 'target' => 'Apr 14, 2026', 'address' => 'Grand Arc Tower, BGC, Taguig City'],
 ];
 
 $quotationByProject = [
@@ -168,7 +168,7 @@ $reportFeedByProject = [
     ],
 ];
 
-$currentProject = $projectMetadata[$id] ?? ['client' => 'Unknown Client', 'service' => 'Service Type', 'timeline' => 'TBD', 'target' => 'TBD', 'address' => 'N/A'];
+$currentProject = $projectMetadata[$id] ?? ['client' => 'Unknown Client', 'service' => 'Aircon Installation', 'timeline' => 'TBD', 'target' => 'TBD', 'address' => 'N/A'];
 $projectQuotation = $quotationByProject[$id] ?? null;
 $projectTeam = $teamByProject[$id] ?? [];
 $projectTasks = $statusKey === 'for assessment' ? [] : ($taskBoardByProject[$id] ?? []);
@@ -717,7 +717,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return '<div class="col-12">'
                 + '<div class="border rounded-3 p-3 bg-white h-100">'
                 + '<div class="d-flex align-items-center gap-2 mb-1"><strong>' + escapeHtml(report.type) + '</strong><span class="badge ' + badgeClass + '">' + escapeHtml(report.type) + '</span></div>'
-                + '<div class="small text-muted mb-2">' + escapeHtml(report.technician) + ' · ' + escapeHtml(report.date) + '</div>'
+                + '<div class="small text-muted mb-2">' + escapeHtml(report.technician) + ' - ' + escapeHtml(report.date) + '</div>'
                 + '<p class="mb-2 small text-muted">' + escapeHtml(report.summary) + '</p>'
                 + (photos.length > 0
                     ? '<div class="row g-2">' + photos.map(function (photo) {
@@ -985,3 +985,4 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+

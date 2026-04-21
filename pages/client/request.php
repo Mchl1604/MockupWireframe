@@ -173,36 +173,36 @@
                 <h2 class="services-label h3 mb-3">Our Services</h2>
 
                 <div class="accordion" id="serviceAccordion">
-                    <div class="accordion-item service-panel service-card selected" data-service-id="aircon-services" data-service-name="Aircon Services">
+                    <div class="accordion-item service-panel service-card selected" data-service-id="Aircon Installation" data-service-name="Aircon Installation">
                         <h2 class="accordion-header" id="serviceHeadingOne">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#serviceCollapseOne" aria-expanded="true" aria-controls="serviceCollapseOne">
-                                Aircon Services
+                                Aircon Installation
                             </button>
                         </h2>
                         <div id="serviceCollapseOne" class="accordion-collapse collapse show" aria-labelledby="serviceHeadingOne" data-bs-parent="#serviceAccordion">
                             <div class="accordion-body">
                                 <p class="mb-2">Installation, maintenance, and cleaning of air-conditioning units for homes, offices, and commercial buildings.</p>
                                 <ul class="service-points">
-                                    <li>Installation</li>
-                                    <li>AC Repair</li>
-                                    <li>AC Cleaning</li>
+                                    <li>Aircon Installation</li>
+                                    <li>Aircon Repair</li>
+                                    <li>Aircon Cleaning</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <div class="accordion-item service-panel service-card" data-service-id="ducting" data-service-name="Ducting">
+                    <div class="accordion-item service-panel service-card" data-service-id="Ducting Installation" data-service-name="Ducting Installation">
                         <h2 class="accordion-header" id="serviceHeadingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#serviceCollapseTwo" aria-expanded="false" aria-controls="serviceCollapseTwo">
-                                Ducting Services
+                                Ducting Installation
                             </button>
                         </h2>
                         <div id="serviceCollapseTwo" class="accordion-collapse collapse" aria-labelledby="serviceHeadingTwo" data-bs-parent="#serviceAccordion">
                             <div class="accordion-body">
                                 <p class="mb-2">Ducting fabrication and installation for proper airflow and efficient system distribution.</p>
                                 <ul class="service-points">
-                                    <li>Fabrication</li>
-                                    <li>Installation</li>
+                                    <li>Ducting Fabrication</li>
+                                    <li>Ducting Installation</li>
                                 </ul>
                             </div>
                         </div>
@@ -218,7 +218,7 @@
 
                     <form method="POST" action="<?php echo htmlspecialchars(app_url('/client/request'), ENT_QUOTES, 'UTF-8'); ?>" class="needs-validation" novalidate>
                         <input type="hidden" name="action" value="request_service">
-                        <input type="hidden" id="selectedService" name="service" value="aircon-services">
+                        <input type="hidden" id="selectedService" name="service" value="Aircon Installation">
 
                         <div class="row g-3">
                             <div class="col-md-6">
@@ -234,17 +234,19 @@
                             <div class="col-12">
                                 <select required name="project_type" class="form-select request-field">
                                     <option value="" selected disabled>Project type</option>
-                                    <option value="aircon-services">Aircon Services</option>
-                                    <option value="ducting">Ducting</option>
-                                    <option value="preventive-maintenance">Preventive Maintenance</option>
+                                    <option value="Aircon Installation">Aircon Installation</option>
+                                    <option value="Aircon Repair">Aircon Repair</option>
+                                    <option value="Aircon Cleaning">Aircon Cleaning</option>
+                                    <option value="Ducting Fabrication">Ducting Fabrication</option>
+                                    <option value="Ducting Installation">Ducting Installation</option>
                                 </select>
                             </div>
                             <div class="col-12" id="airconServiceTypeWrap" style="display:none;">
                                 <select name="aircon_service_type" id="airconServiceType" class="form-select request-field">
                                     <option value="" selected disabled>Select aircon service type</option>
-                                    <option value="installation">Installation</option>
-                                    <option value="ac-repair">AC Repair</option>
-                                    <option value="ac-cleaning">AC Cleaning</option>
+                                    <option value="Aircon Installation">Aircon Installation</option>
+                                    <option value="Aircon Repair">Aircon Repair</option>
+                                    <option value="Aircon Cleaning">Aircon Cleaning</option>
                                 </select>
                             </div>
                             <div class="col-md-6" id="airconUnitsWrap" style="display:none;">
@@ -253,8 +255,8 @@
                             <div class="col-12" id="ductingServiceTypeWrap" style="display:none;">
                                 <select name="ducting_service_type" id="ductingServiceType" class="form-select request-field">
                                     <option value="" selected disabled>Select ducting service type</option>
-                                    <option value="fabrication">Fabrication</option>
-                                    <option value="installation">Installation</option>
+                                    <option value="Ducting Fabrication">Ducting Fabrication</option>
+                                    <option value="Ducting Installation">Ducting Installation</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -301,8 +303,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!projectTypeSelect) return;
 
         const selectedType = projectTypeSelect.value;
-        const isAircon = selectedType === 'aircon-services';
-        const isDucting = selectedType === 'ducting';
+        const isAircon = selectedType === 'Aircon Installation' || selectedType === 'Aircon Repair' || selectedType === 'Aircon Cleaning';
+        const isDucting = selectedType === 'Ducting Fabrication' || selectedType === 'Ducting Installation';
 
         if (airconServiceTypeWrap && airconServiceType) {
             airconServiceTypeWrap.style.display = isAircon ? '' : 'none';
@@ -353,3 +355,5 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

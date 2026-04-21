@@ -1,4 +1,4 @@
-<?php $pageTitle = 'Admin Project Details'; ?>
+﻿<?php $pageTitle = 'Admin Project Details'; ?>
 <?php include __DIR__ . '/../../includes/head.php'; ?>
 <body class="dashboard-body bg-light min-vh-100 d-flex flex-column">
 <?php include __DIR__ . '/../../includes/navbar.php'; ?>
@@ -9,24 +9,43 @@ $status = $_GET['status'] ?? 'Ongoing';
 $statusKey = strtolower(trim($status));
 $statusClassMap = [
     'ongoing' => 'bg-primary',
+    'in progress' => 'bg-primary',
     'completed' => 'bg-success',
     'to be approved' => 'bg-warning text-dark',
+    'pending quotation approval' => 'bg-warning text-dark',
     'quotation to be approved' => 'bg-warning text-dark',
     'scheduled' => 'bg-danger',
+    'pending schedule' => 'bg-dark',
     'for assessment' => 'bg-info text-dark',
     'drafting quotation' => 'bg-secondary',
+    'cancelled' => 'bg-danger',
 ];
-$canViewQuotation = in_array($statusKey, ['ongoing', 'scheduled', 'completed', 'to be approved', 'quotation to be approved'], true);
+$canViewQuotation = in_array($statusKey, ['ongoing', 'in progress', 'scheduled', 'completed', 'to be approved', 'pending quotation approval', 'quotation to be approved'], true);
 
 $projectMetadata = [
-    'PRJ-1001' => ['client' => 'ACME Holdings', 'service' => 'Aircon Installation', 'timeline' => 'Apr 10 - Apr 18', 'target' => 'Apr 18, 2026'],
-    'PRJ-1002' => ['client' => 'J. Dela Cruz', 'service' => 'AC Unit Repair', 'timeline' => 'Apr 05 - Apr 10', 'target' => 'Apr 10, 2026'],
-    'PRJ-1003' => ['client' => 'Metro Storage', 'service' => 'Ductwork Installation', 'timeline' => 'Apr 15 - Apr 25', 'target' => 'Apr 25, 2026'],
-    'PRJ-1004' => ['client' => 'Northline Foods', 'service' => 'Split-Type AC Unit Installation', 'timeline' => 'Apr 14 - Apr 22', 'target' => 'Apr 22, 2026'],
-    'PRJ-1005' => ['client' => 'BluePeak IT', 'service' => 'Ventilation System Retrofit', 'timeline' => 'May 01 - May 10', 'target' => 'May 10, 2026'],
-    'PRJ-1006' => ['client' => 'Grand Arc Tower', 'service' => 'Ventilation System Inspection', 'timeline' => 'Apr 12 - Apr 14', 'target' => 'Apr 14, 2026'],
+    'PRJ-1001' => ['client' => 'ACME Holdings', 'service' => 'Aircon Installation', 'timeline' => 'Apr 21, 2026', 'target' => 'Apr 21, 2026', 'location' => '112 Meridian Ave, Makati City'],
+    'PRJ-1002' => ['client' => 'J. Dela Cruz', 'service' => 'Aircon Repair', 'timeline' => 'Apr 05 - Apr 10, 2026', 'target' => 'Apr 10, 2026', 'location' => 'Blk 4 Lot 9 Greenfield Homes, Pasig City'],
+    'PRJ-1003' => ['client' => 'Metro Storage', 'service' => 'Ducting Installation', 'timeline' => '', 'target' => 'TBD', 'location' => '45 Pioneer Rd, Mandaluyong City'],
+    'PRJ-1004' => ['client' => 'Northline Foods', 'service' => 'Aircon Installation', 'timeline' => 'Apr 14 - Apr 22, 2026', 'target' => 'Apr 22, 2026', 'location' => '8 Westbank Ave, Quezon City'],
+    'PRJ-1005' => ['client' => 'BluePeak IT', 'service' => 'Ducting Fabrication', 'timeline' => '', 'target' => 'TBD', 'location' => '11 East Ridge Dr, Taguig City'],
+    'PRJ-1006' => ['client' => 'Grand Arc Tower', 'service' => 'Ducting Installation', 'timeline' => 'Apr 12 - Apr 14, 2026', 'target' => 'Apr 14, 2026', 'location' => '900 Aurora Blvd, Cubao, Quezon City'],
+    'PRJ-1007' => ['client' => 'Riverside Mall', 'service' => 'Ducting Installation', 'timeline' => '', 'target' => 'TBD', 'location' => '120 Riverside Ave, Mandaluyong City'],
+    'PRJ-1008' => ['client' => 'Hillcrest Suites', 'service' => 'Aircon Repair', 'timeline' => '', 'target' => 'Cancelled', 'location' => '89 Northfield St, Pasig City'],
+    'PRJ-1009' => ['client' => 'Westline Depot', 'service' => 'Ducting Fabrication', 'timeline' => '', 'target' => 'Cancelled', 'location' => '22 Harbor Ave, Manila City'],
 ];
-$currentProject = $projectMetadata[$id] ?? ['client' => 'Unknown', 'service' => 'Service Type', 'timeline' => 'TBD', 'target' => 'TBD'];
+$currentProject = $projectMetadata[$id] ?? ['client' => 'Unknown', 'service' => 'Aircon Installation', 'timeline' => '', 'target' => 'TBD', 'location' => 'Address unavailable'];
+$projectTitle = $currentProject['service'] . ' - ' . $currentProject['client'];
+
+$cancellationReasonByProject = [
+    'PRJ-1008' => 'Client rejected quotation due to budget constraints.',
+    'PRJ-1009' => 'Admin cancelled project due to incomplete permit requirements.',
+];
+$projectCancellationReason = $cancellationReasonByProject[$id] ?? '';
+
+$statusesWithSchedule = ['for assessment', 'scheduled', 'in progress', 'ongoing', 'completed'];
+$displaySchedule = in_array($statusKey, $statusesWithSchedule, true)
+    ? ($currentProject['timeline'] !== '' ? $currentProject['timeline'] : 'TBD')
+    : 'Not yet scheduled';
 
 $quotationByProject = [
     'PRJ-1001' => [
@@ -163,7 +182,7 @@ $assessmentByProject = [
         'date' => 'Apr 07, 2026',
         'technician' => 'Tech. Lito Ramos',
         'requiredTechnicians' => 1,
-        'summary' => 'AC unit repair assessment. Identified failing capacitor and worn fan motor. Parts in stock. Estimated repair time: 3 hours.',
+        'summary' => 'Aircon Repair assessment. Identified failing capacitor and worn fan motor. Parts in stock. Estimated repair time: 3 hours.',
         'photos' => ['imageSample.png'],
         'findings' => [
             'Capacitor needs replacement',
@@ -250,6 +269,7 @@ $assessmentByProject = [
 ];
 $projectAssessment = $assessmentByProject[$id] ?? null;
 $canViewAssessment = $statusKey !== 'for assessment';
+$canViewTechnicianReports = in_array($statusKey, ['in progress', 'ongoing', 'completed'], true);
 ?>
 <main class="container py-4 flex-grow-1">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -257,14 +277,38 @@ $canViewAssessment = $statusKey !== 'for assessment';
         <a href="<?php echo htmlspecialchars(app_url('/admin/projects'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Back to Projects</a>
     </div>
 
-    <div class="card border-0 shadow-sm mb-3">
-        <div class="card-body row g-3 align-items-start">
-            <div class="col-md-4"><small class="text-muted d-block">Project ID</small><strong><?php echo htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?></strong></div>
-            <div class="col-md-4"><small class="text-muted d-block">Client</small><strong><?php echo htmlspecialchars($currentProject['client'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-            <div class="col-md-4"><small class="text-muted d-block">Status</small><span class="badge <?php echo htmlspecialchars($statusClassMap[$statusKey] ?? 'bg-light text-dark', ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8'); ?></span></div>
-            <div class="col-md-4"><small class="text-muted d-block">Service Type</small><strong><?php echo htmlspecialchars($currentProject['service'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-            <div class="col-md-4"><small class="text-muted d-block">Timeline</small><strong class="d-block"><?php echo htmlspecialchars($currentProject['timeline'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-            <div class="col-md-4"><small class="text-muted d-block">Target Completion</small><strong class="d-block"><?php echo htmlspecialchars($currentProject['target'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
+    <div class="card border-0 shadow-sm mb-3 compact-project-overview">
+        <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
+                <h3 class="h4 fw-bold mb-0"><?php echo htmlspecialchars($projectTitle, ENT_QUOTES, 'UTF-8'); ?></h3>
+                <span class="badge rounded-pill px-3 py-2 <?php echo htmlspecialchars($statusClassMap[$statusKey] ?? 'bg-light text-dark', ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8'); ?></span>
+            </div>
+            <div class="d-flex flex-wrap align-items-center gap-3 text-muted mb-2 compact-project-meta">
+                <span><i class="bi bi-bar-chart-steps me-1"></i><?php echo htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?></span>
+                <span><i class="bi bi-geo-alt me-1"></i><?php echo htmlspecialchars($currentProject['location'], ENT_QUOTES, 'UTF-8'); ?></span>
+            </div>
+            <div class="d-flex flex-wrap align-items-center gap-2 compact-project-meta">
+                <span class="badge rounded-pill text-bg-light border"><?php echo htmlspecialchars($currentProject['service'], ENT_QUOTES, 'UTF-8'); ?></span>
+                <span class="text-muted"><?php echo htmlspecialchars($displaySchedule, ENT_QUOTES, 'UTF-8'); ?></span>
+            </div>
+            <?php if ($statusKey === 'cancelled' && $projectCancellationReason !== ''): ?>
+            <div class="alert alert-danger mt-3 mb-0 py-2 px-3 small">
+                <strong>Cancellation Reason:</strong> <?php echo htmlspecialchars($projectCancellationReason, ENT_QUOTES, 'UTF-8'); ?>
+            </div>
+            <?php endif; ?>
+            <div class="d-flex flex-wrap gap-2 mt-3 pt-2 border-top">
+                <?php if ($canViewAssessment): ?>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#assessmentPanel" aria-expanded="false" aria-controls="assessmentPanel" title="View Assessment Report">
+                    <i class="bi bi-file-earmark-text me-1"></i>Assessment
+                </button>
+                <?php endif; ?>
+                <?php if ($canViewQuotation): ?>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#projectQuotationPanel" aria-expanded="false" aria-controls="projectQuotationPanel" title="View Quotation">
+                    <i class="bi bi-receipt me-1"></i>Quotation
+                </button>
+                <?php endif; ?>
+            </div>
+            <div id="overviewActionPanels" class="mt-3"></div>
         </div>
     </div>
 
@@ -272,6 +316,7 @@ $canViewAssessment = $statusKey !== 'for assessment';
         <div class="col-lg-6"><div class="card border-0 shadow-sm h-100"><div class="card-header bg-white d-flex justify-content-between align-items-center"><strong>Assigned Team</strong><button type="button" class="btn btn-sm btn-outline-primary" id="addTechnicianBtn"><i class="bi bi-plus-circle me-1"></i>Add</button></div><div class="card-body"><ul class="list-group list-group-flush" id="technicianList" style="display: none;"></ul><div id="technicianEmptyMsg" class="text-muted small">No technicians assigned yet.</div></div></div></div>
     </div>
 
+    <?php if ($canViewTechnicianReports): ?>
     <div class="card border-0 shadow-sm mt-3">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
             <strong>Technician Reports</strong>
@@ -352,11 +397,9 @@ $canViewAssessment = $statusKey !== 'for assessment';
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
     <?php if ($canViewAssessment): ?>
-    <div class="mt-3">
-        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#assessmentPanel" aria-expanded="false" aria-controls="assessmentPanel">View Assessment Report</button>
-    </div>
     <div class="collapse mt-3" id="assessmentPanel">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white"><strong>Assessment Report</strong></div>
@@ -426,9 +469,6 @@ $canViewAssessment = $statusKey !== 'for assessment';
     <?php endif; ?>
 
     <?php if ($canViewQuotation): ?>
-    <div class="mt-3">
-        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#projectQuotationPanel" aria-expanded="false" aria-controls="projectQuotationPanel">View Quotation</button>
-    </div>
     <div class="collapse mt-3" id="projectQuotationPanel">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
@@ -477,12 +517,58 @@ $canViewAssessment = $statusKey !== 'for assessment';
     
 </main>
 
+<div class="modal fade" id="cancelProjectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancel Project</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-2">Are you sure you want to cancel this project?</p>
+                <p class="small text-muted mb-3">Project: <?php echo htmlspecialchars($projectTitle, ENT_QUOTES, 'UTF-8'); ?></p>
+                <label for="cancelProjectReason" class="form-label">Reason for cancellation</label>
+                <textarea id="cancelProjectReason" class="form-control" rows="4" placeholder="Enter reason" required></textarea>
+                <div class="invalid-feedback d-none" id="cancelProjectReasonError">Please provide a reason before confirming.</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Keep Project</button>
+                <button type="button" class="btn btn-danger" id="confirmCancelProjectBtn">Confirm Cancel Project</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const overviewActionPanels = document.getElementById('overviewActionPanels');
+    const assessmentPanel = document.getElementById('assessmentPanel');
+    const projectQuotationPanel = document.getElementById('projectQuotationPanel');
+
+    if (overviewActionPanels) {
+        if (assessmentPanel) {
+            overviewActionPanels.appendChild(assessmentPanel);
+        }
+        if (projectQuotationPanel) {
+            overviewActionPanels.appendChild(projectQuotationPanel);
+        }
+    }
+
     const projectTeam = <?php echo json_encode($projectTeam); ?>;
     const technicianList = document.getElementById('technicianList');
     const technicianEmptyMsg = document.getElementById('technicianEmptyMsg');
     const addTechnicianBtn = document.getElementById('addTechnicianBtn');
+    const cancelProjectBtn = document.getElementById('cancelProjectBtn');
+    const cancelProjectReason = document.getElementById('cancelProjectReason');
+    const cancelProjectReasonError = document.getElementById('cancelProjectReasonError');
+    const confirmCancelProjectBtn = document.getElementById('confirmCancelProjectBtn');
+    const cancelProjectModalEl = document.getElementById('cancelProjectModal');
+    const projectStatusBadge = document.querySelector('.compact-project-overview .badge.rounded-pill.px-3.py-2');
+
+    let cancelProjectModal = null;
+    if (cancelProjectModalEl && typeof bootstrap !== 'undefined') {
+        cancelProjectModal = bootstrap.Modal.getOrCreateInstance(cancelProjectModalEl);
+    }
 
     function renderTeam() {
         technicianList.innerHTML = '';
@@ -525,8 +611,75 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    if (confirmCancelProjectBtn) {
+        confirmCancelProjectBtn.addEventListener('click', function () {
+            const reason = cancelProjectReason ? cancelProjectReason.value.trim() : '';
+            if (!reason) {
+                if (cancelProjectReasonError) {
+                    cancelProjectReasonError.classList.remove('d-none');
+                }
+                if (cancelProjectReason) {
+                    cancelProjectReason.classList.add('is-invalid');
+                    cancelProjectReason.focus();
+                }
+                return;
+            }
+
+            if (cancelProjectReasonError) {
+                cancelProjectReasonError.classList.add('d-none');
+            }
+            if (cancelProjectReason) {
+                cancelProjectReason.classList.remove('is-invalid');
+            }
+
+            if (projectStatusBadge) {
+                projectStatusBadge.className = 'badge rounded-pill px-3 py-2 bg-danger';
+                projectStatusBadge.textContent = 'Cancelled';
+            }
+
+            const mainContainer = document.querySelector('main.container');
+            if (mainContainer) {
+                const alertHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+                    + '<strong>Project cancelled.</strong> Reason: ' + reason.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+                    + '</div>';
+                mainContainer.insertAdjacentHTML('afterbegin', alertHtml);
+            }
+
+            if (cancelProjectBtn) {
+                cancelProjectBtn.disabled = true;
+                cancelProjectBtn.textContent = 'Project Cancelled';
+            }
+
+            if (cancelProjectModal) {
+                cancelProjectModal.hide();
+            }
+        });
+    }
+
+    if (cancelProjectModalEl) {
+        cancelProjectModalEl.addEventListener('hidden.bs.modal', function () {
+            if (cancelProjectReasonError) {
+                cancelProjectReasonError.classList.add('d-none');
+            }
+            if (cancelProjectReason) {
+                cancelProjectReason.classList.remove('is-invalid');
+            }
+        });
+    }
+
     renderTeam();
 });
 </script>
 
+<div class="container pb-4">
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-danger" id="cancelProjectBtn" data-bs-toggle="modal" data-bs-target="#cancelProjectModal">
+            Cancel Project
+        </button>
+    </div>
+</div>
+
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+

@@ -6,9 +6,9 @@
 <?php
 $projects = [
     ['id' => 'PRJ-1001', 'name' => 'Aircon Installation - ACME Holdings', 'status' => 'For Assessment', 'timeline' => 'Apr 14, 2026'],
-    ['id' => 'PRJ-1003', 'name' => 'Ductwork Installation - Metro Storage', 'status' => 'Ongoing', 'timeline' => 'Apr 15 - Apr 25, 2026'],
-    ['id' => 'PRJ-1004', 'name' => 'Split-Type AC Unit Installation - Northline Foods', 'status' => 'Assigned', 'timeline' => 'Apr 27 - Apr 30, 2026'],
-    ['id' => 'PRJ-1005', 'name' => 'Ventilation System Retrofit - BluePeak IT', 'status' => 'Assigned', 'timeline' => 'May 01 - May 10, 2026'],
+    ['id' => 'PRJ-1003', 'name' => 'Ducting Installation - Metro Storage', 'status' => 'Ongoing', 'timeline' => 'Apr 15 - Apr 25, 2026'],
+    ['id' => 'PRJ-1004', 'name' => 'Aircon Installation - Northline Foods', 'status' => 'Assigned', 'timeline' => 'Apr 27 - Apr 30, 2026'],
+    ['id' => 'PRJ-1005', 'name' => 'Ducting Fabrication - BluePeak IT', 'status' => 'Assigned', 'timeline' => 'May 01 - May 10, 2026'],
 ];
 
 $statusClassMap = [
@@ -140,3 +140,5 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
+
+
