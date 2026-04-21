@@ -7,6 +7,9 @@
 $id = $_GET['id'] ?? 'PRJ-1001';
 $status = $_GET['status'] ?? 'Ongoing';
 $statusKey = strtolower(trim($status));
+$preparingStatuses = ['drafting quotation', 'pending quotation approval', 'quotation to be approved', 'pending schedule'];
+$isPreparingStatus = in_array($statusKey, $preparingStatuses, true);
+$canEditSchedule = !in_array($statusKey, array_merge($preparingStatuses, ['completed', 'cancelled']), true);
 $statusClassMap = [
     'ongoing' => 'bg-primary',
     'in progress' => 'bg-primary',
@@ -20,7 +23,7 @@ $statusClassMap = [
     'drafting quotation' => 'bg-secondary',
     'cancelled' => 'bg-danger',
 ];
-$canViewQuotation = in_array($statusKey, ['ongoing', 'in progress', 'scheduled', 'completed', 'to be approved', 'pending quotation approval', 'quotation to be approved'], true);
+$canViewQuotation = in_array($statusKey, ['ongoing', 'in progress', 'scheduled', 'completed', 'to be approved', 'pending quotation approval', 'quotation to be approved', 'pending schedule'], true);
 
 $projectMetadata = [
     'PRJ-1001' => ['client' => 'ACME Holdings', 'service' => 'Aircon Installation', 'timeline' => 'Apr 21, 2026', 'target' => 'Apr 21, 2026', 'location' => '112 Meridian Ave, Makati City'],
@@ -72,7 +75,7 @@ $quotationByProject = [
     'PRJ-1003' => [
         'id' => 'QT-103',
         'client' => 'Metro Storage',
-        'status' => 'Draft',
+        'status' => 'Pending Approval',
         'laborCost' => 26000,
         'materials' => [
             ['name' => 'GI Sheet', 'qty' => 12, 'unit' => 'sheet', 'unitCost' => 4200],
@@ -101,6 +104,17 @@ $quotationByProject = [
             ['name' => 'Diffuser Grill', 'qty' => 8, 'unit' => 'pc', 'unitCost' => 1450],
         ],
     ],
+    'PRJ-1007' => [
+        'id' => 'QT-106',
+        'client' => 'Riverside Mall',
+        'status' => 'Approved',
+        'laborCost' => 30500,
+        'materials' => [
+            ['name' => 'Spiral Duct', 'qty' => 9, 'unit' => 'length', 'unitCost' => 3200],
+            ['name' => 'Volume Damper', 'qty' => 12, 'unit' => 'pc', 'unitCost' => 1250],
+            ['name' => 'Duct Insulation', 'qty' => 7, 'unit' => 'roll', 'unitCost' => 2800],
+        ],
+    ],
 ];
 $projectQuotation = $quotationByProject[$id] ?? null;
 
@@ -126,6 +140,9 @@ $teamByProject = [
     'PRJ-1006' => ['Tech. Anne Mendoza', 'Tech. Lito Ramos'],
 ];
 $projectTeam = $teamByProject[$id] ?? [];
+if ($isPreparingStatus) {
+    $projectTeam = [];
+}
 
 $reportsByProject = [
     'PRJ-1002' => [
@@ -266,10 +283,71 @@ $assessmentByProject = [
         ],
         'estimatedDays' => 3,
     ],
+    'PRJ-1007' => [
+        'date' => 'Apr 15, 2026',
+        'technician' => 'Engr. Mario Santos',
+        'requiredTechnicians' => 3,
+        'summary' => 'Mall branch duct assessment completed. Quotation is approved and project is ready for crew scheduling and site mobilization.',
+        'photos' => ['imageSample.png', 'imageSample.png'],
+        'findings' => [
+            'Main trunk routing is cleared for installation',
+            'Ceiling access windows are available per zone',
+            'Weekend night shift is recommended to minimize disruption',
+        ],
+        'materials' => [
+            ['name' => 'Spiral Duct', 'qty' => 9, 'unit' => 'length'],
+            ['name' => 'Volume Damper', 'qty' => 12, 'unit' => 'pc'],
+            ['name' => 'Duct Insulation', 'qty' => 7, 'unit' => 'roll'],
+        ],
+        'estimatedDays' => 7,
+    ],
 ];
 $projectAssessment = $assessmentByProject[$id] ?? null;
 $canViewAssessment = $statusKey !== 'for assessment';
 $canViewTechnicianReports = in_array($statusKey, ['in progress', 'ongoing', 'completed'], true);
+$canViewTaskBoard = in_array($statusKey, ['in progress', 'completed'], true);
+
+$taskBoardByProject = [
+    'PRJ-1001' => [
+        ['title' => 'Deliver copper piping set', 'assignee' => 'Tech. Carlo Reyes', 'status' => 'In Progress', 'dateCreated' => 'Apr 10, 2026'],
+        ['title' => 'Prepare indoor unit mounting points', 'assignee' => 'Tech. Carlo Reyes', 'status' => 'Done', 'dateCreated' => 'Apr 11, 2026'],
+    ],
+    'PRJ-1002' => [
+        ['title' => 'Replace fan motor', 'assignee' => 'Tech. Lito Ramos', 'status' => 'Done', 'dateCreated' => 'Apr 08, 2026'],
+        ['title' => 'Test cooling cycle', 'assignee' => 'Tech. Lito Ramos', 'status' => 'In Progress', 'dateCreated' => 'Apr 09, 2026'],
+    ],
+    'PRJ-1003' => [
+        ['title' => 'Measure duct layout', 'assignee' => 'Tech. Anne Mendoza', 'status' => 'In Progress', 'dateCreated' => 'Apr 09, 2026'],
+        ['title' => 'Check installation points', 'assignee' => 'Tech. Carlo Reyes', 'status' => 'Pending', 'dateCreated' => 'Apr 10, 2026'],
+    ],
+    'PRJ-1004' => [
+        ['title' => 'Inspect mounting brackets', 'assignee' => 'Tech. Carl Dominguez', 'status' => 'Pending', 'dateCreated' => 'Apr 12, 2026'],
+        ['title' => 'Stage unit delivery', 'assignee' => 'Tech. Carl Dominguez', 'status' => 'In Progress', 'dateCreated' => 'Apr 13, 2026'],
+    ],
+    'PRJ-1005' => [
+        ['title' => 'Confirm retrofit layout', 'assignee' => 'Tech. John Gonzales', 'status' => 'In Progress', 'dateCreated' => 'Apr 14, 2026'],
+        ['title' => 'Prepare duct accessories', 'assignee' => 'Tech. John Gonzales', 'status' => 'Pending', 'dateCreated' => 'Apr 15, 2026'],
+    ],
+    'PRJ-1006' => [
+        ['title' => 'Record airflow readings', 'assignee' => 'Tech. Anne Mendoza', 'status' => 'Done', 'dateCreated' => 'Apr 10, 2026'],
+        ['title' => 'Inspect diffuser locations', 'assignee' => 'Tech. Lito Ramos', 'status' => 'In Progress', 'dateCreated' => 'Apr 11, 2026'],
+    ],
+    'PRJ-1007' => [
+        ['title' => 'Verify branch route clearance', 'assignee' => 'Tech. Carlo Reyes', 'status' => 'Pending', 'dateCreated' => 'Apr 16, 2026'],
+        ['title' => 'Prepare damper placement guide', 'assignee' => 'Tech. Anne Mendoza', 'status' => 'In Progress', 'dateCreated' => 'Apr 17, 2026'],
+    ],
+];
+$projectTasks = $canViewTaskBoard ? ($taskBoardByProject[$id] ?? []) : [];
+
+if ($statusKey === 'completed') {
+    foreach ($projectTasks as &$task) {
+        $task['status'] = 'Completed';
+    }
+    unset($task);
+}
+
+$quotationsModuleUrl = app_url('/admin/quotations', ['project' => $id]);
+$schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'projects']);
 ?>
 <main class="container py-4 flex-grow-1">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -302,10 +380,20 @@ $canViewTechnicianReports = in_array($statusKey, ['in progress', 'ongoing', 'com
                     <i class="bi bi-file-earmark-text me-1"></i>Assessment
                 </button>
                 <?php endif; ?>
+                <?php if ($statusKey === 'drafting quotation'): ?>
+                <a href="<?php echo htmlspecialchars($quotationsModuleUrl, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm btn-primary" title="Go to Quotations">
+                    <i class="bi bi-box-arrow-up-right me-1"></i>Go to Quotation
+                </a>
+                <?php endif; ?>
                 <?php if ($canViewQuotation): ?>
                 <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#projectQuotationPanel" aria-expanded="false" aria-controls="projectQuotationPanel" title="View Quotation">
-                    <i class="bi bi-receipt me-1"></i>Quotation
+                    <i class="bi bi-receipt me-1"></i><?php echo $statusKey === 'pending quotation approval' ? 'Show Quotation' : 'Quotation'; ?>
                 </button>
+                <?php endif; ?>
+                <?php if ($statusKey === 'pending schedule'): ?>
+                <a href="<?php echo htmlspecialchars($schedulesModuleUrl, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm btn-primary" title="Schedule Project">
+                    <i class="bi bi-calendar-event me-1"></i>Schedule Project
+                </a>
                 <?php endif; ?>
             </div>
             <div id="overviewActionPanels" class="mt-3"></div>
@@ -313,7 +401,7 @@ $canViewTechnicianReports = in_array($statusKey, ['in progress', 'ongoing', 'com
     </div>
 
     <div class="row g-3">
-        <div class="col-lg-6"><div class="card border-0 shadow-sm h-100"><div class="card-header bg-white d-flex justify-content-between align-items-center"><strong>Assigned Team</strong><button type="button" class="btn btn-sm btn-outline-primary" id="addTechnicianBtn"><i class="bi bi-plus-circle me-1"></i>Add</button></div><div class="card-body"><ul class="list-group list-group-flush" id="technicianList" style="display: none;"></ul><div id="technicianEmptyMsg" class="text-muted small">No technicians assigned yet.</div></div></div></div>
+        <div class="col-lg-6"><div class="card border-0 shadow-sm h-100"><div class="card-header bg-white d-flex justify-content-between align-items-center"><strong>Assigned Team</strong><?php if ($canEditSchedule): ?><a href="<?php echo htmlspecialchars($schedulesModuleUrl, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-calendar-week me-1"></i>Edit Schedule</a><?php endif; ?></div><div class="card-body"><ul class="list-group list-group-flush" id="technicianList" style="display: none;"></ul><div id="technicianEmptyMsg" class="text-muted small"><?php echo $isPreparingStatus ? 'No technicians should be assigned while project is in Preparing.' : 'No technicians assigned yet.'; ?></div></div></div></div>
     </div>
 
     <?php if ($canViewTechnicianReports): ?>
@@ -395,6 +483,40 @@ $canViewTechnicianReports = in_array($statusKey, ['in progress', 'ongoing', 'com
                     <?php endif; ?>
                 </div>
             </div>
+
+            <?php if ($canViewTaskBoard): ?>
+            <hr>
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <div>
+                    <h3 class="h6 mb-1 fw-bold">Tasks</h3>
+                    <div class="small text-muted" id="taskProgressSummary">
+                        <?php echo count(array_filter($projectTasks, static function ($task) {
+                            $taskStatus = strtolower((string) ($task['status'] ?? ''));
+                            return $taskStatus === 'done' || $taskStatus === 'completed';
+                        })); ?>/<?php echo count($projectTasks); ?> task completed
+                    </div>
+                </div>
+                <?php if ($statusKey !== 'completed'): ?>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#assignTaskModal">Assign Task</button>
+                <?php endif; ?>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Task</th>
+                            <th>Assigned To</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taskTableBody"></tbody>
+                </table>
+            </div>
+            <div id="tasksEmptyState" class="text-muted small d-none">No tasks assigned yet.</div>
+            <?php endif; ?>
         </div>
     </div>
     <?php endif; ?>
@@ -539,6 +661,99 @@ $canViewTechnicianReports = in_array($statusKey, ['in progress', 'ongoing', 'com
     </div>
 </div>
 
+<?php if ($canViewTaskBoard): ?>
+<div class="modal fade" id="assignTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow overflow-hidden">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Assign Task</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="taskTitle" class="form-label">Task Title</label>
+                        <input type="text" id="taskTitle" class="form-control" placeholder="Describe the task">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="taskAssignee" class="form-label">Assign To</label>
+                        <select id="taskAssignee" class="form-select">
+                            <?php foreach ($projectTeam as $member): ?>
+                                <option value="<?php echo htmlspecialchars($member, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($member, ENT_QUOTES, 'UTF-8'); ?></option>
+                            <?php endforeach; ?>
+                            <?php if (empty($projectTeam)): ?>
+                                <option value="">No technicians available</option>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="taskDueDate" class="form-label">Due Date</label>
+                        <input type="date" id="taskDueDate" class="form-control">
+                    </div>
+                    <div class="col-12">
+                        <label for="taskDescription" class="form-label">Task Description</label>
+                        <textarea id="taskDescription" class="form-control" rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-white">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveTaskBtn">Save Task</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="viewTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow overflow-hidden">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Task Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="small text-dark mb-1 fw-semibold">Task Title</div>
+                        <div id="viewTaskTitle" class="border rounded p-2 bg-white">No task title provided.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="small text-dark mb-1 fw-semibold">Status</div>
+                        <div id="viewTaskStatus" class="border rounded p-2 bg-white">Pending</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="small text-dark mb-1 fw-semibold">Assigned Technician</div>
+                        <div id="viewTaskAssignee" class="border rounded p-2 bg-white">No assignee provided.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="small text-dark mb-1 fw-semibold">Due Date</div>
+                        <div id="viewTaskDueDate" class="border rounded p-2 bg-white">No due date provided.</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="small text-dark mb-1 fw-semibold">Description</div>
+                        <div id="viewTaskDescription" class="border rounded p-3 bg-white">No description provided.</div>
+                    </div>
+                    <div class="col-md-6 d-none" id="viewTaskAccomplishedWrapper">
+                        <div class="small text-dark mb-1 fw-semibold">Date Accomplished</div>
+                        <div id="viewTaskAccomplishedDate" class="border rounded p-2 bg-success-subtle text-success-emphasis">-</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="small text-dark mb-1 fw-semibold">Image</div>
+                        <div class="border rounded p-3 bg-white">
+                            <img id="viewTaskImage" src="" alt="Task image" class="img-fluid rounded border d-none">
+                            <div id="viewTaskImageEmpty" class="text-muted small">No image attached.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-white">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const overviewActionPanels = document.getElementById('overviewActionPanels');
@@ -557,13 +772,124 @@ document.addEventListener('DOMContentLoaded', function() {
     const projectTeam = <?php echo json_encode($projectTeam); ?>;
     const technicianList = document.getElementById('technicianList');
     const technicianEmptyMsg = document.getElementById('technicianEmptyMsg');
-    const addTechnicianBtn = document.getElementById('addTechnicianBtn');
     const cancelProjectBtn = document.getElementById('cancelProjectBtn');
     const cancelProjectReason = document.getElementById('cancelProjectReason');
     const cancelProjectReasonError = document.getElementById('cancelProjectReasonError');
     const confirmCancelProjectBtn = document.getElementById('confirmCancelProjectBtn');
     const cancelProjectModalEl = document.getElementById('cancelProjectModal');
     const projectStatusBadge = document.querySelector('.compact-project-overview .badge.rounded-pill.px-3.py-2');
+    const canViewTaskBoard = <?php echo json_encode($canViewTaskBoard, JSON_UNESCAPED_SLASHES); ?>;
+    const isCompletedProject = <?php echo json_encode($statusKey === 'completed', JSON_UNESCAPED_SLASHES); ?>;
+    const initialTasks = <?php echo json_encode(array_values($projectTasks), JSON_UNESCAPED_SLASHES); ?>;
+    const assetImageBasePath = <?php echo json_encode(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/', JSON_UNESCAPED_SLASHES); ?>;
+    const taskTableBody = document.getElementById('taskTableBody');
+    const tasksEmptyState = document.getElementById('tasksEmptyState');
+    const saveTaskBtn = document.getElementById('saveTaskBtn');
+    const taskTitle = document.getElementById('taskTitle');
+    const taskAssignee = document.getElementById('taskAssignee');
+    const taskDueDate = document.getElementById('taskDueDate');
+    const taskDescription = document.getElementById('taskDescription');
+    const viewTaskTitle = document.getElementById('viewTaskTitle');
+    const viewTaskStatus = document.getElementById('viewTaskStatus');
+    const viewTaskAssignee = document.getElementById('viewTaskAssignee');
+    const viewTaskDueDate = document.getElementById('viewTaskDueDate');
+    const viewTaskDescription = document.getElementById('viewTaskDescription');
+    const viewTaskImage = document.getElementById('viewTaskImage');
+    const viewTaskImageEmpty = document.getElementById('viewTaskImageEmpty');
+    const viewTaskAccomplishedWrapper = document.getElementById('viewTaskAccomplishedWrapper');
+    const viewTaskAccomplishedDate = document.getElementById('viewTaskAccomplishedDate');
+
+    function normalizeTaskStatus(status) {
+        const key = String(status || '').toLowerCase();
+        if (isCompletedProject) {
+            return 'Completed';
+        }
+
+        return key === 'done' || key === 'completed' ? 'Completed' : 'Pending';
+    }
+
+    function buildDetailedTaskDescription(title, assignee, dueDate) {
+        const safeTitle = String(title || 'this task').trim();
+        const safeAssignee = String(assignee || 'assigned technician').trim();
+        const safeDueDate = String(dueDate || 'the due date').trim();
+
+        return 'Complete ' + safeTitle + ' by coordinating with ' + safeAssignee + ', documenting major steps performed, validating outputs against project requirements, and finalizing all checks before ' + safeDueDate + '.';
+    }
+
+    const tasks = initialTasks.map(function (task) {
+        return {
+            title: task.title || '',
+            assignee: task.assignee || '',
+            status: normalizeTaskStatus(task.status),
+            dateCreated: task.dateCreated || '',
+            dueDate: task.dueDate || task.dateCreated || '',
+            description: task.description || buildDetailedTaskDescription(task.title, task.assignee, task.dueDate || task.dateCreated),
+            image: task.image || '',
+            accomplishedDate: isCompletedProject
+                ? (task.accomplishedDate || task.dateCreated || new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }))
+                : (task.accomplishedDate || ''),
+        };
+    }).sort(function (left, right) {
+        return String(right.dateCreated || '').localeCompare(String(left.dateCreated || ''));
+    });
+
+    function escapeHtml(value) {
+        return String(value || '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function taskStatusClass(status) {
+        return String(status || '').toLowerCase() === 'completed' ? 'bg-success' : 'bg-secondary';
+    }
+
+    function getTaskPreviewImageSource(task) {
+        if (String(task.status || '').toLowerCase() !== 'completed') {
+            return '';
+        }
+
+        return assetImageBasePath + 'imageSample.png';
+    }
+
+    function renderTasks() {
+        if (!canViewTaskBoard || !taskTableBody) {
+            return;
+        }
+
+        taskTableBody.innerHTML = tasks.map(function (task, index) {
+            const isCompleted = String(task.status || '').toLowerCase() === 'completed';
+
+            return '<tr>'
+                + '<td>' + escapeHtml(task.title) + '</td>'
+                + '<td>' + escapeHtml(task.assignee) + '</td>'
+                + '<td>' + escapeHtml(task.dueDate || task.dateCreated) + '</td>'
+                + '<td><span class="badge ' + taskStatusClass(task.status) + '">' + escapeHtml(task.status) + '</span></td>'
+                + '<td class="text-start">'
+                + '<button type="button" class="btn btn-sm btn-primary view-task-btn me-1" data-task-index="' + index + '" title="View Task"><i class="bi bi-eye"></i></button>'
+                + (isCompleted || isCompletedProject
+                    ? ''
+                    : '<button type="button" class="btn btn-sm btn-success mark-done-btn" data-task-index="' + index + '">Mark as Done</button>')
+                + '</td>'
+                + '</tr>';
+        }).join('');
+
+        if (tasksEmptyState) {
+            tasksEmptyState.classList.toggle('d-none', tasks.length > 0);
+        }
+    }
+
+    function updateTaskProgress() {
+        const doneCount = tasks.filter(function (task) {
+            return String(task.status || '').toLowerCase() === 'completed';
+        }).length;
+        const summaryNode = document.getElementById('taskProgressSummary');
+        if (summaryNode && canViewTaskBoard) {
+            summaryNode.textContent = doneCount + '/' + tasks.length + ' task completed';
+        }
+    }
 
     let cancelProjectModal = null;
     if (cancelProjectModalEl && typeof bootstrap !== 'undefined') {
@@ -588,28 +914,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         ${tech}
                         ${index === 0 ? '<span class="badge bg-primary ms-2">Lead</span>' : ''}
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-danger remove-tech" data-index="${index}">Remove</button>
                 `;
                 technicianList.appendChild(li);
             });
         }
-        
-        document.querySelectorAll('.remove-tech').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const index = this.getAttribute('data-index');
-                projectTeam.splice(index, 1);
-                renderTeam();
-            });
-        });
     }
-
-    addTechnicianBtn.addEventListener('click', function() {
-        const name = prompt('Enter technician name:');
-        if (name && name.trim()) {
-            projectTeam.push(name.trim());
-            renderTeam();
-        }
-    });
 
     if (confirmCancelProjectBtn) {
         confirmCancelProjectBtn.addEventListener('click', function () {
@@ -668,16 +977,142 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    if (taskTableBody) {
+        taskTableBody.addEventListener('click', function (event) {
+            const button = event.target.closest('.mark-done-btn');
+            if (button) {
+                const taskIndex = Number(button.getAttribute('data-task-index'));
+                if (Number.isNaN(taskIndex) || !tasks[taskIndex]) {
+                    return;
+                }
+
+                tasks[taskIndex].status = 'Completed';
+                tasks[taskIndex].accomplishedDate = new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+                renderTasks();
+                updateTaskProgress();
+                return;
+            }
+
+            const viewButton = event.target.closest('.view-task-btn');
+            if (!viewButton) {
+                return;
+            }
+
+            const taskIndex = Number(viewButton.getAttribute('data-task-index'));
+            if (Number.isNaN(taskIndex) || !tasks[taskIndex]) {
+                return;
+            }
+
+            const task = tasks[taskIndex];
+            const imageSrc = getTaskPreviewImageSource(task);
+            const isCompleted = String(task.status || '').toLowerCase() === 'completed';
+            const statusText = isCompleted ? 'Completed' : 'Incomplete';
+            const statusBadgeClass = isCompleted ? 'text-bg-success' : 'text-bg-warning';
+
+            if (viewTaskTitle) {
+                viewTaskTitle.textContent = task.title || 'No task title provided.';
+            }
+            if (viewTaskStatus) {
+                viewTaskStatus.innerHTML = '<span class="badge ' + statusBadgeClass + '">' + statusText + '</span>';
+            }
+            if (viewTaskAssignee) {
+                viewTaskAssignee.textContent = task.assignee || 'No assignee provided.';
+            }
+            if (viewTaskDueDate) {
+                viewTaskDueDate.textContent = task.dueDate || 'No due date provided.';
+            }
+            if (viewTaskDescription) {
+                viewTaskDescription.textContent = task.description || buildDetailedTaskDescription(task.title, task.assignee, task.dueDate);
+            }
+            if (viewTaskImage && viewTaskImageEmpty) {
+                if (imageSrc) {
+                    viewTaskImage.src = imageSrc;
+                    viewTaskImage.classList.remove('d-none');
+                    viewTaskImageEmpty.classList.add('d-none');
+                } else {
+                    viewTaskImage.src = '';
+                    viewTaskImage.classList.add('d-none');
+                    viewTaskImageEmpty.classList.remove('d-none');
+                }
+            }
+            if (viewTaskAccomplishedWrapper && viewTaskAccomplishedDate) {
+                if (isCompleted) {
+                    viewTaskAccomplishedWrapper.classList.remove('d-none');
+                    viewTaskAccomplishedDate.textContent = task.accomplishedDate || new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+                } else {
+                    viewTaskAccomplishedWrapper.classList.add('d-none');
+                    viewTaskAccomplishedDate.textContent = '-';
+                }
+            }
+
+            const modalEl = document.getElementById('viewTaskModal');
+            if (modalEl && window.bootstrap && window.bootstrap.Modal) {
+                window.bootstrap.Modal.getOrCreateInstance(modalEl).show();
+            }
+        });
+    }
+
+    if (saveTaskBtn) {
+        saveTaskBtn.addEventListener('click', function () {
+            const title = taskTitle ? taskTitle.value.trim() : '';
+            const assignee = taskAssignee ? taskAssignee.value.trim() : '';
+            const dueDate = taskDueDate ? taskDueDate.value : '';
+            const description = taskDescription ? taskDescription.value.trim() : '';
+
+            if (!title || !assignee || !dueDate || isCompletedProject) {
+                return;
+            }
+
+            const formattedDueDate = new Date(dueDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+            const detailedDescription = description.length > title.length
+                ? description
+                : 'Complete ' + title + ' with clear execution steps, coordination details, and verification notes for ' + assignee + '.';
+
+            tasks.unshift({
+                title: title,
+                assignee: assignee,
+                status: 'Pending',
+                dateCreated: formattedDueDate,
+                dueDate: formattedDueDate,
+                description: detailedDescription,
+                image: '',
+                accomplishedDate: '',
+            });
+
+            if (taskTitle) {
+                taskTitle.value = '';
+            }
+            if (taskDueDate) {
+                taskDueDate.value = '';
+            }
+            if (taskDescription) {
+                taskDescription.value = '';
+            }
+
+            renderTasks();
+            updateTaskProgress();
+
+            const modalEl = document.getElementById('assignTaskModal');
+            if (modalEl && window.bootstrap && window.bootstrap.Modal) {
+                window.bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+            }
+        });
+    }
+
     renderTeam();
+    renderTasks();
+    updateTaskProgress();
 });
 </script>
 
-<div class="container pb-4">
-    <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-danger" id="cancelProjectBtn" data-bs-toggle="modal" data-bs-target="#cancelProjectModal">
-            Cancel Project
-        </button>
-    </div>
+<div class="container-fluid pb-4 px-4">
+    <?php if ($statusKey !== 'cancelled'): ?>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-danger" id="cancelProjectBtn" data-bs-toggle="modal" data-bs-target="#cancelProjectModal">
+                Cancel Project
+            </button>
+        </div>
+    <?php endif; ?>
 </div>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
