@@ -7,7 +7,7 @@
 $id = $_GET['id'] ?? 'PRJ-1001';
 $status = $_GET['status'] ?? 'Ongoing';
 $statusKey = strtolower(trim($status));
-$preparingStatuses = ['drafting quotation', 'pending quotation approval', 'quotation to be approved', 'pending schedule'];
+$preparingStatuses = ['drafting quotation', 'pending quotation approval', 'quotation to be approved', 'pending contract upload', 'pending schedule'];
 $isPreparingStatus = in_array($statusKey, $preparingStatuses, true);
 $canEditSchedule = !in_array($statusKey, array_merge($preparingStatuses, ['completed', 'cancelled']), true);
 $statusClassMap = [
@@ -17,13 +17,16 @@ $statusClassMap = [
     'to be approved' => 'bg-warning text-dark',
     'pending quotation approval' => 'bg-warning text-dark',
     'quotation to be approved' => 'bg-warning text-dark',
+    'pending contract upload' => 'bg-warning text-dark',
     'scheduled' => 'bg-danger',
     'pending schedule' => 'bg-dark',
     'for assessment' => 'bg-info text-dark',
     'drafting quotation' => 'bg-secondary',
+    'on hold' => 'bg-warning text-dark',
+    'onhold' => 'bg-warning text-dark',
     'cancelled' => 'bg-danger',
 ];
-$canViewQuotation = in_array($statusKey, ['ongoing', 'in progress', 'scheduled', 'completed', 'to be approved', 'pending quotation approval', 'quotation to be approved', 'pending schedule'], true);
+$canViewQuotation = in_array($statusKey, ['ongoing', 'in progress', 'scheduled', 'completed', 'to be approved', 'pending quotation approval', 'quotation to be approved', 'pending contract upload', 'pending schedule'], true);
 
 $projectMetadata = [
     'PRJ-1001' => ['client' => 'ACME Holdings', 'service' => 'Aircon Installation', 'timeline' => 'Apr 21, 2026', 'target' => 'Apr 21, 2026', 'location' => '112 Meridian Ave, Makati City'],
@@ -35,9 +38,16 @@ $projectMetadata = [
     'PRJ-1007' => ['client' => 'Riverside Mall', 'service' => 'Ducting Installation', 'timeline' => '', 'target' => 'TBD', 'location' => '120 Riverside Ave, Mandaluyong City'],
     'PRJ-1008' => ['client' => 'Hillcrest Suites', 'service' => 'Aircon Repair', 'timeline' => '', 'target' => 'Cancelled', 'location' => '89 Northfield St, Pasig City'],
     'PRJ-1009' => ['client' => 'Westline Depot', 'service' => 'Ducting Fabrication', 'timeline' => '', 'target' => 'Cancelled', 'location' => '22 Harbor Ave, Manila City'],
+    'PRJ-1010' => ['client' => 'Vertex Plaza', 'service' => 'Aircon Installation', 'timeline' => '', 'target' => 'TBD', 'location' => '75 Summit Ave, Taguig City'],
 ];
 $currentProject = $projectMetadata[$id] ?? ['client' => 'Unknown', 'service' => 'Aircon Installation', 'timeline' => '', 'target' => 'TBD', 'location' => 'Address unavailable'];
 $projectTitle = $currentProject['service'] . ' - ' . $currentProject['client'];
+
+$commercialClients = ['ACME Holdings', 'Metro Storage', 'Northline Foods', 'BluePeak IT', 'Riverside Mall', 'Grand Arc Tower', 'Hillcrest Suites', 'Westline Depot', 'Vertex Plaza'];
+$isCommercialClient = in_array($currentProject['client'], $commercialClients, true);
+$contractEligibleStatuses = ['pending contract upload', 'pending schedule', 'scheduled', 'in progress', 'ongoing', 'completed'];
+$canAccessContracts = $isCommercialClient && in_array($statusKey, $contractEligibleStatuses, true);
+$canUploadContract = $canAccessContracts;
 
 $cancellationReasonByProject = [
     'PRJ-1008' => 'Client rejected quotation due to budget constraints.',
@@ -144,6 +154,27 @@ if ($isPreparingStatus) {
     $projectTeam = [];
 }
 
+$minimumTechnicianCount = in_array($statusKey, ['scheduled', 'in progress'], true) ? 3 : 0;
+$technicianFallbackPool = [
+    'Tech. Anne Mendoza',
+    'Tech. Lito Ramos',
+    'Tech. Carl Dominguez',
+    'Tech. John Gonzales',
+    'Tech. Carlo Reyes',
+];
+
+if ($minimumTechnicianCount > 0 && count($projectTeam) < $minimumTechnicianCount) {
+    foreach ($technicianFallbackPool as $fallbackTechnician) {
+        if (!in_array($fallbackTechnician, $projectTeam, true)) {
+            $projectTeam[] = $fallbackTechnician;
+        }
+
+        if (count($projectTeam) >= $minimumTechnicianCount) {
+            break;
+        }
+    }
+}
+
 $reportsByProject = [
     'PRJ-1002' => [
         [
@@ -174,7 +205,29 @@ $reportsByProject = [
     ],
 ];
 $projectReports = $reportsByProject[$id] ?? [];
+$progressReports = array_values(array_filter($projectReports, function ($report) {
+    return $report['type'] === 'Progress Report';
+}));
+usort($progressReports, function ($a, $b) {
+    return strtotime($b['date']) <=> strtotime($a['date']);
+});
+
+$incidentReports = array_values(array_filter($projectReports, function ($report) {
+    return $report['type'] === 'Incident Report';
+}));
+usort($incidentReports, function ($a, $b) {
+    return strtotime($b['date']) <=> strtotime($a['date']);
+});
 $leadTechnician = !empty($projectTeam) ? $projectTeam[0] : null;
+$taskAssigneeOptions = $projectTeam;
+if ($statusKey === 'in progress' && $leadTechnician !== null) {
+    $taskAssigneeOptions = array_values(array_filter($taskAssigneeOptions, static function ($member) use ($leadTechnician) {
+        return $member !== $leadTechnician;
+    }));
+}
+if (empty($taskAssigneeOptions)) {
+    $taskAssigneeOptions = $projectTeam;
+}
 
 $assessmentByProject = [
     'PRJ-1001' => [
@@ -329,8 +382,8 @@ $taskBoardByProject = [
         ['title' => 'Prepare duct accessories', 'assignee' => 'Tech. John Gonzales', 'status' => 'Pending', 'dateCreated' => 'Apr 15, 2026'],
     ],
     'PRJ-1006' => [
-        ['title' => 'Record airflow readings', 'assignee' => 'Tech. Anne Mendoza', 'status' => 'Done', 'dateCreated' => 'Apr 10, 2026'],
-        ['title' => 'Inspect diffuser locations', 'assignee' => 'Tech. Lito Ramos', 'status' => 'In Progress', 'dateCreated' => 'Apr 11, 2026'],
+        ['title' => 'Record airflow readings', 'assignee' => 'Tech. Lito Ramos', 'status' => 'Done', 'dateCreated' => 'Apr 10, 2026'],
+        ['title' => 'Inspect diffuser locations', 'assignee' => 'Tech. Carl Dominguez', 'status' => 'In Progress', 'dateCreated' => 'Apr 11, 2026'],
     ],
     'PRJ-1007' => [
         ['title' => 'Verify branch route clearance', 'assignee' => 'Tech. Carlo Reyes', 'status' => 'Pending', 'dateCreated' => 'Apr 16, 2026'],
@@ -338,6 +391,44 @@ $taskBoardByProject = [
     ],
 ];
 $projectTasks = $canViewTaskBoard ? ($taskBoardByProject[$id] ?? []) : [];
+
+$completionReportByProject = [
+    'PRJ-1002' => [
+        'date' => 'Apr 10, 2026',
+        'description' => 'Repair activities were completed successfully. Cooling cycle tests passed, compressor amp draw normalized, and no additional faults were observed after final validation.',
+        'photos' => ['imageSample.png', 'imageSample.png'],
+    ],
+    'PRJ-1004' => [
+        'date' => 'Apr 22, 2026',
+        'description' => 'Installation and commissioning were completed. Indoor and outdoor units are operational, controls were handed over to the client, and final site cleanup was performed.',
+        'photos' => ['imageSample.png'],
+    ],
+];
+$projectCompletionReport = $completionReportByProject[$id] ?? null;
+
+$contractsByProject = [
+    'PRJ-1004' => [
+        ['name' => 'Northline-Signed-Contract.pdf', 'uploadedBy' => 'Admin', 'uploadedDate' => 'Apr 14, 2026'],
+    ],
+    'PRJ-1006' => [
+        ['name' => 'GrandArc-Commercial-Agreement.pdf', 'uploadedBy' => 'Admin', 'uploadedDate' => 'Apr 11, 2026'],
+    ],
+    'PRJ-1007' => [
+        ['name' => 'Riverside-Contract-Signed.pdf', 'uploadedBy' => 'Admin', 'uploadedDate' => 'Apr 18, 2026'],
+    ],
+    'PRJ-1010' => [],
+];
+$projectContracts = $canAccessContracts ? ($contractsByProject[$id] ?? []) : [];
+
+if ($statusKey === 'in progress' && !empty($projectTasks) && $leadTechnician !== null && !empty($taskAssigneeOptions)) {
+    $preferredTaskAssignee = $taskAssigneeOptions[0];
+    foreach ($projectTasks as &$task) {
+        if (($task['assignee'] ?? '') === $leadTechnician) {
+            $task['assignee'] = $preferredTaskAssignee;
+        }
+    }
+    unset($task);
+}
 
 if ($statusKey === 'completed') {
     foreach ($projectTasks as &$task) {
@@ -390,6 +481,11 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                     <i class="bi bi-receipt me-1"></i><?php echo $statusKey === 'pending quotation approval' ? 'Show Quotation' : 'Quotation'; ?>
                 </button>
                 <?php endif; ?>
+                <?php if ($canAccessContracts): ?>
+                <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="collapse" data-bs-target="#projectContractPanel" aria-expanded="false" aria-controls="projectContractPanel" title="Contracts">
+                    <i class="bi bi-file-earmark-lock2"></i>Contract
+                </button>
+                <?php endif; ?>
                 <?php if ($statusKey === 'pending schedule'): ?>
                 <a href="<?php echo htmlspecialchars($schedulesModuleUrl, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm btn-primary" title="Schedule Project">
                     <i class="bi bi-calendar-event me-1"></i>Schedule Project
@@ -403,6 +499,34 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
     <div class="row g-3">
         <div class="col-lg-6"><div class="card border-0 shadow-sm h-100"><div class="card-header bg-white d-flex justify-content-between align-items-center"><strong>Assigned Team</strong><?php if ($canEditSchedule): ?><a href="<?php echo htmlspecialchars($schedulesModuleUrl, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-calendar-week me-1"></i>Edit Schedule</a><?php endif; ?></div><div class="card-body"><ul class="list-group list-group-flush" id="technicianList" style="display: none;"></ul><div id="technicianEmptyMsg" class="text-muted small"><?php echo $isPreparingStatus ? 'No technicians should be assigned while project is in Preparing.' : 'No technicians assigned yet.'; ?></div></div></div></div>
     </div>
+
+    <?php if ($statusKey === 'completed'): ?>
+    <div class="card border-0 shadow-sm mt-3">
+        <div class="card-header bg-white"><strong>Completion Report</strong></div>
+        <div class="card-body">
+            <?php if ($projectCompletionReport !== null): ?>
+                <div class="mb-2">
+                    <div class="small text-muted">Date</div>
+                    <div class="fw-bold"><?php echo htmlspecialchars($projectCompletionReport['date'], ENT_QUOTES, 'UTF-8'); ?></div>
+                </div>
+                <div class="mb-3">
+                    <div class="small text-muted">Description</div>
+                    <div><?php echo htmlspecialchars($projectCompletionReport['description'], ENT_QUOTES, 'UTF-8'); ?></div>
+                </div>
+                <div class="small text-muted mb-2">Picture</div>
+                <div class="row g-2">
+                    <?php foreach (($projectCompletionReport['photos'] ?? []) as $photo): ?>
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <img src="<?php echo htmlspecialchars($assetBasePath . $photo, ENT_QUOTES, 'UTF-8'); ?>" alt="Completion report photo" class="img-fluid rounded border report-photo">
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p class="mb-0 text-muted">No completion report submitted yet.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <?php if ($canViewTechnicianReports): ?>
     <div class="card border-0 shadow-sm mt-3">
@@ -421,21 +545,20 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="progressReports" role="tabpanel" aria-labelledby="progressTab">
-                    <?php 
-                        $progressReports = array_filter($projectReports, function($r) { return $r['type'] === 'Progress Report'; });
-                        if (!empty($progressReports)): 
-                    ?>
+                    <?php if (!empty($progressReports)): ?>
                         <div class="row g-3">
                             <?php foreach ($progressReports as $report): ?>
                                 <div class="col-12">
                                     <div class="border rounded p-3">
-                                        <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
-                                            <div>
-                                                <strong><?php echo htmlspecialchars($report['technician'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                                <div class="small text-muted">Submitted <?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                            </div>
+                                        <div class="mb-2">
+                                            <div class="small text-muted">Date</div>
+                                            <div class="fw-bold"><?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
                                         </div>
-                                        <p class="mb-2 small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></p>
+                                        <div class="mb-2">
+                                            <div class="small text-muted">Description</div>
+                                            <div class="small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                        </div>
+                                        <div class="small text-muted mb-2">Picture</div>
                                         <div class="row g-2">
                                             <?php foreach ($report['photos'] as $photo): ?>
                                                 <div class="col-6 col-md-4 col-lg-3">
@@ -452,21 +575,20 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                     <?php endif; ?>
                 </div>
                 <div class="tab-pane fade" id="incidentReports" role="tabpanel" aria-labelledby="incidentTab">
-                    <?php 
-                        $incidentReports = array_filter($projectReports, function($r) { return $r['type'] === 'Incident Report'; });
-                        if (!empty($incidentReports)): 
-                    ?>
+                    <?php if (!empty($incidentReports)): ?>
                         <div class="row g-3">
                             <?php foreach ($incidentReports as $report): ?>
                                 <div class="col-12">
                                     <div class="border rounded p-3">
-                                        <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
-                                            <div>
-                                                <strong><?php echo htmlspecialchars($report['technician'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                                <div class="small text-muted">Submitted <?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                            </div>
+                                        <div class="mb-2">
+                                            <div class="small text-muted">Date</div>
+                                            <div class="fw-bold"><?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
                                         </div>
-                                        <p class="mb-2 small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></p>
+                                        <div class="mb-2">
+                                            <div class="small text-muted">Description</div>
+                                            <div class="small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                        </div>
+                                        <div class="small text-muted mb-2">Picture</div>
                                         <div class="row g-2">
                                             <?php foreach ($report['photos'] as $photo): ?>
                                                 <div class="col-6 col-md-4 col-lg-3">
@@ -636,6 +758,41 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
     </div>
     <?php endif; ?>
 
+    <?php if ($canAccessContracts): ?>
+    <div class="collapse mt-3" id="projectContractPanel">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <strong>Project Contracts</strong>
+                <?php if ($canUploadContract): ?>
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#uploadContractModal">
+                    <i class="bi bi-cloud-arrow-up me-1"></i>Upload Contract
+                </button>
+                <?php endif; ?>
+            </div>
+            <div class="card-body">
+                <div id="projectContractsList" class="list-group list-group-flush border rounded">
+                    <?php if (!empty($projectContracts)): ?>
+                        <?php foreach ($projectContracts as $contractIndex => $contract): ?>
+                        <div class="list-group-item d-flex flex-wrap justify-content-between align-items-center gap-2">
+                            <div>
+                                <strong><?php echo htmlspecialchars($contract['name'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <div class="small text-muted">Uploaded by <?php echo htmlspecialchars($contract['uploadedBy'], ENT_QUOTES, 'UTF-8'); ?> on <?php echo htmlspecialchars($contract['uploadedDate'], ENT_QUOTES, 'UTF-8'); ?></div>
+                            </div>
+                            <div class="d-flex align-items-center gap-1">
+                                <button type="button" class="btn btn-sm btn-outline-primary" title="Open Contract"><i class="bi bi-eye"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-danger archive-contract-btn" data-contract-index="<?php echo htmlspecialchars((string) $contractIndex, ENT_QUOTES, 'UTF-8'); ?>" title="Archive Contract"><i class="bi bi-trash"></i></button>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                    <div class="list-group-item text-muted small" id="projectContractsEmptyState">No contracts uploaded yet.</div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
     
 </main>
 
@@ -661,6 +818,30 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
     </div>
 </div>
 
+<?php if ($canUploadContract): ?>
+<div class="modal fade" id="uploadContractModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Contract</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadContractForm" novalidate>
+                    <label for="contractFile" class="form-label">Contract File</label>
+                    <input type="file" id="contractFile" class="form-control" accept=".pdf,.doc,.docx" required>
+                    <div class="form-text">Accepted file types: PDF, DOC, DOCX.</div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveContractBtn">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
 <?php if ($canViewTaskBoard): ?>
 <div class="modal fade" id="assignTaskModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -678,13 +859,14 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                     <div class="col-md-6">
                         <label for="taskAssignee" class="form-label">Assign To</label>
                         <select id="taskAssignee" class="form-select">
-                            <?php foreach ($projectTeam as $member): ?>
+                            <?php foreach ($taskAssigneeOptions as $member): ?>
                                 <option value="<?php echo htmlspecialchars($member, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($member, ENT_QUOTES, 'UTF-8'); ?></option>
                             <?php endforeach; ?>
-                            <?php if (empty($projectTeam)): ?>
+                            <?php if (empty($taskAssigneeOptions)): ?>
                                 <option value="">No technicians available</option>
                             <?php endif; ?>
                         </select>
+                        
                     </div>
                     <div class="col-md-6">
                         <label for="taskDueDate" class="form-label">Due Date</label>
@@ -759,6 +941,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const overviewActionPanels = document.getElementById('overviewActionPanels');
     const assessmentPanel = document.getElementById('assessmentPanel');
     const projectQuotationPanel = document.getElementById('projectQuotationPanel');
+    const projectContractPanel = document.getElementById('projectContractPanel');
 
     if (overviewActionPanels) {
         if (assessmentPanel) {
@@ -767,9 +950,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (projectQuotationPanel) {
             overviewActionPanels.appendChild(projectQuotationPanel);
         }
+        if (projectContractPanel) {
+            overviewActionPanels.appendChild(projectContractPanel);
+        }
     }
 
     const projectTeam = <?php echo json_encode($projectTeam); ?>;
+    const leadTechnician = <?php echo json_encode($leadTechnician, JSON_UNESCAPED_SLASHES); ?>;
     const technicianList = document.getElementById('technicianList');
     const technicianEmptyMsg = document.getElementById('technicianEmptyMsg');
     const cancelProjectBtn = document.getElementById('cancelProjectBtn');
@@ -789,6 +976,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const taskAssignee = document.getElementById('taskAssignee');
     const taskDueDate = document.getElementById('taskDueDate');
     const taskDescription = document.getElementById('taskDescription');
+    const isInProgressProject = <?php echo json_encode($statusKey === 'in progress', JSON_UNESCAPED_SLASHES); ?>;
     const viewTaskTitle = document.getElementById('viewTaskTitle');
     const viewTaskStatus = document.getElementById('viewTaskStatus');
     const viewTaskAssignee = document.getElementById('viewTaskAssignee');
@@ -798,6 +986,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const viewTaskImageEmpty = document.getElementById('viewTaskImageEmpty');
     const viewTaskAccomplishedWrapper = document.getElementById('viewTaskAccomplishedWrapper');
     const viewTaskAccomplishedDate = document.getElementById('viewTaskAccomplishedDate');
+    const uploadContractForm = document.getElementById('uploadContractForm');
+    const contractFile = document.getElementById('contractFile');
+    const saveContractBtn = document.getElementById('saveContractBtn');
+    const projectContractsList = document.getElementById('projectContractsList');
+    const uploadContractModalEl = document.getElementById('uploadContractModal');
+    const initialContracts = <?php echo json_encode(array_values($projectContracts), JSON_UNESCAPED_SLASHES); ?>;
+    const contracts = initialContracts.map(function (contract) {
+        return {
+            name: contract.name || '',
+            uploadedBy: contract.uploadedBy || 'Admin',
+            uploadedDate: contract.uploadedDate || new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+        };
+    });
 
     function normalizeTaskStatus(status) {
         const key = String(status || '').toLowerCase();
@@ -844,6 +1045,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function taskStatusClass(status) {
         return String(status || '').toLowerCase() === 'completed' ? 'bg-success' : 'bg-secondary';
+    }
+
+    function renderContracts() {
+        if (!projectContractsList) {
+            return;
+        }
+
+        if (contracts.length === 0) {
+            projectContractsList.innerHTML = '<div class="list-group-item text-muted small" id="projectContractsEmptyState">No contracts uploaded yet.</div>';
+            return;
+        }
+
+        projectContractsList.innerHTML = contracts.map(function (contract, index) {
+            return '<div class="list-group-item d-flex flex-wrap justify-content-between align-items-center gap-2">'
+                + '<div>'
+                + '<strong>' + escapeHtml(contract.name) + '</strong>'
+                + '<div class="small text-muted">Uploaded by ' + escapeHtml(contract.uploadedBy) + ' on ' + escapeHtml(contract.uploadedDate) + '</div>'
+                + '</div>'
+                + '<div class="d-flex align-items-center gap-1">'
+                + '<button type="button" class="btn btn-sm btn-outline-primary" title="Open Contract"><i class="bi bi-eye"></i></button>'
+                + '<button type="button" class="btn btn-sm btn-outline-danger archive-contract-btn" data-contract-index="' + String(index) + '" title="Archive Contract"><i class="bi bi-trash"></i></button>'
+                + '</div>'
+                + '</div>';
+        }).join('');
     }
 
     function getTaskPreviewImageSource(task) {
@@ -959,7 +1184,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 cancelProjectBtn.disabled = true;
                 cancelProjectBtn.textContent = 'Project Cancelled';
             }
-
             if (cancelProjectModal) {
                 cancelProjectModal.hide();
             }
@@ -1059,7 +1283,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const dueDate = taskDueDate ? taskDueDate.value : '';
             const description = taskDescription ? taskDescription.value.trim() : '';
 
-            if (!title || !assignee || !dueDate || isCompletedProject) {
+            if (!title || !assignee || !dueDate || isCompletedProject || (isInProgressProject && assignee === leadTechnician)) {
                 return;
             }
 
@@ -1099,15 +1323,69 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    if (saveContractBtn) {
+        saveContractBtn.addEventListener('click', function () {
+            if (!contractFile || !contractFile.files || contractFile.files.length === 0) {
+                if (contractFile) {
+                    contractFile.focus();
+                }
+                return;
+            }
+
+            const selectedFile = contractFile.files[0];
+            contracts.unshift({
+                name: selectedFile.name,
+                uploadedBy: 'Admin',
+                uploadedDate: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+            });
+            renderContracts();
+
+            if (uploadContractForm) {
+                uploadContractForm.reset();
+            }
+
+            const mainContainer = document.querySelector('main.container');
+            if (mainContainer) {
+                const alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                    + '<strong>Contract uploaded.</strong> The contract is now available in Project Contracts.'
+                    + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+                    + '</div>';
+                mainContainer.insertAdjacentHTML('afterbegin', alertHtml);
+            }
+
+            if (uploadContractModalEl && window.bootstrap && window.bootstrap.Modal) {
+                window.bootstrap.Modal.getOrCreateInstance(uploadContractModalEl).hide();
+            }
+        });
+    }
+
+    if (projectContractsList) {
+        projectContractsList.addEventListener('click', function (event) {
+            const archiveButton = event.target.closest('.archive-contract-btn');
+            if (!archiveButton) {
+                return;
+            }
+
+            const contractIndex = Number(archiveButton.getAttribute('data-contract-index'));
+            if (Number.isNaN(contractIndex) || !contracts[contractIndex]) {
+                return;
+            }
+
+            contracts.splice(contractIndex, 1);
+            renderContracts();
+        });
+    }
+
     renderTeam();
+    renderContracts();
     renderTasks();
     updateTaskProgress();
 });
 </script>
 
 <div class="container-fluid pb-4 px-4">
-    <?php if ($statusKey !== 'cancelled'): ?>
-        <div class="d-flex justify-content-end">
+    <?php if (!in_array($statusKey, ['completed', 'cancelled'], true)): ?>
+        <div class="d-flex justify-content-end gap-2">
             <button type="button" class="btn btn-danger" id="cancelProjectBtn" data-bs-toggle="modal" data-bs-target="#cancelProjectModal">
                 Cancel Project
             </button>

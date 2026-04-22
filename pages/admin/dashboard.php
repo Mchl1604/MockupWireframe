@@ -18,8 +18,8 @@
                         <i class="bi bi-folder2-open"></i>
                     </div>
                     <div>
-                        <p class="text-muted mb-1 small">Total Projects</p>
-                        <h3 class="mb-0">6</h3>
+                        <p class="text-muted mb-1 small">Ongoing Projects</p>
+                        <h3 class="mb-0">2</h3>
                     </div>
                 </div>
             </div>
@@ -31,8 +31,8 @@
                         <i class="bi bi-hourglass-split"></i>
                     </div>
                     <div>
-                        <p class="text-muted mb-1 small">Pending Approval</p>
-                        <h3 class="mb-0">2</h3>
+                        <p class="text-muted mb-1 small">Scheduled Projects</p>
+                        <h3 class="mb-0">5</h3>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white d-flex align-items-center justify-content-between">
-                    <strong>Service Requests Trend</strong>
+                    <strong>Projects Completed</strong>
                     <span class="small text-muted">Last 6 months</span>
                 </div>
                 <div class="card-body">
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 datasets: [
                     {
                         label: 'Requests',
-                        data: [8, 11, 9, 13, 10, 15],
+                        data: [8, 9, 9, 10, 10, 4],
                         backgroundColor: 'rgba(37, 99, 235, 0.75)',
                         borderRadius: 8,
                         maxBarThickness: 34
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
         new Chart(statusCtx, {
             type: 'doughnut',
             data: {
-                labels: ['For Approval', 'For Assessment', 'Pending', 'Ongoing', 'Completed'],
+                labels: ['For Approval', 'For Assessment', 'Preparing', 'Ongoing', 'Completed'],
                 datasets: [
                     {
                         data: [1, 1, 1, 2, 1],

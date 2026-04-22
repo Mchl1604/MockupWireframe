@@ -176,6 +176,19 @@ $projectMaterials = $projectQuotation['materials'] ?? [];
 $progressReports = $progressReportsByProject[$id] ?? [];
 $projectReports = $statusKey === 'assigned' ? [] : ($reportFeedByProject[$id] ?? []);
 $isAssessmentProject = $statusKey === 'for assessment';
+$completionReportByProject = [
+    'PRJ-1002' => [
+        'date' => 'Apr 10, 2026',
+        'description' => 'Final diagnostics and replacement work were completed successfully. Unit cooling performance returned to normal range and all final checks passed.',
+        'photos' => ['imageSample.png'],
+    ],
+    'PRJ-1003' => [
+        'date' => 'Apr 25, 2026',
+        'description' => 'Ducting installation was completed and all target zones were balanced. Final airflow readings were documented and accepted during handover.',
+        'photos' => ['imageSample.png', 'imageSample.png'],
+    ],
+];
+$projectCompletionReport = $completionReportByProject[$id] ?? null;
 
 if ($statusKey === 'assigned') {
     foreach ($projectTasks as &$task) {
@@ -257,6 +270,34 @@ if ($projectQuotation !== null) {
                         </div>
                     </div>
                 </div>
+
+                <?php if ($statusKey === 'completed'): ?>
+                <div class="card border-0 shadow-sm mt-3">
+                    <div class="card-header bg-white"><strong>Completion Report</strong></div>
+                    <div class="card-body">
+                        <?php if ($projectCompletionReport !== null): ?>
+                            <div class="mb-2">
+                                <div class="small text-muted">Date</div>
+                                <div class="fw-bold"><?php echo htmlspecialchars($projectCompletionReport['date'], ENT_QUOTES, 'UTF-8'); ?></div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="small text-muted">Description</div>
+                                <div><?php echo htmlspecialchars($projectCompletionReport['description'], ENT_QUOTES, 'UTF-8'); ?></div>
+                            </div>
+                            <div class="small text-muted mb-2">Picture</div>
+                            <div class="row g-2">
+                                <?php foreach (($projectCompletionReport['photos'] ?? []) as $photo): ?>
+                                    <div class="col-6 col-md-4 col-lg-3">
+                                        <img src="<?php echo htmlspecialchars((($baseUrl !== '' ? $baseUrl : '') . '/assets/img/' . $photo), ENT_QUOTES, 'UTF-8'); ?>" alt="Completion report photo" class="img-fluid rounded border report-photo">
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php else: ?>
+                            <p class="mb-0 text-muted">No completion report submitted yet.</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
 
                 <div class="card border-0 shadow-sm mt-3">
                     <div class="card-body" id="reportsCardBody">
@@ -712,13 +753,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return '<div class="row g-3">' + reportList.map(function (report) {
             const photos = Array.isArray(report.photos) ? report.photos : [];
-            const badgeClass = report.type === 'Incident Report' ? 'bg-danger' : 'bg-primary';
 
             return '<div class="col-12">'
                 + '<div class="border rounded-3 p-3 bg-white h-100">'
-                + '<div class="d-flex align-items-center gap-2 mb-1"><strong>' + escapeHtml(report.type) + '</strong><span class="badge ' + badgeClass + '">' + escapeHtml(report.type) + '</span></div>'
-                + '<div class="small text-muted mb-2">' + escapeHtml(report.technician) + ' - ' + escapeHtml(report.date) + '</div>'
-                + '<p class="mb-2 small text-muted">' + escapeHtml(report.summary) + '</p>'
+                + '<div class="mb-2">'
+                + '<div class="small text-muted">Date</div>'
+                + '<div class="fw-bold">' + escapeHtml(report.date) + '</div>'
+                + '</div>'
+                + '<div class="mb-2">'
+                + '<div class="small text-muted">Description</div>'
+                + '<div class="small text-muted">' + escapeHtml(report.summary) + '</div>'
+                + '</div>'
+                + '<div class="small text-muted mb-2">Image</div>'
                 + (photos.length > 0
                     ? '<div class="row g-2">' + photos.map(function (photo) {
                         return '<div class="col-6 col-md-4"><img src="' + escapeHtml(<?php echo json_encode(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/', JSON_UNESCAPED_SLASHES); ?> + photo) + '" alt="Report photo" class="img-fluid rounded border"></div>';

@@ -65,11 +65,11 @@ foreach ($schedules as $schedule) {
 
 // Available projects for scheduling
 $availableProjects = [
-    ['id' => 'PRJ-1001', 'name' => 'Aircon Installation - ACME Holdings', 'service' => 'Aircon Installation'],
-    ['id' => 'PRJ-1003', 'name' => 'Ducting Installation - Metro Storage', 'service' => 'Ducting Installation'],
-    ['id' => 'PRJ-1004', 'name' => 'Aircon Installation - Northline Foods', 'service' => 'Aircon Installation'],
-    ['id' => 'PRJ-1005', 'name' => 'Ducting Fabrication - BluePeak IT', 'service' => 'Ducting Fabrication'],
-    ['id' => 'PRJ-1006', 'name' => 'Ducting Installation - Grand Arc Tower', 'service' => 'Ducting Installation'],
+    ['id' => 'PRJ-1001', 'name' => 'Aircon Installation - ACME Holdings', 'service' => 'Aircon Installation', 'phase' => 'Assessment'],
+    ['id' => 'PRJ-1003', 'name' => 'Ducting Installation - Metro Storage', 'service' => 'Ducting Installation', 'phase' => 'Project Execution', 'requiredTechnicians' => 4, 'estimatedDays' => 4],
+    ['id' => 'PRJ-1004', 'name' => 'Aircon Installation - Northline Foods', 'service' => 'Aircon Installation', 'phase' => 'Project Execution', 'requiredTechnicians' => 3, 'estimatedDays' => 3],
+    ['id' => 'PRJ-1005', 'name' => 'Ducting Fabrication - BluePeak IT', 'service' => 'Ducting Fabrication', 'phase' => 'Project Execution', 'requiredTechnicians' => 5, 'estimatedDays' => 5],
+    ['id' => 'PRJ-1006', 'name' => 'Ducting Installation - Grand Arc Tower', 'service' => 'Ducting Installation', 'phase' => 'Project Execution', 'requiredTechnicians' => 3, 'estimatedDays' => 4],
 ];
 
 // All technicians with their skills
@@ -134,11 +134,18 @@ $technicians = [
                         <select class="form-select" id="projectSelect" required>
                             <option value="">-- Select Project --</option>
                             <?php foreach ($availableProjects as $proj): ?>
-                                <option value="<?php echo htmlspecialchars($proj['id'], ENT_QUOTES, 'UTF-8'); ?>" data-service="<?php echo htmlspecialchars($proj['service'], ENT_QUOTES, 'UTF-8'); ?>">
+                                <option
+                                    value="<?php echo htmlspecialchars($proj['id'], ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-service="<?php echo htmlspecialchars($proj['service'], ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-phase="<?php echo htmlspecialchars($proj['phase'], ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-required-technicians="<?php echo htmlspecialchars((string) ($proj['requiredTechnicians'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-estimated-days="<?php echo htmlspecialchars((string) ($proj['estimatedDays'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                >
                                     <?php echo htmlspecialchars($proj['id'] . ' - ' . $proj['name'], ENT_QUOTES, 'UTF-8'); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
+                        <div id="projectPhaseNote" class="small text-muted mt-2">Select a project to view phase details.</div>
                     </div>
 
                     <!-- Assign Technicians -->
@@ -234,6 +241,30 @@ let leadTechnician = '';
 let currentDetailProjectId = '';
 let detailLeadTechnician = '';
 let detailSelectedTechnicians = [];
+
+function renderProjectPhaseNote(project) {
+    const phaseNote = document.getElementById('projectPhaseNote');
+    if (!phaseNote) {
+        return;
+    }
+
+    if (!project) {
+        phaseNote.innerHTML = 'Select a project to view phase details.';
+        return;
+    }
+
+    const phase = String(project.phase || 'Assessment');
+    if (phase !== 'Project Execution') {
+        phaseNote.innerHTML = '<strong>Phase:</strong> ' + phase;
+        return;
+    }
+
+    const requiredTechnicians = Number(project.requiredTechnicians) || 3;
+    const estimatedDays = Number(project.estimatedDays) || 3;
+    phaseNote.innerHTML = '<strong>Phase:</strong> Project Execution<br>'
+        + '<strong>Required Technician:</strong> ' + requiredTechnicians + '<br>'
+        + '<strong>Estimated Working Days:</strong> ' + estimatedDays;
+}
 
 function dayToDateValue(day) {
     const dayString = String(day).padStart(2, '0');
@@ -614,11 +645,13 @@ document.getElementById('projectSelect').addEventListener('change', function() {
     if (!selectedProject) {
         leadSelect.innerHTML = '<option value="">-- Select lead technician --</option>';
         technicianPicker.innerHTML = '<option value="">-- Select technician to add --</option>';
+        renderProjectPhaseNote(null);
         return;
     }
 
     buildLeadDropdown(selectedProject.service);
     buildTechnicianPicker(selectedProject.service);
+    renderProjectPhaseNote(selectedProject);
 });
 
 function saveSchedule() {
@@ -649,6 +682,8 @@ function saveSchedule() {
     document.getElementById('technicianPicker').innerHTML = '<option value="">-- Select technician to add --</option>';
     bootstrap.Modal.getOrCreateInstance(document.getElementById('scheduleProjectModal')).hide();
 }
+
+renderProjectPhaseNote(null);
 </script>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>

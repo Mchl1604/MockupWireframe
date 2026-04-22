@@ -326,13 +326,15 @@ if (!preg_match('/\b\d{4}\b/', $projectTimeline)) {
                                     <?php foreach ($progressReports as $report): ?>
                                         <div class="col-12">
                                             <div class="border rounded p-3">
-                                                <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
-                                                    <div>
-                                                        <strong><?php echo htmlspecialchars($report['technician'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                                        <div class="small text-muted">Submitted <?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                                    </div>
+                                                <div class="mb-2">
+                                                    <div class="small text-muted">Date</div>
+                                                    <div class="fw-bold"><?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
                                                 </div>
-                                                <p class="mb-2 small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></p>
+                                                <div class="mb-2">
+                                                    <div class="small text-muted">Description</div>
+                                                    <div class="small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                                </div>
+                                                <div class="small text-muted mb-2">Picture</div>
                                                 <div class="row g-2">
                                                     <?php foreach ($report['photos'] as $photo): ?>
                                                         <div class="col-6 col-md-4 col-lg-3">
@@ -356,13 +358,15 @@ if (!preg_match('/\b\d{4}\b/', $projectTimeline)) {
                                     <?php foreach ($incidentReports as $report): ?>
                                         <div class="col-12">
                                             <div class="border rounded p-3">
-                                                <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
-                                                    <div>
-                                                        <strong><?php echo htmlspecialchars($report['technician'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                                        <div class="small text-muted">Submitted <?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                                    </div>
+                                                <div class="mb-2">
+                                                    <div class="small text-muted">Date</div>
+                                                    <div class="fw-bold"><?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
                                                 </div>
-                                                <p class="mb-2 small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></p>
+                                                <div class="mb-2">
+                                                    <div class="small text-muted">Description</div>
+                                                    <div class="small text-muted"><?php echo htmlspecialchars($report['summary'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                                </div>
+                                                <div class="small text-muted mb-2">Picture</div>
                                                 <div class="row g-2">
                                                     <?php foreach ($report['photos'] as $photo): ?>
                                                         <div class="col-6 col-md-4 col-lg-3">
