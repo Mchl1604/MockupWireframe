@@ -237,6 +237,7 @@ $assessmentByProject = [
 ];
 $projectAssessment = $assessmentByProject[$id] ?? null;
 $canViewAssessment = $statusKey !== 'for assessment';
+$isCompletedProject = $statusKey === 'completed';
 $projectTitle = $currentProject['service'] . ' - ' . $currentProject['client'];
 $showTasksTab = $statusKey !== 'for assessment';
 $projectTimeline = $currentProject['timeline'];
@@ -470,6 +471,7 @@ if (!preg_match('/\b\d{4}\b/', $projectTimeline)) {
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const isCompletedProject = <?php echo json_encode($isCompletedProject); ?>;
     const taskTableBody = document.getElementById('taskTableBody');
     const tasksEmptyState = document.getElementById('tasksEmptyState');
     const saveCompleteTaskBtn = document.getElementById('saveCompleteTaskBtn');
@@ -487,6 +489,12 @@ document.addEventListener('DOMContentLoaded', function () {
         { title: 'Check installation points', status: 'Incomplete', dateCreated: 'Apr 10, 2026', dueDate: 'Apr 22, 2026', details: 'Inspect and confirm all indoor and outdoor unit mounting points based on layout plan.' },
         { title: 'Confirm retrofit layout', status: 'Incomplete', dateCreated: 'Apr 14, 2026', dueDate: 'Apr 24, 2026', details: 'Finalize retrofit layout with lead technician and mark revisions on site plan.' }
     ];
+
+    if (isCompletedProject) {
+        tasks.forEach(function (task) {
+            task.status = 'Completed';
+        });
+    }
 
     function escapeHtml(value) {
         return String(value || '')

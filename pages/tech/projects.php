@@ -6,9 +6,10 @@
 <?php
 $projects = [
     ['id' => 'PRJ-1001', 'name' => 'Aircon Installation - ACME Holdings', 'status' => 'For Assessment', 'timeline' => 'Apr 14, 2026'],
-    ['id' => 'PRJ-1003', 'name' => 'Ducting Installation - Metro Storage', 'status' => 'Ongoing', 'timeline' => 'Apr 15 - Apr 25, 2026'],
+    ['id' => 'PRJ-1003', 'name' => 'Ducting Installation - Metro Storage', 'status' => 'In Progress', 'timeline' => 'Apr 15 - Apr 25, 2026'],
     ['id' => 'PRJ-1004', 'name' => 'Aircon Installation - Northline Foods', 'status' => 'Assigned', 'timeline' => 'Apr 27 - Apr 30, 2026'],
     ['id' => 'PRJ-1005', 'name' => 'Ducting Fabrication - BluePeak IT', 'status' => 'Assigned', 'timeline' => 'May 01 - May 10, 2026'],
+    ['id' => 'PRJ-1002', 'name' => 'Aircon Repair - J. Dela Cruz', 'status' => 'Completed', 'timeline' => 'Apr 05 - Apr 10, 2026'],
 ];
 
 $statusClassMap = [
@@ -38,6 +39,11 @@ $statusClassMap = [
                         Ongoing
                     </button>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed-pane" type="button" role="tab" aria-controls="completed-pane" aria-selected="false">
+                        Completed
+                    </button>
+                </li>
             </ul>
         </div>
 
@@ -61,6 +67,16 @@ $statusClassMap = [
                 </div>
                 <p class="text-muted small mb-0 mt-3 d-none" id="ongoingEmpty">No ongoing projects.</p>
             </div>
+
+            <div class="tab-pane fade" id="completed-pane" role="tabpanel" aria-labelledby="completed-tab" tabindex="0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light"><tr><th>ID</th><th>Project</th><th>Schedule</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="completedProjectsBody"></tbody>
+                    </table>
+                </div>
+                <p class="text-muted small mb-0 mt-3 d-none" id="completedEmpty">No completed projects.</p>
+            </div>
         </div>
     </div>
 </main>
@@ -73,8 +89,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const assessmentProjectsBody = document.getElementById('assessmentProjectsBody');
     const ongoingProjectsBody = document.getElementById('ongoingProjectsBody');
+    const completedProjectsBody = document.getElementById('completedProjectsBody');
     const assessmentEmpty = document.getElementById('assessmentEmpty');
     const ongoingEmpty = document.getElementById('ongoingEmpty');
+    const completedEmpty = document.getElementById('completedEmpty');
 
     function escapeHtml(value) {
         return String(value || '')
@@ -93,6 +111,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const statusKey = getStatusKey(status);
         if (statusKey === 'for assessment') {
             return 'assessment';
+        }
+        if (statusKey === 'completed') {
+            return 'completed';
         }
         return 'ongoing';
     }
@@ -117,7 +138,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderProjectTabs() {
         const buckets = {
             assessment: [],
-            ongoing: []
+            ongoing: [],
+            completed: []
         };
 
         projects.forEach(function (project) {
@@ -130,9 +152,13 @@ document.addEventListener('DOMContentLoaded', function () {
         ongoingProjectsBody.innerHTML = buckets.ongoing.map(function (project) {
             return buildProjectRow(project, true);
         }).join('');
+        completedProjectsBody.innerHTML = buckets.completed.map(function (project) {
+            return buildProjectRow(project, true);
+        }).join('');
 
         assessmentEmpty.classList.toggle('d-none', buckets.assessment.length > 0);
         ongoingEmpty.classList.toggle('d-none', buckets.ongoing.length > 0);
+        completedEmpty.classList.toggle('d-none', buckets.completed.length > 0);
     }
 
     renderProjectTabs();
