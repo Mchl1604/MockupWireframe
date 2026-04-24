@@ -107,9 +107,9 @@ $taskBoardByProject = [
         ['title' => 'Test cooling cycle', 'assignee' => 'Tech. Lito Ramos', 'status' => 'In Progress', 'dateCreated' => 'Apr 09, 2026'],
     ],
     'PRJ-1003' => [
-        ['title' => 'Measure duct layout', 'assignee' => 'Tech. Anne Mendoza', 'status' => 'In Progress', 'dateCreated' => 'Apr 09, 2026'],
-        ['title' => 'Check installation points', 'assignee' => 'Tech. Carlo Reyes', 'status' => 'Pending', 'dateCreated' => 'Apr 10, 2026'],
-        ['title' => 'Validate sealant stock', 'assignee' => 'Tech. Anne Mendoza', 'status' => 'Done', 'dateCreated' => 'Apr 11, 2026'],
+        ['title' => 'Measure duct layout', 'assignee' => 'Tech. Anne Mendoza', 'status' => 'In Progress', 'dateCreated' => 'Apr 15, 2026'],
+        ['title' => 'Check installation points', 'assignee' => 'Tech. Carlo Reyes', 'status' => 'Pending', 'dateCreated' => 'Apr 19, 2026'],
+        ['title' => 'Validate sealant stock', 'assignee' => 'Tech. Anne Mendoza', 'status' => 'Done', 'dateCreated' => 'Apr 23, 2026'],
     ],
     'PRJ-1004' => [
         ['title' => 'Inspect mounting brackets', 'assignee' => 'Tech. Carl Dominguez', 'status' => 'Pending', 'dateCreated' => 'Apr 12, 2026'],

@@ -25,6 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($path === '/register' && $action === 'register') {
+        if (empty($_POST['terms_agreed'])) {
+            header('Location: ' . app_url('/register', ['error' => 'terms']));
+            exit;
+        }
+
         header('Location: ' . app_url('/login', ['registered' => 1]));
         exit;
     }
@@ -84,6 +89,8 @@ if ($path === '/lead-technician') {
 
 $routes = [
     '/' => __DIR__ . '/pages/index.php',
+    '/about' => __DIR__ . '/pages/about.php',
+    '/services' => __DIR__ . '/pages/services.php',
     '/login' => __DIR__ . '/pages/login.php',
     '/register' => __DIR__ . '/pages/register.php',
     '/client/request' => __DIR__ . '/pages/client/request.php',

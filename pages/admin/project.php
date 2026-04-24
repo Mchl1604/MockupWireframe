@@ -42,6 +42,33 @@ $projectMetadata = [
 ];
 $currentProject = $projectMetadata[$id] ?? ['client' => 'Unknown', 'service' => 'Aircon Installation', 'timeline' => '', 'target' => 'TBD', 'location' => 'Address unavailable'];
 $projectTitle = $currentProject['service'] . ' - ' . $currentProject['client'];
+$isInProgressProject = $statusKey === 'in progress';
+
+$projectTimeline = (string) ($currentProject['timeline'] ?? '');
+$projectTarget = (string) ($currentProject['target'] ?? '');
+$projectStartText = $projectTimeline;
+if (strpos($projectTimeline, '-') !== false) {
+    $timelineParts = explode('-', $projectTimeline, 2);
+    $projectStartText = trim((string) ($timelineParts[0] ?? $projectTimeline));
+}
+
+$projectStartDate = DateTime::createFromFormat('M d, Y', trim($projectStartText)) ?: null;
+$projectEndDate = DateTime::createFromFormat('M d, Y', trim($projectTarget)) ?: null;
+
+if ($projectStartDate !== null && $projectEndDate === null) {
+    $projectEndDate = clone $projectStartDate;
+}
+if ($projectEndDate !== null && $projectStartDate === null) {
+    $projectStartDate = clone $projectEndDate;
+}
+if ($projectStartDate !== null && $projectEndDate !== null && $projectStartDate > $projectEndDate) {
+    $swapDate = $projectStartDate;
+    $projectStartDate = $projectEndDate;
+    $projectEndDate = $swapDate;
+}
+
+$projectDueDateMin = $projectStartDate ? $projectStartDate->format('Y-m-d') : '';
+$projectDueDateMax = $projectEndDate ? $projectEndDate->format('Y-m-d') : '';
 
 $commercialClients = ['ACME Holdings', 'Metro Storage', 'Northline Foods', 'BluePeak IT', 'Riverside Mall', 'Grand Arc Tower', 'Hillcrest Suites', 'Westline Depot', 'Vertex Plaza'];
 $isCommercialClient = in_array($currentProject['client'], $commercialClients, true);
@@ -359,6 +386,7 @@ $projectAssessment = $assessmentByProject[$id] ?? null;
 $canViewAssessment = $statusKey !== 'for assessment';
 $canViewTechnicianReports = in_array($statusKey, ['in progress', 'ongoing', 'completed'], true);
 $canViewTaskBoard = in_array($statusKey, ['in progress', 'completed'], true);
+$useActivityTabs = $isInProgressProject && $canViewTechnicianReports && $canViewTaskBoard;
 
 $taskBoardByProject = [
     'PRJ-1001' => [
@@ -531,10 +559,23 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
     <?php if ($canViewTechnicianReports): ?>
     <div class="card border-0 shadow-sm mt-3">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
-            <strong>Technician Reports</strong>
+            <strong><?php echo $useActivityTabs ? 'Project Activity' : 'Technician Reports'; ?></strong>
            
         </div>
         <div class="card-body">
+            <?php if ($useActivityTabs): ?>
+            <ul class="nav nav-tabs mb-3" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="activityReportsTab" data-bs-toggle="tab" data-bs-target="#activityReportsPane" type="button" role="tab" aria-controls="activityReportsPane" aria-selected="true">Technician Reports</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="activityTasksTab" data-bs-toggle="tab" data-bs-target="#activityTasksPane" type="button" role="tab" aria-controls="activityTasksPane" aria-selected="false">Tasks</button>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="activityReportsPane" role="tabpanel" aria-labelledby="activityReportsTab" tabindex="0">
+            <?php endif; ?>
+
             <ul class="nav nav-tabs mb-3" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="progressTab" data-bs-toggle="tab" data-bs-target="#progressReports" type="button" role="tab" aria-controls="progressReports" aria-selected="true">Progress Report</button>
@@ -606,8 +647,13 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                 </div>
             </div>
 
+            <?php if ($useActivityTabs): ?>
+                </div>
+                <div class="tab-pane fade" id="activityTasksPane" role="tabpanel" aria-labelledby="activityTasksTab" tabindex="0">
+            <?php endif; ?>
+
             <?php if ($canViewTaskBoard): ?>
-            <hr>
+            <?php if (!$useActivityTabs): ?><hr><?php endif; ?>
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                 <div>
                     <h3 class="h6 mb-1 fw-bold">Tasks</h3>
@@ -638,6 +684,11 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                 </table>
             </div>
             <div id="tasksEmptyState" class="text-muted small d-none">No tasks assigned yet.</div>
+            <?php endif; ?>
+
+            <?php if ($useActivityTabs): ?>
+                </div>
+            </div>
             <?php endif; ?>
         </div>
     </div>
@@ -967,6 +1018,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const projectStatusBadge = document.querySelector('.compact-project-overview .badge.rounded-pill.px-3.py-2');
     const canViewTaskBoard = <?php echo json_encode($canViewTaskBoard, JSON_UNESCAPED_SLASHES); ?>;
     const isCompletedProject = <?php echo json_encode($statusKey === 'completed', JSON_UNESCAPED_SLASHES); ?>;
+    const projectDueDateMin = <?php echo json_encode($projectDueDateMin, JSON_UNESCAPED_SLASHES); ?>;
+    const projectDueDateMax = <?php echo json_encode($projectDueDateMax, JSON_UNESCAPED_SLASHES); ?>;
     const initialTasks = <?php echo json_encode(array_values($projectTasks), JSON_UNESCAPED_SLASHES); ?>;
     const assetImageBasePath = <?php echo json_encode(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/', JSON_UNESCAPED_SLASHES); ?>;
     const taskTableBody = document.getElementById('taskTableBody');
@@ -1015,6 +1068,30 @@ document.addEventListener('DOMContentLoaded', function() {
         const safeDueDate = String(dueDate || 'the due date').trim();
 
         return 'Complete ' + safeTitle + ' by coordinating with ' + safeAssignee + ', documenting major steps performed, validating outputs against project requirements, and finalizing all checks before ' + safeDueDate + '.';
+    }
+
+    function isDueDateWithinProjectRange(dueDateIso) {
+        if (!dueDateIso) {
+            return false;
+        }
+        if (projectDueDateMin && dueDateIso < projectDueDateMin) {
+            return false;
+        }
+        if (projectDueDateMax && dueDateIso > projectDueDateMax) {
+            return false;
+        }
+        return true;
+    }
+
+    function formatIsoDateForDisplay(isoDate) {
+        if (!isoDate) {
+            return '';
+        }
+        const parsed = new Date(isoDate + 'T00:00:00');
+        if (Number.isNaN(parsed.getTime())) {
+            return isoDate;
+        }
+        return parsed.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
     }
 
     const tasks = initialTasks.map(function (task) {
@@ -1287,6 +1364,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+            if (isInProgressProject && !isDueDateWithinProjectRange(dueDate)) {
+                const rangeText = formatIsoDateForDisplay(projectDueDateMin) + ' to ' + formatIsoDateForDisplay(projectDueDateMax);
+                alert('Task due date must be within the project date range: ' + rangeText + '.');
+                return;
+            }
+
             const formattedDueDate = new Date(dueDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
             const detailedDescription = description.length > title.length
                 ? description
@@ -1308,6 +1391,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (taskDueDate) {
                 taskDueDate.value = '';
+                taskDueDate.setCustomValidity('');
             }
             if (taskDescription) {
                 taskDescription.value = '';
@@ -1320,6 +1404,22 @@ document.addEventListener('DOMContentLoaded', function() {
             if (modalEl && window.bootstrap && window.bootstrap.Modal) {
                 window.bootstrap.Modal.getOrCreateInstance(modalEl).hide();
             }
+        });
+    }
+
+    if (taskDueDate && isInProgressProject) {
+        if (projectDueDateMin) {
+            taskDueDate.min = projectDueDateMin;
+        }
+        if (projectDueDateMax) {
+            taskDueDate.max = projectDueDateMax;
+        }
+        taskDueDate.addEventListener('input', function () {
+            if (!taskDueDate.value || isDueDateWithinProjectRange(taskDueDate.value)) {
+                taskDueDate.setCustomValidity('');
+                return;
+            }
+            taskDueDate.setCustomValidity('Due date must be within the project date range.');
         });
     }
 

@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
         new Chart(statusCtx, {
             type: 'doughnut',
             data: {
-                labels: ['For Approval', 'For Assessment', 'Preparing', 'Ongoing', 'Completed'],
+                labels: ['For Approval', 'For Assessment', 'Pending', 'Ongoing', 'Completed'],
                 datasets: [
                     {
                         data: [1, 1, 1, 2, 1],

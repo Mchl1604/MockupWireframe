@@ -5,355 +5,413 @@
 <?php include __DIR__ . '/../../includes/sidebar.php'; ?>
 
 <style>
-    .request-project-wrap {
+    .req-wrap {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        width: 100%;
     }
 
-    .request-title {
-        font-size: 2.15rem;
+    .req-page-title {
+        font-size: 2.05rem;
         font-weight: 700;
         color: #0c2740;
-        letter-spacing: -0.02em;
+        margin-bottom: 0.35rem;
     }
 
-    .request-subtitle {
-        color: #0c2740;
-        font-size: 1.95rem;
+    .req-page-sub {
+        font-size: 1rem;
+        color: #4a7aa0;
+        margin-bottom: 2.2rem;
+    }
+
+    /* ── Form ── */
+    .req-form-title {
+        font-size: 1.35rem;
         font-weight: 700;
-        letter-spacing: -0.02em;
-    }
-
-    .services-label {
-        color: #163049;
-        font-size: 2rem;
-        font-weight: 700;
-    }
-
-    .service-panel {
-        border: 0;
-        border-radius: 18px;
-        background: #f8fafc;
-        margin-bottom: 0.85rem;
-        overflow: hidden;
-    }
-
-    .service-panel .accordion-button {
-        background: #ebeff3;
         color: #0f2941;
-        border-radius: 18px !important;
-        box-shadow: none;
-        font-size: 1.05rem;
-        font-weight: 700;
-        padding: 1rem 1.15rem;
+        margin-bottom: 0.3rem;
     }
 
-    .service-panel .accordion-button:not(.collapsed) {
-        background: #ebeff3;
-        color: #0f2941;
-    }
-
-    .service-panel .accordion-button::after {
-        transform: scale(0.8);
-    }
-
-    .service-panel .accordion-body {
-        background: #ebeff3;
-        padding-top: 0.15rem;
-        color: #0f2941;
-        font-size: 1.05rem;
-        line-height: 1.35;
-    }
-
-    .service-panel .service-points {
-        margin-bottom: 0;
-        padding-left: 1rem;
-        color: #1a3b5b;
-        font-size: 0.95rem;
-    }
-
-    .service-panel .service-points li {
-        margin-bottom: 0.25rem;
-    }
-
-    .service-card.selected {
-        outline: 2px solid #2f95e9;
-        outline-offset: 0;
-    }
-
-    .request-form-title {
-        color: #0f2941;
-        font-size: 1.85rem;
-        font-weight: 700;
-    }
-
-    .request-form-subtitle {
-        color: #1d476f;
-        font-size: 1.05rem;
+    .req-form-sub {
+        font-size: 0.92rem;
+        color: #4a7aa0;
         margin-bottom: 1.5rem;
     }
 
-    .request-field {
-        border: 0;
-        border-radius: 999px;
+    .req-form-shell {
+        max-width: 1200px;
+    }
+
+    .req-section-label {
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: #32668f;
+        text-transform: uppercase;
+        margin-bottom: 0.7rem;
+    }
+
+    .req-project-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 991px) {
+        .req-project-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 560px) {
+        .req-project-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .req-project-option {
+        display: block;
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+    }
+
+    .req-project-input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        width: 1px;
+        height: 1px;
+    }
+
+    .req-project-card {
+        display: block;
+        width: 100%;
+        background: #ebeff3;
+        border: 2px solid transparent;
+        border-radius: 14px;
+        padding: 0.9rem 1rem;
+        transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+        min-height: 88px;
+    }
+
+    .req-project-option:hover .req-project-card {
+        border-color: #92cbf3;
+        transform: translateY(-1px);
+    }
+
+    .req-project-input:checked + .req-project-card {
+        border-color: #2f95e9;
+        background: #def1fe;
+        box-shadow: 0 6px 16px rgba(47, 149, 233, 0.15);
+    }
+
+    .req-project-option.is-selected .req-project-card {
+        border-color: #2f95e9;
+        background: #def1fe;
+        box-shadow: 0 6px 16px rgba(47, 149, 233, 0.15);
+    }
+
+    .req-project-name {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #0f2941;
+        line-height: 1.25;
+    }
+
+    .req-project-meta {
+        display: block;
+        font-size: 0.78rem;
+        color: #4a7aa0;
+        margin-top: 0.35rem;
+    }
+
+    .req-field-group {
+        margin-bottom: 0.75rem;
+    }
+
+    .req-field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.65rem;
+        margin-bottom: 0.75rem;
+    }
+
+    @media (max-width: 480px) {
+        .req-field-row { grid-template-columns: 1fr; }
+    }
+
+    .req-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #1d476f;
+        margin-bottom: 0.4rem;
+        letter-spacing: 0.01em;
+    }
+
+    .req-input,
+    .req-textarea {
+        width: 100%;
         background: #bfe6fb;
+        border: none;
         color: #0d4e81;
-        padding: 0.88rem 1rem;
+        font-size: 0.96rem;
+        font-family: inherit;
+        outline: none;
+        padding: 0.82rem 1.05rem;
+        transition: background 0.15s;
     }
 
-    .request-field::placeholder {
-        color: #0d6aad;
-        opacity: 0.9;
+    .req-input::placeholder,
+    .req-textarea::placeholder {
+        color: #3a87bb;
+        opacity: 1;
     }
 
-    .request-field:focus {
-        box-shadow: 0 0 0 0.2rem rgba(47,149,233,0.2);
-        background: #c9ebfc;
+    .req-input:focus,
+    .req-textarea:focus {
+        background: #ade0fb;
+        box-shadow: 0 0 0 3px rgba(47, 149, 233, 0.18);
     }
 
-    .request-textarea {
-        border-radius: 20px;
-        min-height: 185px;
-        resize: vertical;
-    }
-    .request-label {
-    display: block;
-    margin: 0 0 0.45rem 0.35rem;
-    color: #1d476f;
-    font-size: 0.92rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-}
-
-    .request-submit {
-        border: 0;
+    .req-input {
         border-radius: 999px;
+    }
+
+    .req-textarea {
+        border-radius: 14px;
+        resize: vertical;
+        min-height: 140px;
+    }
+
+    .req-submit-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .req-selected-badge {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #155f9c;
+        background: #d0e8f5;
+        border-radius: 999px;
+        padding: 0.28rem 0.8rem;
+    }
+
+    .req-submit-btn {
         background: #2f95e9;
         color: #fff;
-        font-size: 1.05rem;
+        border: none;
+        border-radius: 999px;
+        font-size: 0.98rem;
         font-weight: 600;
-        padding: 0.75rem 1.65rem;
-        min-width: 170px;
+        padding: 0.78rem 1.9rem;
+        cursor: pointer;
+        transition: background 0.15s;
     }
 
-    .request-submit:hover,
-    .request-submit:focus {
+    .req-submit-btn:hover,
+    .req-submit-btn:focus {
         background: #1e84d8;
         color: #fff;
     }
 
-    .selected-service-badge {
-        display: inline-block;
-        margin-top: 0.4rem;
-        color: #155f9c;
-        font-size: 0.9rem;
-        font-weight: 600;
-    }
-
-    @media (max-width: 991.98px) {
-        .request-title,
-        .services-label,
-        .request-form-title {
-            font-size: 1.65rem;
-        }
-    }
 </style>
 
-<main class="container py-4 flex-grow-1">
+<main class="container-fluid py-4 px-3 px-lg-4 flex-grow-1">
     <?php if (!empty($_GET['submitted'])): ?>
         <div class="alert alert-success"><i class="bi bi-check-circle me-2"></i>Service request submitted successfully.</div>
     <?php endif; ?>
 
-    <section class="request-project-wrap">
-        <div class="mb-4">
-            <h1 class="request-title mb-0">Request Project</h1>
-        </div>
+    <section class="req-wrap">
+        <h1 class="req-page-title">Request a project</h1>
+        <p class="req-page-sub">Choose a project type card, fill in your details, and schedule an assessment.</p>
 
-        <div class="row g-4 g-lg-5">
-            <div class="col-lg-5">
-                <h2 class="services-label h3 mb-3">Our Services</h2>
+        <div class="req-form-shell">
+            <p class="req-form-title">Request form</p>
+            
 
-                <div class="accordion" id="serviceAccordion">
-                    <div class="accordion-item service-panel service-card selected" data-service-id="Aircon Installation" data-service-name="Aircon Installation">
-                        <h2 class="accordion-header" id="serviceHeadingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#serviceCollapseOne" aria-expanded="true" aria-controls="serviceCollapseOne">
-                                Aircon Installation
-                            </button>
-                        </h2>
-                        <div id="serviceCollapseOne" class="accordion-collapse collapse show" aria-labelledby="serviceHeadingOne" data-bs-parent="#serviceAccordion">
-                            <div class="accordion-body">
-                                <p class="mb-2">Installation, maintenance, and cleaning of air-conditioning units for homes, offices, and commercial buildings.</p>
-                                <ul class="service-points">
-                                    <li>Aircon Installation</li>
-                                    <li>Aircon Repair</li>
-                                    <li>Aircon Cleaning</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+            <form id="requestForm" method="POST" action="<?php echo htmlspecialchars(app_url('/client/request'), ENT_QUOTES, 'UTF-8'); ?>" class="needs-validation" novalidate>
+                <input type="hidden" name="action" value="request_service">
+                <input type="hidden" id="selectedService" name="service" value="">
+                <input type="hidden" id="selectedProjectTypes" name="project_type" value="">
+                <input type="hidden" id="addressCombined" name="address" value="">
 
-                    <div class="accordion-item service-panel service-card" data-service-id="Ducting Installation" data-service-name="Ducting Installation">
-                        <h2 class="accordion-header" id="serviceHeadingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#serviceCollapseTwo" aria-expanded="false" aria-controls="serviceCollapseTwo">
-                                Ducting Installation
-                            </button>
-                        </h2>
-                        <div id="serviceCollapseTwo" class="accordion-collapse collapse" aria-labelledby="serviceHeadingTwo" data-bs-parent="#serviceAccordion">
-                            <div class="accordion-body">
-                                <p class="mb-2">Ducting fabrication and installation for proper airflow and efficient system distribution.</p>
-                                <ul class="service-points">
-                                    <li>Ducting Fabrication</li>
-                                    <li>Ducting Installation</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                <p class="req-section-label">Project type</p>
+                <div class="req-project-grid" role="radiogroup" aria-label="Project type">
+                    <label class="req-project-option">
+                        <input class="req-project-input" type="checkbox" name="services[]" value="Aircon Installation">
+                        <span class="req-project-card">
+                            <span class="req-project-name">Aircon Installation</span>
+                            <span class="req-project-meta">New unit setup and testing</span>
+                        </span>
+                    </label>
 
+                    <label class="req-project-option">
+                        <input class="req-project-input" type="checkbox" name="services[]" value="Aircon Repair">
+                        <span class="req-project-card">
+                            <span class="req-project-name">Aircon Repair</span>
+                            <span class="req-project-meta">Troubleshooting and fixes</span>
+                        </span>
+                    </label>
+
+                    <label class="req-project-option">
+                        <input class="req-project-input" type="checkbox" name="services[]" value="Aircon Cleaning">
+                        <span class="req-project-card">
+                            <span class="req-project-name">Aircon Cleaning</span>
+                            <span class="req-project-meta">Cleaning and tune-up service</span>
+                        </span>
+                    </label>
+
+                    <label class="req-project-option">
+                        <input class="req-project-input" type="checkbox" name="services[]" value="Ducting Fabrication">
+                        <span class="req-project-card">
+                            <span class="req-project-name">Ducting Fabrication</span>
+                            <span class="req-project-meta">Custom duct build and prep</span>
+                        </span>
+                    </label>
+
+                    <label class="req-project-option">
+                        <input class="req-project-input" type="checkbox" name="services[]" value="Ducting Installation">
+                        <span class="req-project-card">
+                            <span class="req-project-name">Ducting Installation</span>
+                            <span class="req-project-meta">On-site duct installation</span>
+                        </span>
+                    </label>
                 </div>
-            </div>
 
-            <div class="col-lg-7">
-                <div id="requestForm">
-                    <h2 class="request-form-title mb-1">Request Form</h2>
-                    <p class="request-form-subtitle">Fill-in the details and we'll schedule an assessment</p>
-
-                    <form method="POST" action="<?php echo htmlspecialchars(app_url('/client/request'), ENT_QUOTES, 'UTF-8'); ?>" class="needs-validation" novalidate>
-                        <input type="hidden" name="action" value="request_service">
-                        <input type="hidden" id="selectedService" name="service" value="Aircon Installation">
-
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <input required type="text" name="contact_person" class="form-control request-field" placeholder="Full name">
-                            </div>
-                            <div class="col-md-6">
-                                <input required type="tel" name="phone" class="form-control request-field" placeholder="Phone number">
-                            </div>
-                            <div class="col-12">
-                                <input required type="text" name="address" class="form-control request-field" placeholder="Address">
-                            </div>
-                            
-                            <div class="col-12">
-                                <select required name="project_type" class="form-select request-field">
-                                    <option value="" selected disabled>Project type</option>
-                                    <option value="Aircon Installation">Aircon Installation</option>
-                                    <option value="Aircon Repair">Aircon Repair</option>
-                                    <option value="Aircon Cleaning">Aircon Cleaning</option>
-                                    <option value="Ducting Fabrication">Ducting Fabrication</option>
-                                    <option value="Ducting Installation">Ducting Installation</option>
-                                </select>
-                            </div>
-                            <div class="col-12" id="airconServiceTypeWrap" style="display:none;">
-                                <select name="aircon_service_type" id="airconServiceType" class="form-select request-field">
-                                    <option value="" selected disabled>Select aircon service type</option>
-                                    <option value="Aircon Installation">Aircon Installation</option>
-                                    <option value="Aircon Repair">Aircon Repair</option>
-                                    <option value="Aircon Cleaning">Aircon Cleaning</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6" id="airconUnitsWrap" style="display:none;">
-                                <input type="number" min="1" step="1" name="aircon_units" id="airconUnits" class="form-control request-field" placeholder="How many units?">
-                            </div>
-                            <div class="col-12" id="ductingServiceTypeWrap" style="display:none;">
-                                <select name="ducting_service_type" id="ductingServiceType" class="form-select request-field">
-                                    <option value="" selected disabled>Select ducting service type</option>
-                                    <option value="Ducting Fabrication">Ducting Fabrication</option>
-                                    <option value="Ducting Installation">Ducting Installation</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-    <label for="preferredDate" class="request-label">Assessment Date</label>
-    <input required type="date" name="preferred_date" id="preferredDate" class="form-control request-field" aria-label="Assessment Date">
-</div>
-                            <div class="col-12">
-                                <textarea class="form-control request-field request-textarea" rows="6" name="notes" placeholder="Description"></textarea>
-                            </div>
-                            <div class="col-12 d-flex justify-content-end">
-                                <button class="btn request-submit" type="submit">Submit request</button>
-                            </div>
-                        </div>
-
-                    </form>
+                <p class="req-section-label">Service location</p>
+                <div class="req-field-group">
+                    <label class="req-label" for="addressBlkLotStreet">Blk / Lot / Street</label>
+                    <input required type="text" id="addressBlkLotStreet" class="req-input" placeholder="Blk, Lot, Street, Subdivision or Building">
                 </div>
-            </div>
+
+                <div class="req-field-row">
+                    <div>
+                        <label class="req-label" for="addressBarangay">Barangay</label>
+                        <input required type="text" id="addressBarangay" class="req-input" placeholder="Barangay name">
+                    </div>
+                    <div>
+                        <label class="req-label" for="addressCity">City / Municipality</label>
+                        <input required type="text" id="addressCity" class="req-input" placeholder="City or municipality">
+                    </div>
+                </div>
+
+                <div class="req-field-row">
+                    <div>
+                        <label class="req-label" for="addressProvince">Province</label>
+                        <input required type="text" id="addressProvince" class="req-input" placeholder="Province">
+                    </div>
+                    <div>
+                        <label class="req-label" for="preferredDate">Preferred assessment date</label>
+                        <input required type="date" id="preferredDate" name="preferred_date" class="req-input">
+                    </div>
+                </div>
+
+                <div class="req-field-group">
+                    <label class="req-label" for="notes">Additional notes</label>
+                    <textarea id="notes" name="notes" class="req-textarea" placeholder="Describe your needs, scope, or any special instructions..."></textarea>
+                </div>
+
+                <div class="req-submit-row">
+                    <span class="req-selected-badge" id="selectedBadge">No service selected</span>
+                    <button type="submit" class="req-submit-btn">Submit request</button>
+                </div>
+
+            </form>
         </div>
     </section>
 </main>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const servicePanels = document.querySelectorAll('.service-card');
-    const selectedServiceText = document.getElementById('selectedServiceText');
-    const selectedServiceInput = document.getElementById('selectedService');
-    const projectTypeSelect = document.querySelector('select[name="project_type"]');
-    const airconServiceTypeWrap = document.getElementById('airconServiceTypeWrap');
-    const airconServiceType = document.getElementById('airconServiceType');
-    const airconUnitsWrap = document.getElementById('airconUnitsWrap');
-    const airconUnits = document.getElementById('airconUnits');
-    const ductingServiceTypeWrap = document.getElementById('ductingServiceTypeWrap');
-    const ductingServiceType = document.getElementById('ductingServiceType');
-    const preferredDateInput = document.getElementById('preferredDate');
+    const form = document.getElementById('requestForm');
+    const projectInputs = document.querySelectorAll('.req-project-input');
+    const selectedInput = document.getElementById('selectedService');
+    const selectedProjectTypes = document.getElementById('selectedProjectTypes');
+    const selectedBadge = document.getElementById('selectedBadge');
+    const addressCombined = document.getElementById('addressCombined');
+    const addressBlkLotStreet = document.getElementById('addressBlkLotStreet');
+    const addressBarangay = document.getElementById('addressBarangay');
+    const addressCity = document.getElementById('addressCity');
+    const addressProvince = document.getElementById('addressProvince');
+    const preferredDate = document.getElementById('preferredDate');
 
-    if (preferredDateInput) {
+    /* Set min date to today */
+    if (preferredDate) {
         const now = new Date();
-        const tzOffsetMs = now.getTimezoneOffset() * 60000;
-        const todayLocal = new Date(now.getTime() - tzOffsetMs).toISOString().split('T')[0];
-        preferredDateInput.min = todayLocal;
+        preferredDate.min = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+                                .toISOString().split('T')[0];
     }
 
-    function toggleServiceSubtypeFields() {
-        if (!projectTypeSelect) return;
+    function updateSelectedProject() {
+        const selectedValues = Array.from(projectInputs)
+            .filter(function (input) { return input.checked; })
+            .map(function (input) { return input.value; });
 
-        const selectedType = projectTypeSelect.value;
-        const isAircon = selectedType === 'Aircon Installation' || selectedType === 'Aircon Repair' || selectedType === 'Aircon Cleaning';
-        const isDucting = selectedType === 'Ducting Fabrication' || selectedType === 'Ducting Installation';
-
-        if (airconServiceTypeWrap && airconServiceType) {
-            airconServiceTypeWrap.style.display = isAircon ? '' : 'none';
-            airconServiceType.required = isAircon;
-            if (!isAircon) airconServiceType.value = '';
-        }
-
-        if (airconUnitsWrap && airconUnits) {
-            airconUnitsWrap.style.display = isAircon ? '' : 'none';
-            airconUnits.required = isAircon;
-            if (!isAircon) airconUnits.value = '';
-        }
-
-        if (ductingServiceTypeWrap && ductingServiceType) {
-            ductingServiceTypeWrap.style.display = isDucting ? '' : 'none';
-            ductingServiceType.required = isDucting;
-            if (!isDucting) ductingServiceType.value = '';
-        }
-    }
-
-    servicePanels.forEach(function (panel) {
-        panel.addEventListener('click', function () {
-            servicePanels.forEach(function (item) {
-                item.classList.remove('selected');
-            });
-            panel.classList.add('selected');
-
-            const serviceName = panel.dataset.serviceName || 'Service';
-            const serviceId = panel.dataset.serviceId || '';
-            if (selectedServiceText) {
-                selectedServiceText.textContent = 'Selected service: ' + serviceName;
-            }
-            if (selectedServiceInput) selectedServiceInput.value = serviceId;
-            if (projectTypeSelect) projectTypeSelect.value = serviceId;
-            toggleServiceSubtypeFields();
+        document.querySelectorAll('.req-project-option').forEach(function (option) {
+            const input = option.querySelector('.req-project-input');
+            option.classList.toggle('is-selected', !!(input && input.checked));
         });
+
+        if (selectedInput) selectedInput.value = selectedValues.join(', ');
+        if (selectedProjectTypes) selectedProjectTypes.value = selectedValues.join(', ');
+
+        if (selectedBadge) {
+            selectedBadge.textContent = selectedValues.length
+                ? selectedValues.join(', ')
+                : 'No service selected';
+        }
+    }
+
+    function updateCombinedAddress() {
+        const parts = [
+            addressBlkLotStreet ? addressBlkLotStreet.value.trim() : '',
+            addressBarangay ? addressBarangay.value.trim() : '',
+            addressCity ? addressCity.value.trim() : '',
+            addressProvince ? addressProvince.value.trim() : ''
+        ].filter(Boolean);
+
+        if (addressCombined) {
+            addressCombined.value = parts.join(', ');
+        }
+    }
+
+    projectInputs.forEach(function (input) {
+        input.addEventListener('click', updateSelectedProject);
+        input.addEventListener('change', updateSelectedProject);
     });
 
-    if (projectTypeSelect) {
-        projectTypeSelect.addEventListener('change', function () {
-            if (selectedServiceInput) selectedServiceInput.value = projectTypeSelect.value;
-            toggleServiceSubtypeFields();
+    [addressBlkLotStreet, addressBarangay, addressCity, addressProvince].forEach(function (el) {
+        if (!el) return;
+        el.addEventListener('input', updateCombinedAddress);
+    });
+
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            updateSelectedProject();
+            updateCombinedAddress();
+
+            const hasSelectedService = Array.from(projectInputs).some(function (input) {
+                return input.checked;
+            });
+
+            if (!hasSelectedService) {
+                event.preventDefault();
+                alert('Please select at least one service.');
+            }
         });
     }
 
-    toggleServiceSubtypeFields();
+    updateSelectedProject();
+    updateCombinedAddress();
 });
 </script>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
-
-

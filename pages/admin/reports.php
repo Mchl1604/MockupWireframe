@@ -82,8 +82,23 @@
         'months' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         'requestTrend' => [4, 6, 5, 7, 8, 9, 11, 10, 12, 13, 14, 15],
         'accomplishedTrend' => [2, 3, 4, 5, 5, 6, 7, 8, 10, 11, 13, 15],
-        'approvedQuotationsTrend' => [
-            120000, 135000, 128000, 142000, 155000, 167000, 160000, 178000, 186000, 194000, 210000, 225000,
+        'years' => ['2022', '2023', '2024', '2025', '2026'],
+        'requestTrendYearly' => [58, 74, 95, 121, 139],
+        'accomplishedTrendYearly' => [41, 59, 78, 104, 126],
+        'quotationStatus' => [
+            ['client' => 'ACME Holdings', 'service' => 'Aircon Installation', 'status' => 'Approved', 'price' => 225000],
+            ['client' => 'Metro Storage', 'service' => 'Ducting Installation', 'status' => 'Pending', 'price' => 168500],
+            ['client' => 'Northline Foods', 'service' => 'Aircon Installation', 'status' => 'Approved', 'price' => 192000],
+            ['client' => 'BluePeak IT', 'service' => 'Ducting Fabrication', 'status' => 'Pending', 'price' => 153750],
+            ['client' => 'Vertex Plaza', 'service' => 'Aircon Installation', 'status' => 'Approved', 'price' => 207300],
+            ['client' => 'Riverside Mall', 'service' => 'Ducting Installation', 'status' => 'Pending', 'price' => 176900],
+        ],
+        'completedProjects' => [
+            ['projectId' => 'PRJ-1002', 'client' => 'J. Dela Cruz', 'leadTechnician' => 'Carlo Reyes', 'serviceType' => 'Aircon Repair', 'completedDate' => '2026-04-10'],
+            ['projectId' => 'PRJ-1006', 'client' => 'Grand Arc Tower', 'leadTechnician' => 'Ana Rodriguez', 'serviceType' => 'Ducting Installation', 'completedDate' => '2026-04-14'],
+            ['projectId' => 'PRJ-1011', 'client' => 'Northline Foods', 'leadTechnician' => 'Mario Santos', 'serviceType' => 'Aircon Installation', 'completedDate' => '2026-04-18'],
+            ['projectId' => 'PRJ-1012', 'client' => 'Vertex Plaza', 'leadTechnician' => 'Juan Delgado', 'serviceType' => 'Aircon Installation', 'completedDate' => '2026-04-20'],
+            ['projectId' => 'PRJ-1014', 'client' => 'Westline Depot', 'leadTechnician' => 'Ana Rodriguez', 'serviceType' => 'Ducting Fabrication', 'completedDate' => '2026-04-22'],
         ],
     ];
 ?>
@@ -155,11 +170,18 @@
             <div class="tab-pane fade" id="system-pane" role="tabpanel" aria-labelledby="system-tab" tabindex="0">
                 <div class="p-3">
                     <div class="row g-3">
+                       
                         <div class="col-12">
                             <div class="card border-0 shadow-sm">
+                                
                                 <div class="card-header bg-light d-flex justify-content-between align-items-center">
                                     <h6 class="mb-0 fw-bold">Current Projects Breakdown</h6>
-                                    <span class="text-muted small">Requests, Ongoing, Pending, Completed</span>
+                                    <div class="d-flex align-items-center gap-2 ms-auto justify-content-end">
+                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#generateReportModal">
+                                            <i class="bi bi-file-earmark-text me-1"></i>Generate Report
+                                        </button>
+                                        <span class="text-muted small">Requests, Ongoing, Pending, Completed</span>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="row g-3 align-items-center">
@@ -188,10 +210,19 @@
                             </div>
                         </div>
 
+                        <div class="col-12">
+                            <div class="d-flex justify-content-end">
+                                <div class="btn-group" role="group" aria-label="Report period toggle" id="reportPeriodToggle">
+                                    <button type="button" class="btn btn-outline-primary btn-sm active" data-report-period="monthly">Monthly</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" data-report-period="yearly">Yearly</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-lg-6">
                             <div class="card border-0 shadow-sm h-100">
                                 <div class="card-header bg-light">
-                                    <h6 class="mb-0 fw-bold">Request Trend</h6>
+                                    <h6 class="mb-0 fw-bold">Project Requests</h6>
                                 </div>
                                 <div class="card-body">
                                     <div style="position: relative; height: 300px;">
@@ -204,7 +235,7 @@
                         <div class="col-lg-6">
                             <div class="card border-0 shadow-sm h-100">
                                 <div class="card-header bg-light">
-                                    <h6 class="mb-0 fw-bold">Accomplished Project Trend</h6>
+                                    <h6 class="mb-0 fw-bold">Accomplished Projects</h6>
                                 </div>
                                 <div class="card-body">
                                     <div style="position: relative; height: 300px;">
@@ -217,11 +248,35 @@
                         <div class="col-12">
                             <div class="card border-0 shadow-sm">
                                 <div class="card-header bg-light">
-                                    <h6 class="mb-0 fw-bold">Approved Quotations Trend</h6>
+                                    <h6 class="mb-0 fw-bold">Quotation Status</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div style="position: relative; height: 320px;">
-                                        <canvas id="approvedQuotationsChart"></canvas>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Client</th>
+                                                    <th>Service</th>
+                                                    <th>Price</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($systemReports['quotationStatus'] as $quotation): ?>
+                                                    <?php $statusKey = strtolower($quotation['status']); ?>
+                                                    <tr>
+                                                        <td><?php echo htmlspecialchars($quotation['client'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                                        <td><?php echo htmlspecialchars($quotation['service'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                                        <td>PHP <?php echo number_format((float) ($quotation['price'] ?? 0), 2); ?></td>
+                                                        <td>
+                                                            <span class="badge <?php echo $statusKey === 'approved' ? 'bg-success' : 'bg-warning text-dark'; ?>">
+                                                                <?php echo htmlspecialchars($quotation['status'], ENT_QUOTES, 'UTF-8'); ?>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -308,8 +363,107 @@
     </div>
 </div>
 
+<div class="modal fade" id="generateReportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title">Generate Report</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="generateReportForm" class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label for="reportTypeInput" class="form-label">Report Type</label>
+                            <select id="reportTypeInput" class="form-select" required>
+                                <option value="" selected disabled>Select report type</option>
+                                <option value="Completed Projects">Completed Projects</option>
+                                <option value="Project Requests">Project Requests</option>
+                                <option value="Technician Reports">Technician Reports</option>
+                                <option value="Quotation Report">Quotation Report</option>
+                            </select>
+                            <div class="invalid-feedback">Report type is required.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="reportStartDateInput" class="form-label">Start Date</label>
+                            <input type="date" id="reportStartDateInput" class="form-control" required>
+                            <div class="invalid-feedback">Start date is required.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="reportEndDateInput" class="form-label">End Date</label>
+                            <input type="date" id="reportEndDateInput" class="form-control" required>
+                            <div class="invalid-feedback">End date is required.</div>
+                        </div>
+                        <div class="col-md-4" id="reportTechnicianWrap" style="display: none;">
+                            <label for="reportTechnicianInput" class="form-label">Technician</label>
+                            <select id="reportTechnicianInput" class="form-select">
+                                <option value="" selected disabled>Select technician</option>
+                                <option value="Mario Santos">Mario Santos</option>
+                                <option value="Carlo Reyes">Carlo Reyes</option>
+                                <option value="Juan Delgado">Juan Delgado</option>
+                                <option value="Ana Rodriguez">Ana Rodriguez</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a technician.</div>
+                        </div>
+                    </div>
+
+                    <div id="generatedReportResult" class="border rounded p-3 bg-light" style="display: none;">
+                        <div class="bg-white border rounded p-4" id="generatedReportPreview">
+                            <div class="d-flex align-items-center justify-content-between gap-3 pb-3 border-bottom">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="<?php echo htmlspecialchars($assetBasePath . 'coliconstruct-logo.svg', ENT_QUOTES, 'UTF-8'); ?>" alt="Coliconstruct Logo" style="width: 60px; height: 60px; object-fit: contain;">
+                                    <div>
+                                        <div class="fw-bold fs-5 text-dark">Coliconstruct Engineering Services</div>
+                                        <div class="text-muted small">Technical and Project Management Report</div>
+                                    </div>
+                                </div>
+                                <div class="text-end small text-muted">
+                                    <div>Generated on <span id="generatedReportCreatedAt"></span></div>
+                                </div>
+                            </div>
+                            <div class="pt-3">
+                                <h5 class="fw-bold mb-3" id="generatedReportTitle">Report</h5>
+                                <div class="row g-2 mb-3 small">
+                                    <div class="col-12"><strong>Report Type:</strong> <span id="generatedReportType"></span></div>
+                                    <div class="col-12"><strong>Date Range:</strong> <span id="generatedReportDateRange"></span></div>
+                                </div>
+                                <div id="generatedReportBody" class="small"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" id="printGeneratedReportBtn" disabled>Print</button>
+                        <button type="button" class="btn btn-outline-success" id="exportGeneratedReportBtn" disabled>Export</button>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Generate</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script>
+    let requestTrendChartInstance = null;
+    let accomplishedTrendChartInstance = null;
+    let activeReportPeriod = 'monthly';
+
+    const monthlyLabels = <?php echo json_encode($systemReports['months']); ?>;
+    const monthlyRequestTrend = <?php echo json_encode($systemReports['requestTrend']); ?>;
+    const monthlyAccomplishedTrend = <?php echo json_encode($systemReports['accomplishedTrend']); ?>;
+
+    const yearlyLabels = <?php echo json_encode($systemReports['years']); ?>;
+    const yearlyRequestTrend = <?php echo json_encode($systemReports['requestTrendYearly']); ?>;
+    const yearlyAccomplishedTrend = <?php echo json_encode($systemReports['accomplishedTrendYearly']); ?>;
+    const quotationStatusData = <?php echo json_encode($systemReports['quotationStatus']); ?>;
+    const technicianProjectsData = <?php echo json_encode($technicianReports); ?>;
+    const completedProjectsData = <?php echo json_encode($systemReports['completedProjects']); ?>;
+
     document.querySelectorAll('.viewReportBtn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.getElementById('reportDetailId').textContent = this.dataset.id;
@@ -395,13 +549,13 @@
 
     const requestTrendCanvas = document.getElementById('requestTrendChart');
     if (requestTrendCanvas) {
-        new Chart(requestTrendCanvas, {
+        requestTrendChartInstance = new Chart(requestTrendCanvas, {
             type: 'line',
             data: {
-                labels: <?php echo json_encode($systemReports['months']); ?>,
+                labels: monthlyLabels,
                 datasets: [{
                     label: 'Requests',
-                    data: <?php echo json_encode($systemReports['requestTrend']); ?>,
+                    data: monthlyRequestTrend,
                     borderColor: '#0d6efd',
                     backgroundColor: 'rgba(13, 110, 253, 0.12)',
                     tension: 0.35,
@@ -424,13 +578,13 @@
 
     const accomplishedTrendCanvas = document.getElementById('accomplishedTrendChart');
     if (accomplishedTrendCanvas) {
-        new Chart(accomplishedTrendCanvas, {
+        accomplishedTrendChartInstance = new Chart(accomplishedTrendCanvas, {
             type: 'line',
             data: {
-                labels: <?php echo json_encode($systemReports['months']); ?>,
+                labels: monthlyLabels,
                 datasets: [{
                     label: 'Completed Projects',
-                    data: <?php echo json_encode($systemReports['accomplishedTrend']); ?>,
+                    data: monthlyAccomplishedTrend,
                     borderColor: '#198754',
                     backgroundColor: 'rgba(25, 135, 84, 0.12)',
                     tension: 0.35,
@@ -451,46 +605,328 @@
         });
     }
 
-    const approvedQuotationsCanvas = document.getElementById('approvedQuotationsChart');
-    if (approvedQuotationsCanvas) {
-        new Chart(approvedQuotationsCanvas, {
-            type: 'line',
-            data: {
-                labels: <?php echo json_encode($systemReports['months']); ?>,
-                datasets: [{
-                    label: 'Approved Quotations Amount',
-                    data: <?php echo json_encode($systemReports['approvedQuotationsTrend']); ?>,
-                    borderColor: '#fd7e14',
-                    backgroundColor: 'rgba(253, 126, 20, 0.12)',
-                    tension: 0.35,
-                    fill: true,
-                    pointBackgroundColor: '#fd7e14',
-                    pointRadius: 4,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return '₱' + value.toLocaleString();
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return '₱' + Number(context.raw).toLocaleString();
-                            }
-                        }
-                    }
+    const reportPeriodToggleButtons = document.querySelectorAll('#reportPeriodToggle [data-report-period]');
+    reportPeriodToggleButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            const selectedPeriod = button.getAttribute('data-report-period') || 'monthly';
+            activeReportPeriod = selectedPeriod;
+            reportPeriodToggleButtons.forEach(function (btn) {
+                btn.classList.toggle('active', btn === button);
+            });
+
+            const nextLabels = selectedPeriod === 'yearly' ? yearlyLabels : monthlyLabels;
+            const nextRequestData = selectedPeriod === 'yearly' ? yearlyRequestTrend : monthlyRequestTrend;
+            const nextAccomplishedData = selectedPeriod === 'yearly' ? yearlyAccomplishedTrend : monthlyAccomplishedTrend;
+
+            if (requestTrendChartInstance) {
+                requestTrendChartInstance.data.labels = nextLabels;
+                requestTrendChartInstance.data.datasets[0].data = nextRequestData;
+                requestTrendChartInstance.update();
+            }
+
+            if (accomplishedTrendChartInstance) {
+                accomplishedTrendChartInstance.data.labels = nextLabels;
+                accomplishedTrendChartInstance.data.datasets[0].data = nextAccomplishedData;
+                accomplishedTrendChartInstance.update();
+            }
+        });
+    });
+
+    const generateReportModalEl = document.getElementById('generateReportModal');
+    const generateReportForm = document.getElementById('generateReportForm');
+    const reportTypeInput = document.getElementById('reportTypeInput');
+    const reportStartDateInput = document.getElementById('reportStartDateInput');
+    const reportEndDateInput = document.getElementById('reportEndDateInput');
+    const reportTechnicianWrap = document.getElementById('reportTechnicianWrap');
+    const reportTechnicianInput = document.getElementById('reportTechnicianInput');
+    const generatedReportResult = document.getElementById('generatedReportResult');
+    const generatedReportPreview = document.getElementById('generatedReportPreview');
+    const generatedReportTitle = document.getElementById('generatedReportTitle');
+    const generatedReportType = document.getElementById('generatedReportType');
+    const generatedReportDateRange = document.getElementById('generatedReportDateRange');
+    const generatedReportCreatedAt = document.getElementById('generatedReportCreatedAt');
+    const generatedReportBody = document.getElementById('generatedReportBody');
+    const printGeneratedReportBtn = document.getElementById('printGeneratedReportBtn');
+    const exportGeneratedReportBtn = document.getElementById('exportGeneratedReportBtn');
+
+    function setReportActionButtonsEnabled(enabled) {
+        if (printGeneratedReportBtn) {
+            printGeneratedReportBtn.disabled = !enabled;
+        }
+        if (exportGeneratedReportBtn) {
+            exportGeneratedReportBtn.disabled = !enabled;
+        }
+    }
+
+    function formatDateForReport(dateValue) {
+        if (!dateValue) {
+            return '';
+        }
+        const parsedDate = new Date(dateValue + 'T00:00:00');
+        if (Number.isNaN(parsedDate.getTime())) {
+            return dateValue;
+        }
+        return parsedDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+    }
+
+    function parseReportDateValue(dateValue) {
+        if (!dateValue) {
+            return null;
+        }
+        const parsed = new Date(dateValue);
+        return Number.isNaN(parsed.getTime()) ? null : parsed;
+    }
+
+    function isDateWithinRange(dateValue, startDateValue, endDateValue) {
+        const targetDate = parseReportDateValue(dateValue);
+        const startDate = parseReportDateValue(startDateValue);
+        const endDate = parseReportDateValue(endDateValue);
+
+        if (!targetDate || !startDate || !endDate) {
+            return false;
+        }
+
+        targetDate.setHours(0, 0, 0, 0);
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(23, 59, 59, 999);
+
+        return targetDate >= startDate && targetDate <= endDate;
+    }
+
+    function getBlueTableHeadClass() {
+        return 'style="background-color: #0d6efd; color: #ffffff;"';
+    }
+
+    function buildTrendTableMarkup(title, labels, values) {
+        if (!labels.length || !values.length) {
+            return '<p class="mb-0">No data available for ' + esc(title) + '.</p>';
+        }
+
+        const rows = labels.map(function (label, index) {
+            return '<tr><td>' + esc(label) + '</td><td>' + Number(values[index] || 0) + '</td></tr>';
+        }).join('');
+
+        return '<div class="table-responsive"><table class="table table-sm table-bordered mb-0">'
+            + '<thead ' + getBlueTableHeadClass() + '><tr><th>Period</th><th>Total</th></tr></thead>'
+            + '<tbody>' + rows + '</tbody>'
+            + '</table></div>';
+    }
+
+    function buildTechnicianProjectsTableMarkup(selectedTechnician, startDateValue, endDateValue) {
+        const filteredRows = technicianProjectsData.filter(function (item) {
+            const technicianMatches = (item.technician || '') === selectedTechnician;
+            return technicianMatches && isDateWithinRange(item.date, startDateValue, endDateValue);
+        });
+
+        if (!filteredRows.length) {
+            return '<p class="mb-0">No technician projects found for the selected technician and date range.</p>';
+        }
+
+        const rows = filteredRows.map(function (item) {
+            return '<tr>'
+                + '<td>' + esc(item.id || '') + '</td>'
+                + '<td>' + esc(item.projectId || '') + '</td>'
+                + '<td>' + esc(item.technician || '') + '</td>'
+                + '<td>' + esc(item.type || '') + '</td>'
+                + '<td>' + esc(item.date || '') + '</td>'
+                + '</tr>';
+        }).join('');
+
+        return '<div class="table-responsive"><table class="table table-sm table-bordered mb-0">'
+            + '<thead ' + getBlueTableHeadClass() + '><tr><th>Report ID</th><th>Project ID</th><th>Technician</th><th>Type</th><th>Date</th></tr></thead>'
+            + '<tbody>' + rows + '</tbody>'
+            + '</table></div>';
+    }
+
+    function buildCompletedProjectsTableMarkup(startDateValue, endDateValue) {
+        const filteredRows = completedProjectsData.filter(function (item) {
+            return isDateWithinRange(item.completedDate, startDateValue, endDateValue);
+        });
+
+        if (!filteredRows.length) {
+            return '<p class="mb-0">No completed projects found within the selected date range.</p>';
+        }
+
+        const rows = filteredRows.map(function (item) {
+            return '<tr>'
+                + '<td>' + esc(item.projectId || '') + '</td>'
+                + '<td>' + esc(item.client || '') + '</td>'
+                + '<td>' + esc(item.leadTechnician || '') + '</td>'
+                + '<td>' + esc(item.serviceType || '') + '</td>'
+                + '<td>' + esc(formatDateForReport(item.completedDate || '')) + '</td>'
+                + '</tr>';
+        }).join('');
+
+        return '<div class="table-responsive"><table class="table table-sm table-bordered mb-0">'
+            + '<thead ' + getBlueTableHeadClass() + '><tr><th>Project ID</th><th>Client</th><th>Lead Technician</th><th>Service Type</th><th>Completed Date</th></tr></thead>'
+            + '<tbody>' + rows + '</tbody>'
+            + '</table></div>';
+    }
+
+    function buildQuotationTableMarkup() {
+        if (!quotationStatusData.length) {
+            return '<p class="mb-0">No quotation data available.</p>';
+        }
+        return '<div class="table-responsive"><table class="table table-sm table-bordered mb-0">'
+            + '<thead ' + getBlueTableHeadClass() + '><tr><th>Client</th><th>Service</th><th>Price</th><th>Status</th></tr></thead><tbody>'
+            + quotationStatusData.map(function (row) {
+                const status = (row.status || '').toLowerCase();
+                const statusClass = status === 'approved' ? 'bg-success' : 'bg-warning text-dark';
+                const price = Number(row.price || 0);
+                const formattedPrice = 'PHP ' + price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return '<tr><td>' + esc(row.client || '') + '</td><td>' + esc(row.service || '') + '</td><td>' + formattedPrice + '</td><td><span class="badge ' + statusClass + '">' + esc(row.status || '') + '</span></td></tr>';
+            }).join('')
+            + '</tbody></table></div>';
+    }
+
+    function buildGeneratedReportBody(reportType, startDateValue, endDateValue, selectedTechnician) {
+        const periodLabel = activeReportPeriod === 'yearly' ? 'Yearly' : 'Monthly';
+        const labels = periodLabel === 'Yearly' ? yearlyLabels : monthlyLabels;
+        const requestData = periodLabel === 'Yearly' ? yearlyRequestTrend : monthlyRequestTrend;
+
+        if (reportType === 'Completed Projects') {
+            return buildCompletedProjectsTableMarkup(startDateValue, endDateValue);
+        }
+        if (reportType === 'Project Requests') {
+            return buildTrendTableMarkup('Project Requests (' + periodLabel + ')', labels, requestData);
+        }
+        if (reportType === 'Technician Reports') {
+            return buildTechnicianProjectsTableMarkup(selectedTechnician, startDateValue, endDateValue);
+        }
+        if (reportType === 'Quotation Report') {
+            return buildQuotationTableMarkup();
+        }
+        return '<p class="mb-0">No report body available.</p>';
+    }
+
+    if (reportTypeInput) {
+        reportTypeInput.addEventListener('change', function () {
+            const selectedType = reportTypeInput.value;
+            const requiresTechnician = selectedType === 'Technician Reports';
+
+            if (reportTechnicianWrap) {
+                reportTechnicianWrap.style.display = requiresTechnician ? '' : 'none';
+            }
+
+            if (reportTechnicianInput) {
+                reportTechnicianInput.required = requiresTechnician;
+                if (!requiresTechnician) {
+                    reportTechnicianInput.value = '';
                 }
             }
+        });
+    }
+
+    if (generateReportForm) {
+        generateReportForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const hasValidDateRange = !reportStartDateInput || !reportEndDateInput || !reportStartDateInput.value || !reportEndDateInput.value || reportEndDateInput.value >= reportStartDateInput.value;
+            if (!hasValidDateRange && reportEndDateInput) {
+                reportEndDateInput.setCustomValidity('End date must be on or after start date.');
+            } else if (reportEndDateInput) {
+                reportEndDateInput.setCustomValidity('');
+            }
+
+            if (!generateReportForm.checkValidity()) {
+                generateReportForm.classList.add('was-validated');
+                return;
+            }
+
+            const selectedType = reportTypeInput ? reportTypeInput.value : '';
+            const selectedTechnician = reportTechnicianInput ? reportTechnicianInput.value : '';
+            const startDateLabel = formatDateForReport(reportStartDateInput ? reportStartDateInput.value : '');
+            const endDateLabel = formatDateForReport(reportEndDateInput ? reportEndDateInput.value : '');
+            const generatedAtLabel = new Date().toLocaleString('en-US', {
+                month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+
+            if (generatedReportType) {
+                generatedReportType.textContent = selectedType;
+            }
+            if (generatedReportTitle) {
+                generatedReportTitle.textContent = selectedType + ' Report';
+            }
+            if (generatedReportDateRange) {
+                generatedReportDateRange.textContent = startDateLabel + ' - ' + endDateLabel;
+            }
+            if (generatedReportCreatedAt) {
+                generatedReportCreatedAt.textContent = generatedAtLabel;
+            }
+            if (generatedReportBody) {
+                generatedReportBody.innerHTML = buildGeneratedReportBody(
+                    selectedType,
+                    reportStartDateInput ? reportStartDateInput.value : '',
+                    reportEndDateInput ? reportEndDateInput.value : '',
+                    selectedTechnician
+                );
+            }
+            if (generatedReportResult) {
+                generatedReportResult.style.display = 'block';
+            }
+            setReportActionButtonsEnabled(true);
+        });
+    }
+
+    if (printGeneratedReportBtn) {
+        printGeneratedReportBtn.addEventListener('click', function () {
+            if (!generatedReportPreview || !generatedReportResult || generatedReportResult.style.display === 'none') {
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) {
+                return;
+            }
+            printWindow.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Generated Report</title>');
+            printWindow.document.write('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">');
+            printWindow.document.write('</head><body class="p-4 bg-white">' + generatedReportPreview.outerHTML + '</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        });
+    }
+
+    if (exportGeneratedReportBtn) {
+        exportGeneratedReportBtn.addEventListener('click', function () {
+            if (!generatedReportPreview || !generatedReportType || !generatedReportDateRange) {
+                return;
+            }
+
+            const exportHtml = '<!doctype html><html><head><meta charset="utf-8"><title>Generated Report</title>'
+                + '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">'
+                + '</head><body class="p-4 bg-white">' + generatedReportPreview.outerHTML + '</body></html>';
+            const exportBlob = new Blob([exportHtml], { type: 'text/html;charset=utf-8' });
+            const exportUrl = URL.createObjectURL(exportBlob);
+            const exportLink = document.createElement('a');
+            exportLink.href = exportUrl;
+            exportLink.download = 'generated-report.html';
+            document.body.appendChild(exportLink);
+            exportLink.click();
+            exportLink.remove();
+            URL.revokeObjectURL(exportUrl);
+        });
+    }
+
+    if (generateReportModalEl) {
+        generateReportModalEl.addEventListener('hidden.bs.modal', function () {
+            if (generateReportForm) {
+                generateReportForm.reset();
+                generateReportForm.classList.remove('was-validated');
+            }
+            if (generatedReportResult) {
+                generatedReportResult.style.display = 'none';
+            }
+            if (reportEndDateInput) {
+                reportEndDateInput.setCustomValidity('');
+            }
+            if (reportTechnicianWrap) {
+                reportTechnicianWrap.style.display = 'none';
+            }
+            if (reportTechnicianInput) {
+                reportTechnicianInput.required = false;
+            }
+            setReportActionButtonsEnabled(false);
         });
     }
 

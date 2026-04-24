@@ -61,6 +61,9 @@ $clientTypeMap = [
         <div class="d-flex flex-nowrap align-items-center gap-2 ms-auto">
             
             <input type="search" id="projectSearch" class="form-control form-control-sm" placeholder="Search projects..." style="width: 280px; max-width: 100%;">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                <i class="bi bi-plus-lg me-1"></i>New Project
+            </button>
             <a class="btn btn-outline-secondary btn-sm" href="<?php echo htmlspecialchars(app_url('/admin/projects', ['view' => 'archives']), ENT_QUOTES, 'UTF-8'); ?>">View Archives</a>
         </div>
     </div>
@@ -72,7 +75,7 @@ $clientTypeMap = [
             <button type="button" class="nav-link" data-project-tab="assessment">Assessment</button>
         </li>
         <li class="nav-item">
-            <button type="button" class="nav-link" data-project-tab="preparing">Preparing</button>
+            <button type="button" class="nav-link" data-project-tab="preparing">Pending</button>
         </li>
         <li class="nav-item">
             <button type="button" class="nav-link" data-project-tab="ongoing">Ongoing</button>
@@ -178,18 +181,142 @@ $clientTypeMap = [
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="createProjectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Project</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="createProjectForm" class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <h6 class="fw-semibold mb-3">Project Details</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label for="newProjectId" class="form-label">Project ID</label>
+                            <input type="text" class="form-control" id="newProjectId" placeholder="Auto-generated" readonly>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="newProjectName" class="form-label">Project Name</label>
+                            <input type="text" class="form-control" id="newProjectName" required>
+                            <div class="invalid-feedback">Project name is required.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="newProjectService" class="form-label">Service Type</label>
+                            <select class="form-select" id="newProjectService" required>
+                                <option value="" selected disabled>Select service</option>
+                                <option value="Aircon Installation">Aircon Installation</option>
+                                <option value="Aircon Repair">Aircon Repair</option>
+                                <option value="Ducting Installation">Ducting Installation</option>
+                                <option value="Ducting Fabrication">Ducting Fabrication</option>
+                            </select>
+                            <div class="invalid-feedback">Service type is required.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="newProjectStatus" class="form-label">Initial Status</label>
+                            <select class="form-select" id="newProjectStatus" required>
+                                <option value="For Assessment" selected>For Assessment</option>
+                                <option value="Drafting Quotation">Drafting Quotation</option>
+                                <option value="Pending Quotation Approval">Pending Quotation Approval</option>
+                                <option value="Pending Contract Upload">Pending Contract Upload</option>
+                                <option value="Pending Schedule">Pending Schedule</option>
+                                <option value="Scheduled">Scheduled</option>
+                                <option value="In progress">In progress</option>
+                                <option value="On Hold">On Hold</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h6 class="fw-semibold mb-3">Client Information</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="newProjectClientName" class="form-label">Client Name</label>
+                            <input type="text" class="form-control" id="newProjectClientName" required>
+                            <div class="invalid-feedback">Client name is required.</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="newProjectClientType" class="form-label">Client Type</label>
+                            <select class="form-select" id="newProjectClientType" required>
+                                <option value="" selected disabled>Select type</option>
+                                <option value="Residential">Residential</option>
+                                <option value="Commercial">Commercial</option>
+                            </select>
+                            <div class="invalid-feedback">Client type is required.</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="newProjectClientPhone" class="form-label">Contact Number</label>
+                            <input type="tel" class="form-control" id="newProjectClientPhone" placeholder="09xx xxx xxxx" required>
+                            <div class="invalid-feedback">Contact number is required.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="newProjectClientEmail" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="newProjectClientEmail" placeholder="name@example.com" required>
+                            <div class="invalid-feedback">A valid email address is required.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="newProjectSiteAddress" class="form-label">Site Address</label>
+                            <input type="text" class="form-control" id="newProjectSiteAddress" required>
+                            <div class="invalid-feedback">Site address is required.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const projectSearch = document.getElementById('projectSearch');
     const projectTabs = document.querySelectorAll('#projectTabs [data-project-tab]');
     const tableBody = document.getElementById('projectsTableBody');
     const rows = Array.from(document.querySelectorAll('#projectsTableBody tr'));
+    const createProjectModalEl = document.getElementById('createProjectModal');
+    const createProjectForm = document.getElementById('createProjectForm');
+    const newProjectIdInput = document.getElementById('newProjectId');
+    const newProjectName = document.getElementById('newProjectName');
+    const newProjectService = document.getElementById('newProjectService');
+    const newProjectStatus = document.getElementById('newProjectStatus');
+    const newProjectClientName = document.getElementById('newProjectClientName');
+    const newProjectClientType = document.getElementById('newProjectClientType');
+    const newProjectClientPhone = document.getElementById('newProjectClientPhone');
+    const newProjectClientEmail = document.getElementById('newProjectClientEmail');
+    const newProjectSiteAddress = document.getElementById('newProjectSiteAddress');
     const completionProjectId = document.getElementById('completionProjectId');
     const completionReportDescription = document.getElementById('completionReportDescription');
     const completionReportPhotos = document.getElementById('completionReportPhotos');
     const saveCompletionReportBtn = document.getElementById('saveCompletionReportBtn');
     const completionReportModalEl = document.getElementById('completionReportModal');
+    const uiStatusClassMap = {
+        'ongoing': 'text-bg-primary',
+        'in progress': 'text-bg-primary',
+        'for assessment': 'text-bg-info',
+        'drafting quotation': 'text-bg-secondary',
+        'pending quotation approval': 'text-bg-warning',
+        'quotation to be approved': 'text-bg-warning',
+        'pending contract upload': 'text-bg-warning',
+        'pending schedule': 'text-bg-dark',
+        'scheduled': 'text-bg-danger',
+        'on hold': 'text-bg-warning',
+        'onhold': 'text-bg-warning',
+        'completed': 'text-bg-success',
+        'cancelled': 'text-bg-danger',
+    };
     let activeTab = 'all';
+    let nextProjectNumber = rows
+        .map(function (row) {
+            const projectId = row.getAttribute('data-project-id') || '';
+            const match = projectId.match(/^PRJ-(\d+)$/i);
+            return match ? Number(match[1]) : 0;
+        })
+        .reduce(function (max, current) {
+            return current > max ? current : max;
+        }, 1000) + 1;
+    let nextOriginalIndex = rows.length;
     const allOrder = {
         'for assessment': 1,
         'drafting quotation': 2,
@@ -232,6 +359,55 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getRowStatusKey(row) {
         return row.getAttribute('data-status-key') || '';
+    }
+
+    function escHtml(value) {
+        const temp = document.createElement('div');
+        temp.textContent = value;
+        return temp.innerHTML;
+    }
+
+    function resolveProjectTab(statusKey) {
+        if (statusKey === 'for assessment') {
+            return 'assessment';
+        }
+        if (['drafting quotation', 'pending quotation approval', 'pending contract upload', 'pending schedule'].includes(statusKey)) {
+            return 'preparing';
+        }
+        if (statusKey === 'completed') {
+            return 'completed';
+        }
+        if (statusKey === 'cancelled') {
+            return 'cancelled';
+        }
+        return 'ongoing';
+    }
+
+    function buildViewProjectLink(projectId, statusLabel) {
+        const params = new URLSearchParams();
+        params.set('id', projectId);
+        params.set('status', statusLabel);
+        return '<?php echo htmlspecialchars(app_url('/admin/project'), ENT_QUOTES, 'UTF-8'); ?>' + '?' + params.toString();
+    }
+
+    function generateNextProjectId() {
+        const generated = 'PRJ-' + String(nextProjectNumber).padStart(4, '0');
+        nextProjectNumber += 1;
+        return generated;
+    }
+
+    function resetCreateProjectForm() {
+        if (!createProjectForm) {
+            return;
+        }
+        createProjectForm.reset();
+        createProjectForm.classList.remove('was-validated');
+        if (newProjectStatus) {
+            newProjectStatus.value = 'For Assessment';
+        }
+        if (newProjectIdInput) {
+            newProjectIdInput.value = generateNextProjectId();
+        }
     }
 
     function applyProjectFilters() {
@@ -345,22 +521,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const statusBadge = row.querySelector('td:nth-child(5) .badge');
             if (statusBadge) {
-                const statusClassMap = {
-                    'ongoing': 'text-bg-primary',
-                    'in progress': 'text-bg-primary',
-                    'for assessment': 'text-bg-info',
-                    'drafting quotation': 'text-bg-secondary',
-                    'pending quotation approval': 'text-bg-warning',
-                    'quotation to be approved': 'text-bg-warning',
-                    'pending contract upload': 'text-bg-warning',
-                    'pending schedule': 'text-bg-dark',
-                    'scheduled': 'text-bg-danger',
-                    'on hold': 'text-bg-warning',
-                    'onhold': 'text-bg-warning',
-                    'completed': 'text-bg-success',
-                    'cancelled': 'text-bg-danger',
-                };
-                statusBadge.className = 'badge rounded-pill ' + (statusClassMap[nextStatusKey] || 'text-bg-light');
+                statusBadge.className = 'badge rounded-pill ' + (uiStatusClassMap[nextStatusKey] || 'text-bg-light');
                 statusBadge.textContent = nextStatusLabel;
             }
 
@@ -445,6 +606,94 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    if (createProjectModalEl) {
+        createProjectModalEl.addEventListener('show.bs.modal', function () {
+            if (newProjectIdInput && !newProjectIdInput.value) {
+                newProjectIdInput.value = generateNextProjectId();
+            }
+        });
+
+        createProjectModalEl.addEventListener('hidden.bs.modal', function () {
+            resetCreateProjectForm();
+        });
+    }
+
+    if (createProjectForm) {
+        createProjectForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            if (!createProjectForm.checkValidity()) {
+                createProjectForm.classList.add('was-validated');
+                return;
+            }
+
+            const projectId = (newProjectIdInput && newProjectIdInput.value) ? newProjectIdInput.value : generateNextProjectId();
+            const projectName = newProjectName ? newProjectName.value.trim() : '';
+            const serviceType = newProjectService ? newProjectService.value.trim() : '';
+            const statusLabel = newProjectStatus ? newProjectStatus.value.trim() : 'For Assessment';
+            const statusKey = statusLabel.toLowerCase();
+            const clientName = newProjectClientName ? newProjectClientName.value.trim() : '';
+            const clientType = newProjectClientType ? newProjectClientType.value.trim() : 'Unknown';
+            const scheduleLabel = ['for assessment', 'scheduled', 'in progress', 'ongoing', 'on hold', 'onhold', 'completed'].includes(statusKey)
+                ? 'TBD'
+                : (statusKey === 'cancelled' ? 'Cancelled' : '');
+            const rowTab = resolveProjectTab(statusKey);
+            const canToggleHold = !['completed', 'cancelled'].includes(statusKey);
+            const isOnHold = statusKey === 'on hold' || statusKey === 'onhold';
+            const canSubmitCompletion = statusKey === 'in progress';
+
+            const metadata = {
+                clientPhone: newProjectClientPhone ? newProjectClientPhone.value.trim() : '',
+                clientEmail: newProjectClientEmail ? newProjectClientEmail.value.trim() : '',
+                siteAddress: newProjectSiteAddress ? newProjectSiteAddress.value.trim() : '',
+            };
+
+            const row = document.createElement('tr');
+            row.setAttribute('data-project-tab', rowTab);
+            row.setAttribute('data-status-key', statusKey);
+            row.setAttribute('data-status-label', statusLabel);
+            row.setAttribute('data-project-id', projectId);
+            row.setAttribute('data-original-index', String(nextOriginalIndex));
+            row.setAttribute('data-project-metadata', JSON.stringify(metadata));
+            nextOriginalIndex += 1;
+
+            row.innerHTML = [
+                '<td>' + escHtml(projectId) + '</td>',
+                '<td>' + escHtml(serviceType) + '</td>',
+                '<td>' + escHtml(clientName) + '</td>',
+                '<td>' + escHtml(clientType) + '</td>',
+                '<td><span class="badge rounded-pill ' + escHtml(uiStatusClassMap[statusKey] || 'text-bg-light') + '">' + escHtml(statusLabel) + '</span></td>',
+                '<td class="project-schedule-col">' + escHtml(scheduleLabel) + '</td>',
+                '<td><div class="d-flex flex-wrap gap-1">'
+                    + '<a class="btn btn-sm btn-primary view-project-btn" title="View Details" aria-label="View Details" href="' + escHtml(buildViewProjectLink(projectId, statusLabel)) + '"><i class="bi bi-eye"></i></a>'
+                    + (canToggleHold
+                        ? '<button type="button" class="btn btn-sm ' + (isOnHold ? 'btn-success' : 'btn-warning') + ' toggle-hold-btn" title="' + (isOnHold ? 'Resume Project' : 'Set On Hold') + '" aria-label="' + (isOnHold ? 'Resume Project' : 'Set On Hold') + '"><i class="bi ' + (isOnHold ? 'bi-play-circle' : 'bi-pause-circle') + '"></i></button>'
+                        : '')
+                    + (canSubmitCompletion
+                        ? '<button type="button" class="btn btn-sm btn-success mark-completed-btn" title="Submit Completion Report" aria-label="Submit Completion Report" data-project-id="' + escHtml(projectId) + '" data-bs-toggle="modal" data-bs-target="#completionReportModal"><i class="bi bi-check2-circle"></i></button>'
+                        : '')
+                    + '<button type="button" class="btn btn-sm btn-danger" title="Archive" aria-label="Archive"><i class="bi bi-trash"></i></button>'
+                + '</div></td>',
+            ].join('');
+
+            if (tableBody) {
+                tableBody.appendChild(row);
+            }
+            rows.push(row);
+
+            if (createProjectModalEl && window.bootstrap && window.bootstrap.Modal) {
+                window.bootstrap.Modal.getOrCreateInstance(createProjectModalEl).hide();
+            }
+
+            activeTab = 'all';
+            const allTab = document.querySelector('#projectTabs [data-project-tab="all"]');
+            projectTabs.forEach(function (btn) {
+                btn.classList.toggle('active', btn === allTab);
+            });
+            applyProjectFilters();
+        });
+    }
+
     projectTabs.forEach(function (tabButton) {
         tabButton.addEventListener('click', function () {
             activeTab = tabButton.getAttribute('data-project-tab') || 'all';
@@ -455,6 +704,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    resetCreateProjectForm();
     applyProjectFilters();
 });
 </script>

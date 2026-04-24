@@ -12,6 +12,9 @@ $panelUserByRole = [
 ];
 $panelUserName = $panelUserByRole[$sidebarRole] ?? 'User';
 $panelRoleLabel = $sidebarRole === 'lead-technician' ? 'Lead Technician' : ucfirst($sidebarRole);
+$isHomePage = $requestPath === '/';
+$isAboutPage = $requestPath === '/about';
+$isServicesPage = $requestPath === '/services';
 ?>
 <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top app-navbar">
     <div class="container-fluid px-3 px-lg-4 d-flex align-items-center">
@@ -33,7 +36,9 @@ $panelRoleLabel = $sidebarRole === 'lead-technician' ? 'Lead Technician' : ucfir
         </div>
         <?php else: ?>
         <div class="ms-auto d-flex gap-2 flex-wrap justify-content-end">
-            <a href="<?php echo htmlspecialchars(app_url('/'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Home</a>
+            <a href="<?php echo htmlspecialchars(app_url('/'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm <?php echo $isHomePage ? 'btn-primary' : 'btn-outline-secondary'; ?>">Home</a>
+            <a href="<?php echo htmlspecialchars(app_url('/services'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm <?php echo $isServicesPage ? 'btn-primary' : 'btn-outline-secondary'; ?>">Services</a>
+            <a href="<?php echo htmlspecialchars(app_url('/about'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm <?php echo $isAboutPage ? 'btn-primary' : 'btn-outline-secondary'; ?>">About</a>
             <a href="<?php echo htmlspecialchars(app_url('/client/projects'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Client</a>
             <a href="<?php echo htmlspecialchars(app_url('/admin/dashboard'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Admin</a>
             <a href="<?php echo htmlspecialchars(app_url('/tech/schedule'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Technician</a>
