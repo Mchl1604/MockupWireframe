@@ -675,6 +675,7 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                         <tr>
                             <th>Task</th>
                             <th>Assigned To</th>
+                            <th>Start Date</th>
                             <th>Due Date</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -908,24 +909,41 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                         <input type="text" id="taskTitle" class="form-control" placeholder="Describe the task">
                     </div>
                     <div class="col-md-6">
-                        <label for="taskAssignee" class="form-label">Assign To</label>
-                        <select id="taskAssignee" class="form-select">
-                            <?php foreach ($taskAssigneeOptions as $member): ?>
-                                <option value="<?php echo htmlspecialchars($member, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($member, ENT_QUOTES, 'UTF-8'); ?></option>
-                            <?php endforeach; ?>
-                            <?php if (empty($taskAssigneeOptions)): ?>
-                                <option value="">No technicians available</option>
-                            <?php endif; ?>
-                        </select>
-                        
+                        <label for="taskStartDate" class="form-label">Start Date</label>
+                        <input type="date" id="taskStartDate" class="form-control">
                     </div>
                     <div class="col-md-6">
                         <label for="taskDueDate" class="form-label">Due Date</label>
                         <input type="date" id="taskDueDate" class="form-control">
                     </div>
                     <div class="col-12">
-                        <label for="taskDescription" class="form-label">Task Description</label>
-                        <textarea id="taskDescription" class="form-control" rows="4"></textarea>
+                        <label for="taskDescription" class="form-label text-primary fw-semibold">Task Description</label>
+                        <textarea id="taskDescription" class="form-control border-primary-subtle" rows="4"></textarea>
+                        <div class="form-text text-muted"></div>
+                    </div>
+                    <div class="col-12">
+                        <label for="taskAssignee" class="form-label">Assign To</label>
+                        <input type="hidden" id="taskAssignee" value="">
+                        <div class="row g-2" id="taskAssigneeCards">
+                            <?php foreach ($taskAssigneeOptions as $member): ?>
+                                <div class="col-sm-6 col-lg-4">
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-primary w-100 text-start task-assignee-card"
+                                        data-assignee="<?php echo htmlspecialchars($member, ENT_QUOTES, 'UTF-8'); ?>"
+                                        aria-pressed="false"
+                                    >
+                                        <span class="fw-semibold d-block"><?php echo htmlspecialchars($member, ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <span class="small d-block task-assignee-count text-muted">0 current tasks</span>
+                                    </button>
+                                </div>
+                            <?php endforeach; ?>
+                            <?php if (empty($taskAssigneeOptions)): ?>
+                                <div class="col-12">
+                                    <div class="border rounded p-2 bg-white text-muted small">No technicians available</div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1027,6 +1045,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const saveTaskBtn = document.getElementById('saveTaskBtn');
     const taskTitle = document.getElementById('taskTitle');
     const taskAssignee = document.getElementById('taskAssignee');
+    const taskAssigneeCards = document.getElementById('taskAssigneeCards');
+    const taskStartDate = document.getElementById('taskStartDate');
     const taskDueDate = document.getElementById('taskDueDate');
     const taskDescription = document.getElementById('taskDescription');
     const isInProgressProject = <?php echo json_encode($statusKey === 'in progress', JSON_UNESCAPED_SLASHES); ?>;
@@ -1167,6 +1187,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return '<tr>'
                 + '<td>' + escapeHtml(task.title) + '</td>'
                 + '<td>' + escapeHtml(task.assignee) + '</td>'
+                + '<td>' + escapeHtml(task.dateCreated) + '</td>'
                 + '<td>' + escapeHtml(task.dueDate || task.dateCreated) + '</td>'
                 + '<td><span class="badge ' + taskStatusClass(task.status) + '">' + escapeHtml(task.status) + '</span></td>'
                 + '<td class="text-start">'
@@ -1181,6 +1202,35 @@ document.addEventListener('DOMContentLoaded', function() {
         if (tasksEmptyState) {
             tasksEmptyState.classList.toggle('d-none', tasks.length > 0);
         }
+
+        syncTaskAssigneeCards();
+    }
+
+    function syncTaskAssigneeCards() {
+        if (!taskAssigneeCards) {
+            return;
+        }
+
+        const selectedAssignee = taskAssignee ? taskAssignee.value.trim() : '';
+        taskAssigneeCards.querySelectorAll('.task-assignee-card').forEach(function (button) {
+            const buttonAssignee = (button.getAttribute('data-assignee') || '').trim();
+            const taskCount = tasks.filter(function (task) {
+                return String(task.assignee || '').trim() === buttonAssignee;
+            }).length;
+            const isSelected = selectedAssignee !== '' && selectedAssignee === buttonAssignee;
+            const countNode = button.querySelector('.task-assignee-count');
+
+            button.classList.toggle('btn-primary', isSelected);
+            button.classList.toggle('text-white', isSelected);
+            button.classList.toggle('btn-outline-primary', !isSelected);
+            button.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+
+            if (countNode) {
+                countNode.textContent = taskCount + ' current task' + (taskCount === 1 ? '' : 's');
+                countNode.classList.toggle('text-white', isSelected);
+                countNode.classList.toggle('text-muted', !isSelected);
+            }
+        });
     }
 
     function updateTaskProgress() {
@@ -1353,14 +1403,43 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    if (taskAssigneeCards) {
+        taskAssigneeCards.addEventListener('click', function (event) {
+            const assigneeButton = event.target.closest('.task-assignee-card');
+            if (!assigneeButton || !taskAssignee) {
+                return;
+            }
+
+            taskAssignee.value = assigneeButton.getAttribute('data-assignee') || '';
+            syncTaskAssigneeCards();
+        });
+
+        const firstAssigneeButton = taskAssigneeCards.querySelector('.task-assignee-card');
+        if (firstAssigneeButton && taskAssignee && !taskAssignee.value) {
+            taskAssignee.value = firstAssigneeButton.getAttribute('data-assignee') || '';
+            syncTaskAssigneeCards();
+        }
+    }
+
+    if (taskStartDate && taskDueDate) {
+        taskStartDate.addEventListener('change', function () {
+            taskDueDate.min = taskStartDate.value || '';
+        });
+    }
+
     if (saveTaskBtn) {
         saveTaskBtn.addEventListener('click', function () {
             const title = taskTitle ? taskTitle.value.trim() : '';
             const assignee = taskAssignee ? taskAssignee.value.trim() : '';
+            const startDate = taskStartDate ? taskStartDate.value : '';
             const dueDate = taskDueDate ? taskDueDate.value : '';
             const description = taskDescription ? taskDescription.value.trim() : '';
 
-            if (!title || !assignee || !dueDate || isCompletedProject || (isInProgressProject && assignee === leadTechnician)) {
+            if (!title || !assignee || !startDate || !dueDate || isCompletedProject || (isInProgressProject && assignee === leadTechnician)) {
+                return;
+            }
+
+            if (new Date(dueDate + 'T00:00:00') < new Date(startDate + 'T00:00:00')) {
                 return;
             }
 
@@ -1370,6 +1449,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+            const formattedStartDate = new Date(startDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
             const formattedDueDate = new Date(dueDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
             const detailedDescription = description.length > title.length
                 ? description
@@ -1379,7 +1459,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: title,
                 assignee: assignee,
                 status: 'Pending',
-                dateCreated: formattedDueDate,
+                dateCreated: formattedStartDate,
                 dueDate: formattedDueDate,
                 description: detailedDescription,
                 image: '',
@@ -1389,9 +1469,17 @@ document.addEventListener('DOMContentLoaded', function() {
             if (taskTitle) {
                 taskTitle.value = '';
             }
+            if (taskStartDate) {
+                taskStartDate.value = '';
+            }
             if (taskDueDate) {
                 taskDueDate.value = '';
+                taskDueDate.min = '';
                 taskDueDate.setCustomValidity('');
+            }
+            if (taskAssignee) {
+                taskAssignee.value = '';
+                syncTaskAssigneeCards();
             }
             if (taskDescription) {
                 taskDescription.value = '';
@@ -1408,15 +1496,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (taskDueDate && isInProgressProject) {
-        if (projectDueDateMin) {
+        if (projectDueDateMin && (!taskDueDate.min || projectDueDateMin > taskDueDate.min)) {
             taskDueDate.min = projectDueDateMin;
         }
         if (projectDueDateMax) {
             taskDueDate.max = projectDueDateMax;
         }
         taskDueDate.addEventListener('input', function () {
-            if (!taskDueDate.value || isDueDateWithinProjectRange(taskDueDate.value)) {
+            if (!taskDueDate.value || (isDueDateWithinProjectRange(taskDueDate.value) && (!taskStartDate || !taskStartDate.value || taskDueDate.value >= taskStartDate.value))) {
                 taskDueDate.setCustomValidity('');
+                return;
+            }
+            if (taskStartDate && taskStartDate.value && taskDueDate.value < taskStartDate.value) {
+                taskDueDate.setCustomValidity('Due date cannot be earlier than start date.');
                 return;
             }
             taskDueDate.setCustomValidity('Due date must be within the project date range.');
