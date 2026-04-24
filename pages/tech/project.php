@@ -391,7 +391,7 @@ if (!preg_match('/\b\d{4}\b/', $projectTimeline)) {
                 <div class="tab-pane fade" id="tasks-pane" role="tabpanel" aria-labelledby="tasks-tab" tabindex="0">
                     <div class="table-responsive">
                         <table class="table table-sm table-hover mb-0">
-                            <thead class="table-light"><tr><th>Task</th><th>Status</th><th>Date Created</th><th>Due</th><th>Action</th></tr></thead>
+                            <thead class="table-light"><tr><th>Task</th><th>Status</th><th>Date Started</th><th>Due Date</th><th>Action</th></tr></thead>
                             <tbody id="taskTableBody"></tbody>
                         </table>
                     </div>
@@ -449,7 +449,7 @@ if (!preg_match('/\b\d{4}\b/', $projectTimeline)) {
                         <div id="viewTaskStatus" class="border rounded p-2 bg-light">-</div>
                     </div>
                     <div class="col-md-6">
-                        <div class="small text-muted mb-1">Date Created</div>
+                        <div class="small text-muted mb-1">Date Started</div>
                         <div id="viewTaskDateCreated" class="border rounded p-2 bg-light">-</div>
                     </div>
                     <div class="col-md-6">
