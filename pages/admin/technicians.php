@@ -172,6 +172,7 @@ $attendanceByTech = [
                 <div class="mb-2"><strong>Name:</strong> <span id="techDetailName"></span></div>
                 <div class="mb-2">
                     <label class="form-label mb-1"><strong>Specialty</strong></label>
+                    <p class="small text-muted mb-2">Pending specialties can be confirmed or removed by admin.</p>
                     <ul id="techDetailSkillsList" class="list-group mb-2">
                         <li class="list-group-item text-muted" id="emptyTechDetailSkillsItem">No skills selected yet.</li>
                     </ul>
@@ -394,6 +395,36 @@ function renderTechTableSkills(skills) {
     return skills.map(skill => `<span class="badge bg-light text-dark border me-1 mb-1">${skill}</span>`).join('');
 }
 
+function normalizeTechSkills(skills) {
+    return skills.map(function (skill) {
+        return {
+            name: skill,
+            status: 'Approved',
+        };
+    });
+}
+
+function getTechSkillNames(skills) {
+    return skills.map(function (skill) {
+        return skill.name;
+    });
+}
+
+function injectExamplePendingSkill() {
+    const exampleSpecialty = 'Ducting Fabrication';
+    const existing = currentTechSkills.find(function (skill) {
+        return skill.name === exampleSpecialty;
+    });
+
+    if (!existing) {
+        currentTechSkills.push({
+            name: exampleSpecialty,
+            status: 'Pending',
+            isExample: true,
+        });
+    }
+}
+
 function renderTechDetailSkillsList() {
     const skillsList = document.getElementById('techDetailSkillsList');
     if (currentTechSkills.length === 0) {
@@ -403,8 +434,14 @@ function renderTechDetailSkillsList() {
 
     skillsList.innerHTML = currentTechSkills.map((skill, index) => `
         <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span>${skill}</span>
-            <button type="button" class="btn btn-sm btn-outline-danger" data-skill-index="${index}">Remove</button>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span>${skill.name}</span>
+                ${skill.status === 'Pending' ? '<span class="badge text-bg-warning">Pending</span>' : ''}
+            </div>
+            <div class="d-flex gap-1">
+                ${skill.status === 'Pending' ? `<button type="button" class="btn btn-sm btn-outline-primary" data-action="confirm" data-skill-index="${index}">Confirm</button>` : ''}
+                <button type="button" class="btn btn-sm btn-outline-danger" data-action="remove" data-skill-index="${index}">Remove</button>
+            </div>
         </li>
     `).join('');
 }
@@ -412,7 +449,8 @@ function renderTechDetailSkillsList() {
 function rebuildTechDetailSkillPicker() {
     const picker = document.getElementById('techDetailSkillPicker');
     const availableSkills = <?php echo json_encode($skillOptions, JSON_UNESCAPED_SLASHES); ?>;
-    const remainingSkills = availableSkills.filter(skill => !currentTechSkills.includes(skill));
+    const selectedSkillNames = getTechSkillNames(currentTechSkills);
+    const remainingSkills = availableSkills.filter(skill => !selectedSkillNames.includes(skill));
     let html = '<option value="">-- Select skill to add --</option>';
 
     remainingSkills.forEach(skill => {
@@ -428,7 +466,8 @@ document.querySelectorAll('.view-tech-details').forEach(button => {
         const tech = techData[currentTechIndex];
 
         document.getElementById('techDetailName').textContent = tech.name;
-        currentTechSkills = [...tech.skills];
+        currentTechSkills = normalizeTechSkills(tech.skills || []);
+        injectExamplePendingSkill();
         renderTechDetailSkillsList();
         rebuildTechDetailSkillPicker();
 
@@ -442,8 +481,15 @@ document.getElementById('techDetailSkillPicker').addEventListener('change', func
         return;
     }
 
-    if (!currentTechSkills.includes(selectedSkill)) {
-        currentTechSkills.push(selectedSkill);
+    const hasSkill = currentTechSkills.some(function (skill) {
+        return skill.name === selectedSkill;
+    });
+
+    if (!hasSkill) {
+        currentTechSkills.push({
+            name: selectedSkill,
+            status: 'Pending',
+        });
         renderTechDetailSkillsList();
         rebuildTechDetailSkillPicker();
     }
@@ -452,14 +498,23 @@ document.getElementById('techDetailSkillPicker').addEventListener('change', func
 });
 
 document.getElementById('techDetailSkillsList').addEventListener('click', function (event) {
-    const button = event.target.closest('button[data-skill-index]');
+    const button = event.target.closest('button[data-skill-index][data-action]');
     if (!button) {
         return;
     }
 
     const index = Number(button.getAttribute('data-skill-index'));
+    const action = button.getAttribute('data-action');
     if (Number.isInteger(index) && index >= 0 && index < currentTechSkills.length) {
-        currentTechSkills.splice(index, 1);
+        if (action === 'confirm') {
+            currentTechSkills[index].status = 'Approved';
+            currentTechSkills[index].isExample = false;
+        }
+
+        if (action === 'remove') {
+            currentTechSkills.splice(index, 1);
+        }
+
         renderTechDetailSkillsList();
         rebuildTechDetailSkillPicker();
     }
@@ -470,17 +525,25 @@ document.getElementById('saveTechDetailsBtn').addEventListener('click', function
         return;
     }
 
-    if (currentTechSkills.length === 0) {
-        alert('Please select at least one specialty.');
+    const approvedSkills = currentTechSkills
+        .filter(function (skill) {
+            return skill.status === 'Approved';
+        })
+        .map(function (skill) {
+            return skill.name;
+        });
+
+    if (approvedSkills.length === 0) {
+        alert('Please confirm at least one specialty.');
         return;
     }
 
-    techData[currentTechIndex].skills = [...currentTechSkills];
+    techData[currentTechIndex].skills = [...approvedSkills];
 
     const tableRows = document.querySelectorAll('#techniciansTableBody tr');
     const currentRow = tableRows[currentTechIndex];
     if (currentRow) {
-        currentRow.children[2].innerHTML = renderTechTableSkills(currentTechSkills);
+        currentRow.children[2].innerHTML = renderTechTableSkills(approvedSkills);
     }
 
     bootstrap.Modal.getOrCreateInstance(document.getElementById('technicianDetailsModal')).hide();

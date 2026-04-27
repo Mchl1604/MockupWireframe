@@ -254,4 +254,96 @@ document.addEventListener('DOMContentLoaded', function () {
         setInterval(updateClock, 1000);
     }
 
+
+    // -------------------------------------------------------
+    // Technician profile specialties modal
+    // -------------------------------------------------------
+    const specialtyModalEl = document.getElementById('specialtyModal');
+    const specialtySaveBtn = document.getElementById('specialtyModalSave');
+    const specialtyList = document.getElementById('specialtyList');
+    const specialtyHiddenInputs = document.getElementById('specialtyHiddenInputs');
+    const specialtyEmptyState = document.getElementById('specialtyEmptyState');
+
+    if (specialtyModalEl && specialtySaveBtn && specialtyList && specialtyHiddenInputs) {
+        const specialtyModalChecks = specialtyModalEl.querySelectorAll('.specialty-modal-checkbox');
+        const approvedExampleSpecialty = (specialtyList.dataset.approvedExample || '').trim();
+        let selectedSpecialties = Array.from(
+            specialtyHiddenInputs.querySelectorAll('input[name="specialties[]"]')
+        ).map(input => input.value);
+
+        function syncModalFromSelected() {
+            specialtyModalChecks.forEach(function (checkbox) {
+                checkbox.checked = selectedSpecialties.includes(checkbox.value);
+            });
+        }
+
+        function getSelectedFromModal() {
+            return Array.from(specialtyModalChecks)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+        }
+
+        function renderSpecialtyList() {
+            specialtyList.innerHTML = '';
+            specialtyHiddenInputs.innerHTML = '';
+
+            if (approvedExampleSpecialty !== '') {
+                const approvedItem = document.createElement('div');
+                approvedItem.className = 'list-group-item d-flex align-items-center justify-content-between gap-2';
+                approvedItem.setAttribute('data-specialty', approvedExampleSpecialty);
+                approvedItem.setAttribute('data-approved-example-item', '1');
+
+                const approvedName = document.createElement('span');
+                approvedName.className = 'text-capitalize';
+                approvedName.textContent = approvedExampleSpecialty;
+
+                approvedItem.appendChild(approvedName);
+                specialtyList.appendChild(approvedItem);
+            }
+
+            selectedSpecialties.forEach(function (specialty) {
+                if (specialty === approvedExampleSpecialty) {
+                    return;
+                }
+
+                const item = document.createElement('div');
+                item.className = 'list-group-item d-flex align-items-center justify-content-between gap-2';
+                item.setAttribute('data-specialty', specialty);
+
+                const name = document.createElement('span');
+                name.className = 'text-capitalize';
+                name.textContent = specialty;
+
+                const badge = document.createElement('span');
+                badge.className = 'badge text-bg-warning';
+                badge.textContent = 'To Be Approved';
+
+                item.appendChild(name);
+                item.appendChild(badge);
+                specialtyList.appendChild(item);
+
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'specialties[]';
+                hiddenInput.value = specialty;
+                specialtyHiddenInputs.appendChild(hiddenInput);
+            });
+
+            if (specialtyEmptyState) {
+                specialtyEmptyState.classList.toggle('d-none', selectedSpecialties.length > 0);
+            }
+        }
+
+        specialtyModalEl.addEventListener('show.bs.modal', syncModalFromSelected);
+
+        specialtySaveBtn.addEventListener('click', function () {
+            selectedSpecialties = getSelectedFromModal();
+            renderSpecialtyList();
+            const bsModal = bootstrap.Modal.getInstance(specialtyModalEl);
+            if (bsModal) bsModal.hide();
+        });
+
+        renderSpecialtyList();
+    }
+
 });

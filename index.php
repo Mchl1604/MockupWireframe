@@ -65,6 +65,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ' . app_url('/lead-technician/reports', ['submitted' => 1]));
         exit;
     }
+
+    if (preg_match('#^/(admin|client|tech|lead-technician)/profile$#', $path, $matches) && $action === 'update_profile') {
+        $role = $matches[1];
+        $firstName = trim((string) ($_POST['first_name'] ?? ''));
+        $lastName = trim((string) ($_POST['last_name'] ?? ''));
+        $email = trim((string) ($_POST['email'] ?? ''));
+        $contactNumber = trim((string) ($_POST['contact_number'] ?? ''));
+        $address = trim((string) ($_POST['address'] ?? ''));
+        $oldPassword = (string) ($_POST['old_password'] ?? '');
+        $newPassword = (string) ($_POST['new_password'] ?? '');
+        $confirmPassword = (string) ($_POST['confirm_password'] ?? '');
+        $postedSpecialties = app_is_technician_role($role)
+            ? app_normalize_specialties($_POST['specialties'] ?? [])
+            : null;
+        $passwordChangeRequested = $oldPassword !== '' || $newPassword !== '' || $confirmPassword !== '';
+
+        if ($firstName === '') {
+            header('Location: ' . app_url($path, ['error' => 'first_name']));
+            exit;
+        }
+
+        if ($lastName === '') {
+            header('Location: ' . app_url($path, ['error' => 'last_name']));
+            exit;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            header('Location: ' . app_url($path, ['error' => 'email']));
+            exit;
+        }
+
+        if ($contactNumber === '' || !preg_match('/^[0-9+\-()\s]{7,20}$/', $contactNumber)) {
+            header('Location: ' . app_url($path, ['error' => 'contact_number']));
+            exit;
+        }
+
+        if ($address === '') {
+            header('Location: ' . app_url($path, ['error' => 'address']));
+            exit;
+        }
+
+        if ($passwordChangeRequested) {
+            if ($oldPassword === '') {
+                header('Location: ' . app_url($path, ['error' => 'old_password_required']));
+                exit;
+            }
+
+            if (!app_verify_old_password($role, $oldPassword)) {
+                header('Location: ' . app_url($path, ['error' => 'old_password_incorrect']));
+                exit;
+            }
+
+            if (strlen($newPassword) < 8) {
+                header('Location: ' . app_url($path, ['error' => 'password_length']));
+                exit;
+            }
+
+            if ($newPassword !== $confirmPassword) {
+                header('Location: ' . app_url($path, ['error' => 'password_mismatch']));
+                exit;
+            }
+        }
+
+        app_update_user_profile(
+            $role,
+            $firstName,
+            $lastName,
+            $email,
+            $contactNumber,
+            $address,
+            $newPassword !== '' ? $newPassword : null,
+            $postedSpecialties
+        );
+        header('Location: ' . app_url($path, ['updated' => 1]));
+        exit;
+    }
 }
 
 if ($path === '/client') {
@@ -109,16 +185,20 @@ $routes = [
     '/admin/materials' => __DIR__ . '/pages/admin/materials.php',
     '/admin/users' => __DIR__ . '/pages/admin/users.php',
     '/admin/chat' => __DIR__ . '/pages/admin/chat.php',
+    '/admin/profile' => __DIR__ . '/pages/profile.php',
     '/tech/schedule' => __DIR__ . '/pages/tech/schedule.php',
     '/tech/projects' => __DIR__ . '/pages/tech/projects.php',
     '/tech/project' => __DIR__ . '/pages/tech/project.php',
     '/tech/reports' => __DIR__ . '/pages/tech/reports.php',
     '/tech/attendance' => __DIR__ . '/pages/tech/attendance.php',
+    '/tech/profile' => __DIR__ . '/pages/profile.php',
+    '/client/profile' => __DIR__ . '/pages/profile.php',
     '/lead-technician/schedule' => __DIR__ . '/pages/lead-technician/schedule.php',
     '/lead-technician/projects' => __DIR__ . '/pages/lead-technician/projects.php',
     '/lead-technician/project' => __DIR__ . '/pages/lead-technician/project.php',
     '/lead-technician/reports' => __DIR__ . '/pages/lead-technician/reports.php',
     '/lead-technician/attendance' => __DIR__ . '/pages/lead-technician/attendance.php',
+    '/lead-technician/profile' => __DIR__ . '/pages/profile.php',
 ];
 
 if (isset($routes[$path])) {

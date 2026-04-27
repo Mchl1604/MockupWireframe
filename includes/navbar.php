@@ -2,16 +2,12 @@
 $baseUrl = $baseUrl ?? '';
 $requestPath = app_current_path();
 $segments = explode('/', trim($requestPath, '/'));
-$sidebarRole = in_array($segments[0] ?? '', ['admin', 'client', 'tech', 'lead-technician'], true) ? $segments[0] : '';
+$sidebarRole = app_is_panel_role($segments[0] ?? '') ? $segments[0] : '';
 
-$panelUserByRole = [
-    'admin' => 'Michael Capanayan',
-    'client' => 'Juan Dela Cruz',
-    'tech' => 'Carlos Reyes',
-    'lead-technician' => 'Mark Santos',
-];
-$panelUserName = $panelUserByRole[$sidebarRole] ?? 'User';
-$panelRoleLabel = $sidebarRole === 'lead-technician' ? 'Lead Technician' : ucfirst($sidebarRole);
+$panelProfile = $sidebarRole !== '' ? app_get_user_profile($sidebarRole) : ['name' => 'User', 'email' => 'user@coliconstruct.local'];
+$panelUserName = $panelProfile['name'];
+$panelRoleLabel = app_role_label($sidebarRole);
+$panelEmail = $panelProfile['email'];
 $isHomePage = $requestPath === '/';
 $isAboutPage = $requestPath === '/about';
 $isServicesPage = $requestPath === '/services';
@@ -30,9 +26,27 @@ $isServicesPage = $requestPath === '/services';
             <?php endif; ?>
         </div>
         <?php if ($sidebarRole !== ''): ?>
-        <div class="ms-auto panel-user-card">
-            <div class="panel-user-name"><?php echo htmlspecialchars($panelUserName, ENT_QUOTES, 'UTF-8'); ?></div>
-            <div class="panel-user-role"><?php echo htmlspecialchars($panelRoleLabel, ENT_QUOTES, 'UTF-8'); ?></div>
+        <div class="ms-auto dropdown panel-user-dropdown">
+            <button class="btn panel-user-toggle dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="panel-user-identity">
+                    <div class="panel-user-name"><?php echo htmlspecialchars($panelUserName, ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="panel-user-role"><?php echo htmlspecialchars($panelRoleLabel, ENT_QUOTES, 'UTF-8'); ?></div>
+                </div>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm mt-2">
+                <li class="px-3 py-2">
+                    <div class="fw-semibold small"><?php echo htmlspecialchars($panelUserName, ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="text-muted small"><?php echo htmlspecialchars($panelRoleLabel, ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="text-muted small"><?php echo htmlspecialchars($panelEmail, ENT_QUOTES, 'UTF-8'); ?></div>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item" href="<?php echo htmlspecialchars(app_url('/' . $sidebarRole . '/profile'), ENT_QUOTES, 'UTF-8'); ?>">
+                        <i class="bi bi-person me-2"></i>Edit Profile
+                    </a>
+                </li>
+                
+            </ul>
         </div>
         <?php else: ?>
         <div class="ms-auto d-flex gap-2 flex-wrap justify-content-end">
