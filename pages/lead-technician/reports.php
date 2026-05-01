@@ -74,6 +74,7 @@ $reportsList = [
                                             <tr>
                                                 <th>Material</th>
                                                 <th style="width: 120px;">Quantity</th>
+                                                <th style="width: 100px;">Unit</th>
                                                 <th style="width: 70px;">Action</th>
                                             </tr>
                                         </thead>
@@ -81,6 +82,7 @@ $reportsList = [
                                             <tr>
                                                 <td><input type="text" class="form-control form-control-sm" name="assessment_material_name[]" disabled></td>
                                                 <td><input type="number" class="form-control form-control-sm" min="1" step="1" name="assessment_material_qty[]" disabled></td>
+                                                <td><input type="text" class="form-control form-control-sm" name="assessment_material_unit[]" disabled></td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-sm btn-outline-danger material-remove" title="Remove row">
                                                         <i class="bi bi-trash"></i>
@@ -346,6 +348,7 @@ document.addEventListener('DOMContentLoaded', function () {
         row.innerHTML = ''
             + '<td><input type="text" class="form-control form-control-sm" name="assessment_material_name[]"></td>'
             + '<td><input type="number" class="form-control form-control-sm" min="1" step="1" name="assessment_material_qty[]"></td>'
+            + '<td><input type="text" class="form-control form-control-sm" name="assessment_material_unit[]"></td>'
             + '<td class="text-center">'
             + '    <button type="button" class="btn btn-sm btn-outline-danger material-remove" title="Remove row">'
             + '        <i class="bi bi-trash"></i>'

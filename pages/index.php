@@ -1,6 +1,6 @@
 <?php $pageTitle = 'Home'; ?>
 <?php include __DIR__ . '/../includes/head.php'; ?>
-<body>
+<body class="home-page">
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
 <section class="hero-section text-white py-5">

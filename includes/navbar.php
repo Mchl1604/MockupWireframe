@@ -14,17 +14,11 @@ $isServicesPage = $requestPath === '/services';
 ?>
 <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top app-navbar">
     <div class="container-fluid px-3 px-lg-4 d-flex align-items-center">
-        <div class="d-flex align-items-center gap-2">
-            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold mb-0" href="<?php echo htmlspecialchars(app_url('/'), ENT_QUOTES, 'UTF-8'); ?>">
-                <img src="<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/coliconstruct-logo.svg', ENT_QUOTES, 'UTF-8'); ?>" alt="Coliconstruct" class="app-logo-sm">
-                <span class="app-brand-text">Coliconstruct</span>
-            </a>
-            <?php if ($sidebarRole !== ''): ?>
-            <button type="button" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center justify-content-center" id="sidebarToggle" aria-label="Toggle sidebar">
-                <i class="bi bi-list fs-5"></i>
-            </button>
-            <?php endif; ?>
-        </div>
+        <?php if ($sidebarRole !== ''): ?>
+        <button type="button" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center justify-content-center me-3" id="sidebarToggle" aria-label="Toggle sidebar">
+            <i class="bi bi-list fs-5"></i>
+        </button>
+        <?php endif; ?>
         <?php if ($sidebarRole !== ''): ?>
         <div class="ms-auto dropdown panel-user-dropdown">
             <button class="btn panel-user-toggle dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

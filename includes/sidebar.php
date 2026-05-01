@@ -43,8 +43,12 @@ $currentPage = $requestPath;
 ?>
 <aside class="sidebar" id="sidebar" aria-label="<?php echo htmlspecialchars($roleLabel, ENT_QUOTES, 'UTF-8'); ?> navigation">
 
+    <a class="sidebar-brand text-decoration-none" href="<?php echo htmlspecialchars(app_url('/'), ENT_QUOTES, 'UTF-8'); ?>">
+        <img src="<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/coliconstruct-logo.svg', ENT_QUOTES, 'UTF-8'); ?>" alt="Coliconstruct" class="app-logo-sm sidebar-brand-logo">
+        <span class="sidebar-brand-text fw-bold">Coliconstruct</span>
+    </a>
 
-    <div class="p-3 sidebar-nav-wrap">
+    <div class="px-3 pb-3 sidebar-nav-wrap">
         <div class="text-uppercase small text-white-50 fw-semibold mb-2 sidebar-section-title">Navigation</div>
         <nav class="nav flex-column gap-1">
             <?php foreach ($sidebarMenus[$sidebarRole] as $item): ?>

@@ -485,9 +485,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const viewTaskDetails = document.getElementById('viewTaskDetails');
 
     const tasks = [
-        { title: 'Deliver copper piping set', status: 'Incomplete', dateCreated: 'Apr 10, 2026', dueDate: 'Apr 21, 2026', details: 'Deliver copper piping materials to the site and verify quantities before installation.' },
-        { title: 'Check installation points', status: 'Incomplete', dateCreated: 'Apr 10, 2026', dueDate: 'Apr 22, 2026', details: 'Inspect and confirm all indoor and outdoor unit mounting points based on layout plan.' },
-        { title: 'Confirm retrofit layout', status: 'Incomplete', dateCreated: 'Apr 14, 2026', dueDate: 'Apr 24, 2026', details: 'Finalize retrofit layout with lead technician and mark revisions on site plan.' }
+        { title: 'Deliver copper piping set', status: 'Incomplete', dateStarted: 'Apr 15, 2026', dueDate: 'Apr 21, 2026', details: 'Deliver copper piping materials to the site and verify quantities before installation.' },
+        { title: 'Check installation points', status: 'Incomplete', dateStarted: 'Apr 17, 2026', dueDate: 'Apr 22, 2026', details: 'Inspect and confirm all indoor and outdoor unit mounting points based on layout plan.' },
+        { title: 'Confirm retrofit layout', status: 'Incomplete', dateStarted: 'Apr 20, 2026', dueDate: 'Apr 24, 2026', details: 'Finalize retrofit layout with lead technician and mark revisions on site plan.' }
     ];
 
     if (isCompletedProject) {
@@ -518,7 +518,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return '<tr>'
                 + '<td class="small">' + escapeHtml(task.title) + '</td>'
                 + '<td><span class="badge ' + taskStatusClass(task.status) + '">' + escapeHtml(task.status) + '</span></td>'
-                + '<td class="small">' + escapeHtml(task.dateCreated) + '</td>'
+                + '<td class="small">' + escapeHtml(task.dateStarted || '-') + '</td>'
                 + '<td class="small">' + escapeHtml(task.dueDate || '-') + '</td>'
                 + '<td class="text-start">'
                 + '<button type="button" class="btn btn-sm btn-outline-primary view-task-btn me-1" data-task-index="' + index + '" data-bs-toggle="modal" data-bs-target="#viewTaskModal" title="View Details" aria-label="View Details"><i class="bi bi-eye"></i></button>'
@@ -543,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const task = tasks[taskIndex];
                     if (viewTaskTitle) viewTaskTitle.textContent = task.title || '-';
                     if (viewTaskStatus) viewTaskStatus.textContent = task.status || '-';
-                    if (viewTaskDateCreated) viewTaskDateCreated.textContent = task.dateCreated || '-';
+                    if (viewTaskDateCreated) viewTaskDateCreated.textContent = task.dateStarted || '-';
                     if (viewTaskDueDate) viewTaskDueDate.textContent = task.dueDate || '-';
                     if (viewTaskDetails) viewTaskDetails.textContent = task.details || 'No additional details available.';
                 }

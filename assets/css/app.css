@@ -153,19 +153,47 @@
     color: #0f52ba !important;
 }
 
+/* ---- Home navbar ---- */
+body.home-page .app-navbar {
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+}
+
 /* ---- Sidebar ---- */
 .sidebar {
     position: fixed;
-    top: var(--topbar-height);
+    top: 0;
     left: 0;
     width: var(--sidebar-width);
-    height: calc(100vh - var(--topbar-height));
+    height: 100vh;
     background: var(--sidebar-bg);
     z-index: 1050;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     transition: transform 0.25s ease;
+}
+
+.sidebar-brand {
+    min-height: 56px;
+    padding: 1rem 1rem 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #fff;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+    flex-shrink: 0;
+}
+
+.sidebar-brand:hover,
+.sidebar-brand:focus {
+    color: #fff;
+}
+
+.sidebar-brand-logo {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
 }
 
 .sidebar.sidebar-collapsed {
@@ -179,7 +207,7 @@
 .sidebar-overlay {
     display: none;
     position: fixed;
-    inset: var(--topbar-height) 0 0 0;
+    inset: 0;
     background: rgba(0,0,0,0.4);
     z-index: 1040;
 }
@@ -244,6 +272,7 @@
 .sidebar.sidebar-collapsed .sidebar-brand {
     padding-left: 0.75rem !important;
     padding-right: 0.75rem !important;
+    justify-content: center;
 }
 
 .sidebar.sidebar-collapsed .sidebar-brand-text,
@@ -269,6 +298,16 @@
 .sidebar.sidebar-collapsed .sidebar-nav-wrap {
     padding-left: 0.5rem !important;
     padding-right: 0.5rem !important;
+}
+
+body.dashboard-body .app-navbar {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
+
+body.dashboard-body.sidebar-collapsed .app-navbar {
+    margin-left: 84px;
+    width: calc(100% - 84px);
 }
 
 .avatar-sm {
@@ -665,6 +704,11 @@ body.dashboard-body.sidebar-collapsed > footer {
 
     .dashboard-main {
         margin-left: 0;
+    }
+
+    .app-navbar {
+        margin-left: 0;
+        width: 100%;
     }
 
     body.dashboard-body > main,

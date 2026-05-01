@@ -116,7 +116,8 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
                                             <th style="width:80px;">Qty</th>
                                             <th style="width:90px;">Unit</th>
                                             <th class="text-end" style="width:120px;">Unit Cost</th>
-                                            <th class="text-end" style="width:80px;">Action</th>
+                                            <th class="text-start" style="width:120px;">Total Cost</th>
+                                            <th class="text-start" style="width:80px;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="qd-materials"></tbody>
@@ -207,7 +208,8 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
                                                 <th style="width: 80px;">Qty</th>
                                                 <th style="width: 90px;">Unit</th>
                                                 <th style="width: 120px;">Unit Cost</th>
-                                                <th class="text-end" style="width: 80px;">Action</th>
+                                                <th style="width: 120px;">Total Cost</th>
+                                                <th class="text-start" style="width: 80px;">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody id="materialsRows"></tbody>
@@ -288,33 +290,48 @@ document.addEventListener('DOMContentLoaded', function () {
             if (isDraft) {
                 materialsBody.innerHTML = '';
             } else {
-                materialsBody.innerHTML = '<tr><td colspan="5" class="small text-muted">No materials listed.</td></tr>';
+                materialsBody.innerHTML = '<tr><td colspan="6" class="small text-muted">No materials listed.</td></tr>';
             }
             return;
         }
 
         if (isDraft) {
             materialsBody.innerHTML = materials.map(function (item) {
+                const totalCost = Number(item.qty || 0) * Number(item.unitCost || 0);
                 return '<tr>' +
                     '<td><input type="text" class="form-control form-control-sm qd-material-name" value="' + (item.name || '') + '"></td>' +
                     '<td><input type="number" class="form-control form-control-sm qd-material-qty" min="1" step="1" value="' + Number(item.qty || 1) + '"></td>' +
-                    '<td><input type="text" class="form-control form-control-sm qd-material-unit" value="' + (item.unit || '') + '"></td>' +
-                    '<td><input type="number" class="form-control form-control-sm text-end qd-material-cost" min="0" step="0.01" value="' + Number(item.unitCost || 0) + '"></td>' +
-                    '<td class="text-end"><button type="button" class="btn btn-outline-danger btn-sm" data-qd-remove-material><i class="bi bi-trash"></i></button></td>' +
+                    '<td><input type="text" class="form-control form-control-sm qd-material-unit" value="' + (item.unit || '') + '" readonly tabindex="-1"></td>' +
+                    '<td><input type="number" class="form-control form-control-sm text-end qd-material-cost" min="0" step="0.01" value="' + Number(item.unitCost || 0) + '" readonly tabindex="-1"></td>' +
+                    '<td><input type="text" class="form-control form-control-sm text-start qd-material-total" value="' + formatCurrency(totalCost) + '" readonly tabindex="-1"></td>' +
+                    '<td class="text-start"><button type="button" class="btn btn-outline-danger btn-sm" data-qd-remove-material><i class="bi bi-trash"></i></button></td>' +
                     '</tr>';
             }).join('');
             return;
         }
 
         materialsBody.innerHTML = materials.map(function (item) {
+            const totalCost = Number(item.qty || 0) * Number(item.unitCost || 0);
             return '<tr>' +
                 '<td class="small">' + (item.name || '') + '</td>' +
                 '<td class="small">' + (item.qty || '') + '</td>' +
                 '<td class="small">' + (item.unit || '') + '</td>' +
                 '<td class="small text-end">₱' + Number(item.unitCost || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
+                '<td class="small text-start">₱' + totalCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
                 '<td></td>' +
                 '</tr>';
         }).join('');
+    }
+
+    function updateDraftMaterialTotal(row) {
+        if (!row) return;
+        const qtyEl = row.querySelector('.qd-material-qty');
+        const costEl = row.querySelector('.qd-material-cost');
+        const totalEl = row.querySelector('.qd-material-total');
+        if (!qtyEl || !costEl || !totalEl) return;
+
+        const total = Number(qtyEl.value || 0) * Number(costEl.value || 0);
+        totalEl.value = formatCurrency(total);
     }
 
     function addDraftMaterialRow() {
@@ -328,8 +345,10 @@ document.addEventListener('DOMContentLoaded', function () {
             '<td><input type="number" class="form-control form-control-sm qd-material-qty" min="1" step="1" value="1"></td>' +
             '<td><input type="text" class="form-control form-control-sm qd-material-unit" placeholder="pc"></td>' +
             '<td><input type="number" class="form-control form-control-sm text-end qd-material-cost" min="0" step="0.01" value="0"></td>' +
+            '<td><input type="text" class="form-control form-control-sm text-end qd-material-total" value="' + formatCurrency(0) + '" readonly tabindex="-1"></td>' +
             '<td class="text-end"><button type="button" class="btn btn-outline-danger btn-sm" data-qd-remove-material><i class="bi bi-trash"></i></button></td>';
         materialsBody.appendChild(row);
+        updateDraftMaterialTotal(row);
     }
 
     function syncActiveRow() {
@@ -374,9 +393,10 @@ document.addEventListener('DOMContentLoaded', function () {
         tr.innerHTML = '' +
             '<td><input type="text" class="form-control form-control-sm" placeholder="Material name"></td>' +
             '<td><input type="number" class="form-control form-control-sm" min="1" step="1" value="1"></td>' +
-            '<td><input type="text" class="form-control form-control-sm" placeholder="pc"></td>' +
-            '<td><input type="number" class="form-control form-control-sm" min="0" step="0.01" placeholder="0.00"></td>' +
-            '<td class="text-end"><button type="button" class="btn btn-outline-danger btn-sm" data-remove-row><i class="bi bi-trash"></i></button></td>';
+            '<td><input type="text" class="form-control form-control-sm" placeholder="pc" readonly tabindex="-1"></td>' +
+            '<td><input type="number" class="form-control form-control-sm" min="0" step="0.01" placeholder="0.00" readonly tabindex="-1"></td>' +
+            '<td><input type="text" class="form-control form-control-sm text-start" value="' + formatCurrency(0) + '" readonly tabindex="-1"></td>' +
+            '<td class="text-start"><button type="button" class="btn btn-outline-danger btn-sm" data-remove-row><i class="bi bi-trash"></i></button></td>';
         rowsContainer.appendChild(tr);
     }
 
@@ -393,6 +413,16 @@ document.addEventListener('DOMContentLoaded', function () {
             if (rowsContainer.children.length === 0) {
                 createMaterialRow();
             }
+        });
+
+        rowsContainer.addEventListener('input', function (event) {
+            const row = event.target.closest('tr');
+            if (!row) return;
+            const qtyEl = row.querySelector('td:nth-child(2) input');
+            const costEl = row.querySelector('td:nth-child(4) input');
+            const totalEl = row.querySelector('td:nth-child(5) input');
+            if (!qtyEl || !costEl || !totalEl) return;
+            totalEl.value = formatCurrency(Number(qtyEl.value || 0) * Number(costEl.value || 0));
         });
 
         createMaterialRow();
@@ -453,6 +483,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const row = removeBtn.closest('tr');
             if (!row) return;
             row.remove();
+        });
+
+        detailsModalEl.addEventListener('input', function (event) {
+            const row = event.target.closest('tr');
+            if (!row) return;
+            if (!row.querySelector('.qd-material-total')) return;
+            updateDraftMaterialTotal(row);
         });
     }
 

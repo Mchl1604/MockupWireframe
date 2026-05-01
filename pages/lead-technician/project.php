@@ -421,7 +421,7 @@ if ($projectQuotation !== null) {
             </div>
             <div class="modal-body bg-light">
                 <div class="row g-3">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="taskTitle" class="form-label">Task Title</label>
                         <input type="text" id="taskTitle" class="form-control" placeholder="Describe the task">
                     </div>
@@ -559,6 +559,7 @@ if ($projectQuotation !== null) {
                                     <tr>
                                         <th>Material</th>
                                         <th style="width: 120px;">Quantity</th>
+                                        <th style="width: 100px;">Unit</th>
                                         <th style="width: 70px;">Action</th>
                                     </tr>
                                 </thead>
@@ -566,6 +567,7 @@ if ($projectQuotation !== null) {
                                     <tr>
                                         <td><input type="text" class="form-control form-control-sm" name="assessment_material_name[]"></td>
                                         <td><input type="number" class="form-control form-control-sm" min="1" step="1" name="assessment_material_qty[]"></td>
+                                        <td><input type="text" class="form-control form-control-sm" name="assessment_material_unit[]"></td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-sm btn-outline-danger assessment-material-remove" title="Remove row">
                                                 <i class="bi bi-trash"></i>
@@ -849,6 +851,7 @@ document.addEventListener('DOMContentLoaded', function () {
         row.innerHTML = ''
             + '<td><input type="text" class="form-control form-control-sm" name="assessment_material_name[]"></td>'
             + '<td><input type="number" class="form-control form-control-sm" min="1" step="1" name="assessment_material_qty[]"></td>'
+            + '<td><input type="text" class="form-control form-control-sm" name="assessment_material_unit[]"></td>'
             + '<td class="text-center">'
             + '    <button type="button" class="btn btn-sm btn-outline-danger assessment-material-remove" title="Remove row">'
             + '        <i class="bi bi-trash"></i>'
