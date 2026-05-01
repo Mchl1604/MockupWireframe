@@ -118,115 +118,326 @@ $technicians = [
         </div>
     </div>
 </main>
-<!-- Schedule Project Modal -->
+<!-- Schedule Project Modal (Redesigned) -->
 <div class="modal fade" id="scheduleProjectModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Schedule Project</h5>
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content schedule-modal-redesigned">
+            <!-- Modal Header -->
+            <div class="modal-header border-bottom">
+                <div>
+                    <h5 class="modal-title">Schedule Project</h5>
+                    <small class="text-muted">Create and manage project schedules with multiple date ranges</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
+            <!-- Modal Body -->
             <div class="modal-body">
-                <form id="scheduleProjectForm">
-                    <!-- Project ID Dropdown -->
-                    <div class="mb-3">
-                        <label for="projectSelect" class="form-label fw-500">Project ID</label>
-                        <select class="form-select" id="projectSelect" required>
-                            <option value="">-- Select Project --</option>
-                            <?php foreach ($availableProjects as $proj): ?>
-                                <option
-                                    value="<?php echo htmlspecialchars($proj['id'], ENT_QUOTES, 'UTF-8'); ?>"
-                                    data-service="<?php echo htmlspecialchars($proj['service'], ENT_QUOTES, 'UTF-8'); ?>"
-                                    data-phase="<?php echo htmlspecialchars($proj['phase'], ENT_QUOTES, 'UTF-8'); ?>"
-                                    data-required-technicians="<?php echo htmlspecialchars((string) ($proj['requiredTechnicians'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                    data-estimated-days="<?php echo htmlspecialchars((string) ($proj['estimatedDays'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                >
-                                    <?php echo htmlspecialchars($proj['id'] . ' - ' . $proj['name'], ENT_QUOTES, 'UTF-8'); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                        <div id="projectPhaseNote" class="small text-muted mt-2">Select a project to view phase details.</div>
-                    </div>
+                <form id="scheduleProjectForm" class="schedule-form">
+                    <div class="row g-4">
+                        <!-- LEFT COLUMN: Project Information -->
+                        <div class="col-lg-6">
+                           
 
-                    <!-- Assign Technicians -->
-                    <div class="mb-3">
-                        <label for="leadTechnicianSelect" class="form-label fw-500">Lead Technician</label>
-                        <select class="form-select mb-2" id="leadTechnicianSelect" required>
-                            <option value="">-- Select lead technician --</option>
-                        </select>
+                            <!-- Project Selection Card -->
+                            <div class="info-card mb-4">
+                                <label for="projectSelect" class="form-label fw-600 mb-2">
+                                    <i class="bi bi-briefcase me-2"></i>Select Project
+                                </label>
+                                <select class="form-select form-select-lg" id="projectSelect" required>
+                                    <option value="">-- Choose a project --</option>
+                                    <?php foreach ($availableProjects as $proj): ?>
+                                        <option
+                                            value="<?php echo htmlspecialchars($proj['id'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-service="<?php echo htmlspecialchars($proj['service'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-phase="<?php echo htmlspecialchars($proj['phase'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-required-technicians="<?php echo htmlspecialchars((string) ($proj['requiredTechnicians'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-estimated-days="<?php echo htmlspecialchars((string) ($proj['estimatedDays'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                        >
+                                            <?php echo htmlspecialchars($proj['id'] . ' - ' . $proj['name'], ENT_QUOTES, 'UTF-8'); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
 
-                        <label class="form-label fw-500">Assigned Technicians</label>
-                        <ul id="selectedTechniciansList" class="list-group mb-2">
-                            <li class="list-group-item text-muted" id="emptyTechnicianItem">No technicians selected yet.</li>
-                        </ul>
+                            <!-- Project Details Display -->
+                            <div id="projectDetailsDisplay" class="project-details-box mb-4" style="display: none;">
+                                <div class="detail-row mb-2">
+                                    <span class="detail-label">Service Type:</span>
+                                    <span id="detailServiceType" class="detail-value badge bg-info bg-opacity-10 text-info">-</span>
+                                </div>
+                                <div class="detail-row mb-2">
+                                    <span class="detail-label">Phase:</span>
+                                    <span id="detailPhase" class="detail-value badge bg-warning bg-opacity-10 text-warning">-</span>
+                                </div>
+                                <div class="detail-row mb-2">
+                                    <span class="detail-label">Required Technicians:</span>
+                                    <span id="detailRequiredTechs" class="detail-value">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Est. Duration:</span>
+                                    <span id="detailDays" class="detail-value">- days</span>
+                                </div>
+                            </div>
 
-                        <label for="technicianPicker" class="form-label fw-500">Technician List</label>
-                        <select class="form-select" id="technicianPicker">
-                            <option value="">-- Select technician to add --</option>
-                        </select>
-                        <small class="text-muted d-block mt-2">Suggested technicians appear first based on project skills.</small>
-                    </div>
+                            <!-- Technicians Assignment -->
+                            <div class="info-card">
+                                <label class="form-label fw-600 mb-2">
+                                    <i class="bi bi-people me-2"></i>Assign Team
+                                </label>
 
-                    <!-- Start Date -->
-                    <div class="mb-3">
-                        <label for="startDate" class="form-label fw-500">Start Date</label>
-                        <input type="date" class="form-control" id="startDate" required>
-                    </div>
+                                <!-- Lead Technician -->
+                                <label for="leadTechnicianSelect" class="form-label small fw-500 mt-2">Lead Technician</label>
+                                <select class="form-select mb-3" id="leadTechnicianSelect" required>
+                                    <option value="">-- Select lead --</option>
+                                </select>
 
-                    <!-- End Date -->
-                    <div class="mb-3">
-                        <label for="endDate" class="form-label fw-500">End Date</label>
-                        <input type="date" class="form-control" id="endDate" required>
+                                <!-- Selected Technicians List -->
+                                <label class="form-label small fw-500">Team Members</label>
+                                <ul id="selectedTechniciansList" class="tech-list mb-3">
+                                    <li class="text-muted small">No technicians selected yet.</li>
+                                </ul>
+
+                                <!-- Add Technician -->
+                                <label for="technicianPicker" class="form-label small fw-500">Add Technician</label>
+                                <select class="form-select form-select-sm" id="technicianPicker">
+                                    <option value="">-- Select to add --</option>
+                                </select>
+                                <small class="text-muted d-block mt-2">Suitable technicians shown first.</small>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COLUMN: Scheduling -->
+                        <div class="col-lg-6">
+                            <!-- Scheduling Section Header -->
+                            <div class="schedule-section-header mb-3">
+                                <span class="badge bg-success-soft text-success-dark">SCHEDULING</span>
+                                <div class="section-divider"></div>
+                            </div>
+
+                            <!-- Date Ranges Container -->
+                            <div class="date-ranges-container mb-4">
+                                <div id="dateRangesWrapper">
+                                    <!-- Date range cards will be inserted here by JavaScript -->
+                                </div>
+                                <button type="button" class="btn btn-outline-primary btn-sm w-100 mt-3" id="addDateRangeBtn">
+                                    <i class="bi bi-plus-circle me-2"></i>Add Date Range
+                                </button>
+                            </div>
+
+                            <!-- Timeline Visualization -->
+                            <div class="timeline-section mb-4" id="timelineSection" style="display: none;">
+                                <label class="form-label small fw-500 mb-2">
+                                    <i class="bi bi-calendar-event me-2"></i>Timeline Overview
+                                </label>
+                                <div class="timeline-bar">
+                                    <div id="timelineVisualization" class="timeline-segments">
+                                        <!-- Timeline segments will be rendered here -->
+                                    </div>
+                                </div>
+                                <small class="text-muted d-block mt-2">Each segment represents a scheduled date range</small>
+                            </div>
+
+
+                        </div>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="saveSchedule()">Schedule</button>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer border-top">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i>Cancel
+                </button>
+                <button type="button" class="btn btn-primary" onclick="saveSchedule()">
+                    <i class="bi bi-calendar-check me-2"></i>Save Schedule
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Calendar Project Details Modal -->
+<!-- Template for Date Range Card (hidden, used by JavaScript) -->
+<template id="dateRangeTemplate">
+    <div class="date-range-card mb-3">
+        <div class="card card-sm border-start-4 border-start-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <span class="badge bg-primary-soft text-primary-dark me-2">Range</span>
+                    <button type="button" class="btn btn-sm btn-outline-danger remove-range-btn" title="Remove this date range">
+                        <i class="bi bi-trash3"></i>
+                    </button>
+                </div>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <label class="form-label small fw-500">Start Date</label>
+                        <input type="date" class="form-control form-control-sm start-date-input" required>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-500">End Date</label>
+                        <input type="date" class="form-control form-control-sm end-date-input" required>
+                    </div>
+                </div>
+                <small class="text-muted d-block mt-2 duration-display">Duration: - days</small>
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- Template for Detail Date Range Card (hidden, used by JavaScript) -->
+<template id="detailDateRangeTemplate">
+    <div class="date-range-card mb-3">
+        <div class="card card-sm border-start-4 border-start-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <span class="badge bg-primary-soft text-primary-dark me-2">Range</span>
+                    <button type="button" class="btn btn-sm btn-outline-danger detail-remove-range-btn" title="Remove this date range">
+                        <i class="bi bi-trash3"></i>
+                    </button>
+                </div>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <label class="form-label small fw-500">Start Date</label>
+                        <input type="date" class="form-control form-control-sm detail-start-date-input" required>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-500">End Date</label>
+                        <input type="date" class="form-control form-control-sm detail-end-date-input" required>
+                    </div>
+                </div>
+                <small class="text-muted d-block mt-2 detail-duration-display">Duration: - days</small>
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- Calendar Project Details Modal (Redesigned with Two-Column Layout) -->
 <div class="modal fade" id="calendarProjectDetailsModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Scheduled Project Details</h5>
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content schedule-modal-redesigned">
+            <!-- Modal Header -->
+            <div class="modal-header border-bottom">
+                <div>
+                    <h5 class="modal-title">Scheduled Project Details</h5>
+                    <small class="text-muted">View and edit scheduled project information</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
+            <!-- Modal Body -->
             <div class="modal-body">
-                <div class="mb-2"><strong>Project ID:</strong> <span id="detailProjectId">-</span></div>
-                <div class="mb-2"><strong>Project Name:</strong> <span id="detailProjectName">-</span></div>
-                <div class="row g-2 mb-2">
-                    <div class="col-6">
-                        <label for="detailStartDate" class="form-label"><strong>Start Date</strong></label>
-                        <input type="date" class="form-control" id="detailStartDate">
+                <form id="detailScheduleProjectForm" class="schedule-form">
+                    <div class="row g-4">
+                        <!-- LEFT COLUMN: Project Information -->
+                        <div class="col-lg-5">
+                            <!-- Project Info Section Header -->
+                            <div class="schedule-section-header mb-3">
+                                <span class="badge bg-primary-soft text-primary-dark">PROJECT INFO</span>
+                                <div class="section-divider"></div>
+                            </div>
+
+                            <!-- Project Details Card -->
+                            <div class="info-card mb-4">
+                                <div class="detail-row mb-2">
+                                    <span class="detail-label">Project ID:</span>
+                                    <span id="detailProjectId" class="detail-value fw-600">-</span>
+                                </div>
+                                <div class="detail-row mb-3">
+                                    <span class="detail-label">Project Name:</span>
+                                    <span id="detailProjectName" class="detail-value fw-600">-</span>
+                                </div>
+                            </div>
+
+                            <!-- Project Details Display -->
+                            <div id="projectDetailsDisplayDetail" class="project-details-box mb-4" style="display: none;">
+                                <div class="detail-row mb-2">
+                                    <span class="detail-label">Service Type:</span>
+                                    <span id="detailServiceTypeDisplay" class="detail-value badge bg-info bg-opacity-10 text-info">-</span>
+                                </div>
+                                <div class="detail-row mb-2">
+                                    <span class="detail-label">Phase:</span>
+                                    <span id="detailPhaseDisplay" class="detail-value badge bg-warning bg-opacity-10 text-warning">-</span>
+                                </div>
+                                <div class="detail-row mb-2">
+                                    <span class="detail-label">Required Technicians:</span>
+                                    <span id="detailRequiredTechsDisplay" class="detail-value">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Est. Duration:</span>
+                                    <span id="detailDaysDisplay" class="detail-value">- days</span>
+                                </div>
+                            </div>
+
+                            <!-- Technicians Assignment -->
+                            <div class="info-card">
+                                <label class="form-label fw-600 mb-2">
+                                    <i class="bi bi-people me-2"></i>Assign Team
+                                </label>
+
+                                <!-- Lead Technician -->
+                                <label for="detailLeadSelect" class="form-label small fw-500 mt-2">Lead Technician</label>
+                                <select class="form-select mb-3" id="detailLeadSelect" required>
+                                    <option value="">-- Select lead --</option>
+                                </select>
+
+                                <!-- Selected Technicians List -->
+                                <label class="form-label small fw-500">Team Members</label>
+                                <ul id="detailAssignedTechnicians" class="tech-list mb-3">
+                                    <li class="text-muted small">No technicians assigned.</li>
+                                </ul>
+
+                                <!-- Add Technician -->
+                                <label for="detailTechnicianPicker" class="form-label small fw-500">Add Technician</label>
+                                <select class="form-select form-select-sm" id="detailTechnicianPicker">
+                                    <option value="">-- Select to add --</option>
+                                </select>
+                                <small class="text-muted d-block mt-2">Suitable technicians shown first.</small>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COLUMN: Dates -->
+                        <div class="col-lg-7">
+                            <!-- Scheduling Section Header -->
+                            <div class="schedule-section-header mb-3">
+                                <span class="badge bg-success-soft text-success-dark">SCHEDULING</span>
+                                <div class="section-divider"></div>
+                            </div>
+
+                            <!-- Date Ranges Display Container -->
+                            <div id="detailDateRangesWrapper" class="date-ranges-container mb-4">
+                                <!-- Date range cards will be rendered here -->
+                            </div>
+
+                            <!-- Add Date Range Button -->
+                            <button type="button" class="btn btn-sm btn-outline-primary mb-4" id="addDetailDateRangeBtn">
+                                <i class="bi bi-plus-circle me-2"></i>Add Date Range
+                            </button>
+
+                            <!-- Timeline Visualization -->
+                            <div class="timeline-section" id="detailTimelineSection" style="display: none;">
+                                <label class="form-label small fw-500 mb-2">
+                                    <i class="bi bi-calendar-event me-2"></i>Timeline Overview
+                                </label>
+                                <div class="timeline-bar">
+                                    <div id="detailTimelineVisualization" class="timeline-segments">
+                                        <!-- Timeline segments will be rendered here -->
+                                    </div>
+                                </div>
+                                <small class="text-muted d-block mt-2">Current scheduled period</small>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <label for="detailEndDate" class="form-label"><strong>End Date</strong></label>
-                        <input type="date" class="form-control" id="detailEndDate">
-                    </div>
-                </div>
-                <div class="mb-2">
-                    <label for="detailLeadSelect" class="form-label"><strong>Lead Technician</strong></label>
-                    <select class="form-select" id="detailLeadSelect"></select>
-                </div>
-                <div class="mb-2">
-                    <label class="form-label"><strong>Assigned Technicians</strong></label>
-                    <ul class="list-group mb-2" id="detailAssignedTechnicians"></ul>
-                </div>
-                <div class="mb-0">
-                    <label for="detailTechnicianPicker" class="form-label"><strong>Add Technician</strong></label>
-                    <select class="form-select" id="detailTechnicianPicker">
-                        <option value="">-- Select technician to add --</option>
-                    </select>
-                </div>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveDetailChangesBtn">Save Changes</button>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer border-top">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i>Close
+                </button>
+                <button type="button" class="btn btn-primary" id="saveDetailChangesBtn">
+                    <i class="bi bi-calendar-check me-2"></i>Save Changes
+                </button>
             </div>
         </div>
     </div>
@@ -243,27 +454,7 @@ let detailLeadTechnician = '';
 let detailSelectedTechnicians = [];
 
 function renderProjectPhaseNote(project) {
-    const phaseNote = document.getElementById('projectPhaseNote');
-    if (!phaseNote) {
-        return;
-    }
-
-    if (!project) {
-        phaseNote.innerHTML = 'Select a project to view phase details.';
-        return;
-    }
-
-    const phase = String(project.phase || 'Assessment');
-    if (phase !== 'Project Execution') {
-        phaseNote.innerHTML = '<strong>Phase:</strong> ' + phase;
-        return;
-    }
-
-    const requiredTechnicians = Number(project.requiredTechnicians) || 3;
-    const estimatedDays = Number(project.estimatedDays) || 3;
-    phaseNote.innerHTML = '<strong>Phase:</strong> Project Execution<br>'
-        + '<strong>Required Technician:</strong> ' + requiredTechnicians + '<br>'
-        + '<strong>Estimated Working Days:</strong> ' + estimatedDays;
+    // Deprecated: phase note display removed - details shown in project details box
 }
 
 function dayToDateValue(day) {
@@ -412,14 +603,58 @@ function openCalendarProjectDetails(projectId) {
 
     document.getElementById('detailProjectId').textContent = schedule.projectId;
     document.getElementById('detailProjectName').textContent = schedule.projectName;
-    document.getElementById('detailStartDate').value = dayToDateValue(schedule.startDate);
-    document.getElementById('detailEndDate').value = dayToDateValue(schedule.endDate);
+
+    // Store schedule for loading into date ranges after modal opens
+    pendingDetailSchedule = schedule;
+
+    // Populate project details display
+    const project = availableProjects.find(p => p.id === schedule.projectId);
+    if (project) {
+        document.getElementById('detailServiceTypeDisplay').textContent = project.service || 'N/A';
+        document.getElementById('detailPhaseDisplay').textContent = project.phase || 'Assessment';
+        document.getElementById('detailRequiredTechsDisplay').textContent = (project.requiredTechnicians || '-');
+        document.getElementById('detailDaysDisplay').textContent = (project.estimatedDays || '-') + ' days';
+        document.getElementById('projectDetailsDisplayDetail').style.display = 'block';
+    }
 
     buildDetailLeadDropdown(schedule.projectId);
     renderDetailAssignedTechnicians();
     buildDetailTechnicianPicker(schedule.projectId);
 
     bootstrap.Modal.getOrCreateInstance(document.getElementById('calendarProjectDetailsModal')).show();
+}
+
+/**
+ * Update duration display for detail modal
+ */
+function updateDetailDurationDisplay() {
+    const startDate = document.getElementById('detailStartDate').value;
+    const endDate = document.getElementById('detailEndDate').value;
+    const durationDisplay = document.getElementById('detailDurationDisplay');
+
+    if (!startDate || !endDate) {
+        durationDisplay.textContent = 'Duration: - days';
+        return;
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    if (isNaN(start) || isNaN(end)) {
+        durationDisplay.textContent = 'Duration: - days';
+        return;
+    }
+
+    if (start > end) {
+        durationDisplay.textContent = 'Duration: Invalid range';
+        durationDisplay.style.color = '#ef4444';
+        return;
+    }
+
+    const diffTime = end.getTime() - start.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    durationDisplay.textContent = `Duration: ${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+    durationDisplay.style.color = '#6b7280';
 }
 
 document.getElementById('detailLeadSelect').addEventListener('change', function () {
@@ -464,8 +699,15 @@ document.getElementById('saveDetailChangesBtn').addEventListener('click', functi
         return;
     }
 
-    const startDay = dateValueToDay(document.getElementById('detailStartDate').value);
-    const endDay = dateValueToDay(document.getElementById('detailEndDate').value);
+    // Get dates from the first date range
+    if (detailDateRanges.length === 0) {
+        alert('Please add at least one date range.');
+        return;
+    }
+
+    const firstRange = detailDateRanges[0];
+    const startDay = dateValueToDay(firstRange.startInput.value);
+    const endDay = dateValueToDay(firstRange.endInput.value);
 
     if (!detailLeadTechnician || detailSelectedTechnicians.length === 0 || Number.isNaN(startDay) || Number.isNaN(endDay)) {
         alert('Please set start/end dates and assign technicians including a lead.');
@@ -484,6 +726,180 @@ document.getElementById('saveDetailChangesBtn').addEventListener('click', functi
 
     renderCalendarFromData();
     bootstrap.Modal.getOrCreateInstance(document.getElementById('calendarProjectDetailsModal')).hide();
+});
+
+// ========================================================
+// Detail Modal - Multiple Date Ranges & Timeline
+// ========================================================
+
+let detailDateRanges = [];
+let pendingDetailSchedule = null;
+
+// Initialize the detail modal when it opens
+const calendarProjectDetailsModal = document.getElementById('calendarProjectDetailsModal');
+if (calendarProjectDetailsModal) {
+    calendarProjectDetailsModal.addEventListener('show.bs.modal', function() {
+        // Reset detail date ranges
+        detailDateRanges = [];
+        const wrapper = document.getElementById('detailDateRangesWrapper');
+        if (wrapper) wrapper.innerHTML = '';
+        
+        // Add first date range
+        addNewDetailDateRange();
+        
+        // If there's a pending schedule to load, populate the first range with its dates
+        if (pendingDetailSchedule) {
+            setTimeout(() => {
+                if (detailDateRanges.length > 0) {
+                    const firstRange = detailDateRanges[0];
+                    firstRange.startInput.value = dayToDateValue(pendingDetailSchedule.startDate);
+                    firstRange.endInput.value = dayToDateValue(pendingDetailSchedule.endDate);
+                    updateDetailRangeDurationDisplay(firstRange.id);
+                    updateDetailTimelineVisualization();
+                }
+                pendingDetailSchedule = null;
+            }, 0);
+        }
+    });
+}
+
+/**
+ * Add a new date range card to the detail modal
+ */
+function addNewDetailDateRange() {
+    const template = document.getElementById('detailDateRangeTemplate');
+    if (!template) return;
+
+    const clone = template.content.cloneNode(true);
+    const wrapper = document.getElementById('detailDateRangesWrapper');
+    if (!wrapper) return;
+
+    // Create a unique ID for this date range
+    const rangeId = 'detail-range-' + Date.now() + '-' + Math.random();
+    const rangeCard = clone.querySelector('.date-range-card');
+    rangeCard.id = rangeId;
+    rangeCard.dataset.rangeId = rangeId;
+
+    // Get input elements from the cloned template
+    const startInput = clone.querySelector('.detail-start-date-input');
+    const endInput = clone.querySelector('.detail-end-date-input');
+    const removeBtn = clone.querySelector('.detail-remove-range-btn');
+    const durationDisplay = clone.querySelector('.detail-duration-display');
+
+    // Add event listeners for date inputs
+    startInput.addEventListener('change', function() {
+        updateDetailRangeDurationDisplay(rangeId);
+        updateDetailTimelineVisualization();
+    });
+
+    endInput.addEventListener('change', function() {
+        updateDetailRangeDurationDisplay(rangeId);
+        updateDetailTimelineVisualization();
+    });
+
+    // Remove button handler
+    removeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        removeDetailDateRange(rangeId);
+    });
+
+    wrapper.appendChild(clone);
+    detailDateRanges.push({ id: rangeId, startInput, endInput, durationDisplay });
+    updateDetailTimelineVisualization();
+}
+
+/**
+ * Remove a date range card from the detail modal
+ */
+function removeDetailDateRange(rangeId) {
+    const rangeCard = document.getElementById(rangeId);
+    if (rangeCard) {
+        rangeCard.remove();
+    }
+    detailDateRanges = detailDateRanges.filter(range => range.id !== rangeId);
+    
+    // If no ranges left, add one back
+    if (detailDateRanges.length === 0) {
+        addNewDetailDateRange();
+    } else {
+        updateDetailTimelineVisualization();
+    }
+}
+
+/**
+ * Update duration display for a specific detail date range
+ */
+function updateDetailRangeDurationDisplay(rangeId) {
+    const range = detailDateRanges.find(r => r.id === rangeId);
+    if (!range) return;
+
+    const startDate = range.startInput.value;
+    const endDate = range.endInput.value;
+    const durationDisplay = range.durationDisplay;
+
+    if (!startDate || !endDate) {
+        durationDisplay.textContent = 'Duration: - days';
+        return;
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    if (isNaN(start) || isNaN(end) || start > end) {
+        durationDisplay.textContent = 'Duration: Invalid range';
+        return;
+    }
+
+    const diffDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+    durationDisplay.textContent = `Duration: ${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+}
+
+/**
+ * Update timeline visualization for detail modal with all date ranges
+ */
+function updateDetailTimelineVisualization() {
+    const timelineSection = document.getElementById('detailTimelineSection');
+    const timelineVisualization = document.getElementById('detailTimelineVisualization');
+
+    if (!timelineSection || !timelineVisualization) return;
+
+    // Collect all valid date ranges
+    const validRanges = detailDateRanges
+        .map(range => ({
+            start: range.startInput.value,
+            end: range.endInput.value
+        }))
+        .filter(range => range.start && range.end && new Date(range.start) <= new Date(range.end));
+
+    // Show/hide timeline section
+    if (validRanges.length === 0) {
+        timelineSection.style.display = 'none';
+        return;
+    }
+
+    timelineSection.style.display = 'block';
+
+    // Generate timeline segments
+    let html = '';
+    validRanges.forEach((range, index) => {
+        const start = new Date(range.start);
+        const end = new Date(range.end);
+        const diffDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+        const segmentClass = `segment-${(index % 5) + 1}`;
+        
+        html += `
+            <div class="timeline-segment ${segmentClass}" title="${range.start} to ${range.end}">
+                <div class="timeline-segment-tooltip">${diffDays} day${diffDays !== 1 ? 's' : ''}</div>
+            </div>
+        `;
+    });
+
+    timelineVisualization.innerHTML = html;
+}
+
+// Add Date Range button event listener
+document.getElementById('addDetailDateRangeBtn').addEventListener('click', function() {
+    addNewDetailDateRange();
 });
 
 document.querySelector('.calendar-grid').addEventListener('click', function (event) {
@@ -645,13 +1061,11 @@ document.getElementById('projectSelect').addEventListener('change', function() {
     if (!selectedProject) {
         leadSelect.innerHTML = '<option value="">-- Select lead technician --</option>';
         technicianPicker.innerHTML = '<option value="">-- Select technician to add --</option>';
-        renderProjectPhaseNote(null);
         return;
     }
 
     buildLeadDropdown(selectedProject.service);
     buildTechnicianPicker(selectedProject.service);
-    renderProjectPhaseNote(selectedProject);
 });
 
 function saveSchedule() {
@@ -683,7 +1097,314 @@ function saveSchedule() {
     bootstrap.Modal.getOrCreateInstance(document.getElementById('scheduleProjectModal')).hide();
 }
 
-renderProjectPhaseNote(null);
+// ========================================================
+// Redesigned Schedule Modal - Date Ranges & Timeline
+// ========================================================
+
+// Store for multiple date ranges
+let dateRanges = [];
+let selectedProjectForModal = null;
+
+// Initialize the modal when it opens
+const scheduleProjectModal = document.getElementById('scheduleProjectModal');
+if (scheduleProjectModal) {
+    scheduleProjectModal.addEventListener('show.bs.modal', function() {
+        // Reset state when modal opens
+        dateRanges = [];
+        selectedProjectForModal = null;
+        document.getElementById('projectSelect').value = '';
+        addNewDateRange();
+        renderProjectDetails(null);
+        updateTimelineVisualization();
+    });
+}
+
+/**
+ * Add a new date range card
+ */
+function addNewDateRange() {
+    const template = document.getElementById('dateRangeTemplate');
+    if (!template) return;
+
+    const clone = template.content.cloneNode(true);
+    const wrapper = document.getElementById('dateRangesWrapper');
+    if (!wrapper) return;
+
+    // Create a unique ID for this date range
+    const rangeId = 'range-' + Date.now() + '-' + Math.random();
+    const rangeCard = clone.querySelector('.date-range-card');
+    rangeCard.id = rangeId;
+    rangeCard.dataset.rangeId = rangeId;
+
+    // Get input elements from the cloned template
+    const startInput = clone.querySelector('.start-date-input');
+    const endInput = clone.querySelector('.end-date-input');
+    const removeBtn = clone.querySelector('.remove-range-btn');
+    const durationDisplay = clone.querySelector('.duration-display');
+
+    // Add event listeners for date inputs
+    startInput.addEventListener('change', function() {
+        updateDurationDisplay(rangeId);
+        updateTimelineVisualization();
+    });
+
+    endInput.addEventListener('change', function() {
+        updateDurationDisplay(rangeId);
+        updateTimelineVisualization();
+    });
+
+    // Remove button handler
+    removeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        removeDateRange(rangeId);
+    });
+
+    wrapper.appendChild(clone);
+    dateRanges.push({ id: rangeId, startInput, endInput, durationDisplay });
+    updateTimelineVisualization();
+}
+
+/**
+ * Remove a date range card
+ */
+function removeDateRange(rangeId) {
+    const card = document.getElementById(rangeId);
+    if (card) {
+        card.remove();
+    }
+    
+    dateRanges = dateRanges.filter(range => range.id !== rangeId);
+    
+    // Ensure at least one date range exists
+    if (dateRanges.length === 0) {
+        addNewDateRange();
+    } else {
+        updateTimelineVisualization();
+    }
+}
+
+/**
+ * Update duration display for a specific date range
+ */
+function updateDurationDisplay(rangeId) {
+    const range = dateRanges.find(r => r.id === rangeId);
+    if (!range) return;
+
+    const startDate = range.startInput.value;
+    const endDate = range.endInput.value;
+
+    if (!startDate || !endDate) {
+        range.durationDisplay.textContent = 'Duration: - days';
+        return;
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    if (isNaN(start) || isNaN(end)) {
+        range.durationDisplay.textContent = 'Duration: - days';
+        return;
+    }
+
+    if (start > end) {
+        range.durationDisplay.textContent = 'Duration: Invalid range';
+        range.durationDisplay.style.color = '#ef4444';
+        return;
+    }
+
+    const diffTime = end.getTime() - start.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    range.durationDisplay.textContent = `Duration: ${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+    range.durationDisplay.style.color = '#6b7280';
+}
+
+/**
+ * Update timeline visualization based on date ranges
+ */
+function updateTimelineVisualization() {
+    const timelineSection = document.getElementById('timelineSection');
+    const timelineVisualization = document.getElementById('timelineVisualization');
+
+    if (!timelineSection || !timelineVisualization) return;
+
+    // Collect all valid date ranges
+    const validRanges = dateRanges
+        .map(range => ({
+            start: range.startInput.value,
+            end: range.endInput.value
+        }))
+        .filter(range => range.start && range.end && new Date(range.start) <= new Date(range.end));
+
+    // Show/hide timeline section
+    if (validRanges.length === 0) {
+        timelineSection.style.display = 'none';
+        return;
+    }
+
+    timelineSection.style.display = 'block';
+
+    // Generate timeline segments
+    let html = '';
+    validRanges.forEach((range, index) => {
+        const start = new Date(range.start);
+        const end = new Date(range.end);
+        const diffDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+        const segmentClass = `segment-${(index % 5) + 1}`;
+        
+        html += `
+            <div class="timeline-segment ${segmentClass}" title="${range.start} to ${range.end}">
+                <div class="timeline-segment-tooltip">${diffDays} day${diffDays !== 1 ? 's' : ''}</div>
+            </div>
+        `;
+    });
+
+    timelineVisualization.innerHTML = html;
+}
+
+/**
+ * Render project details in the left column
+ */
+function renderProjectDetails(projectId) {
+    const detailsDisplay = document.getElementById('projectDetailsDisplay');
+    if (!detailsDisplay) return;
+
+    if (!projectId) {
+        detailsDisplay.style.display = 'none';
+        return;
+    }
+
+    const project = availableProjects.find(p => p.id === projectId);
+    if (!project) {
+        detailsDisplay.style.display = 'none';
+        return;
+    }
+
+    document.getElementById('detailServiceType').textContent = project.service || 'N/A';
+    document.getElementById('detailPhase').textContent = project.phase || 'Assessment';
+    document.getElementById('detailRequiredTechs').textContent = (project.requiredTechnicians || '-');
+    document.getElementById('detailDays').textContent = (project.estimatedDays || '-') + ' days';
+
+    detailsDisplay.style.display = 'block';
+}
+
+/**
+ * Update technician list in modal
+ */
+function updateModalTechniciansList() {
+    const selectedList = document.getElementById('selectedTechniciansList');
+    const leadSelect = document.getElementById('leadTechnicianSelect');
+    
+    if (!selectedList) return;
+
+    if (selectedTechnicians.length === 0) {
+        selectedList.innerHTML = '<li class="text-muted small" style="padding: 0.75rem; background: #f3f4f6; border-radius: 6px;">No technicians selected yet.</li>';
+        return;
+    }
+
+    selectedList.innerHTML = selectedTechnicians.map((name, index) => {
+        const isLead = name === leadTechnician;
+        return `
+            <li class="tech-list-item" style="background: #f3f4f6; padding: 0.75rem; border-radius: 6px; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; color: #374151;">
+                <span>${name}${isLead ? ' <span class="badge bg-primary" style="font-size: 0.7rem; padding: 0.3rem 0.6rem; margin-left: 0.5rem;">Lead</span>' : ''}</span>
+                ${!isLead ? `<button type="button" class="btn btn-sm btn-link text-danger p-0 remove-tech-btn" data-tech-index="${index}" style="text-decoration: none;"><i class="bi bi-trash3"></i></button>` : ''}
+            </li>
+        `;
+    }).join('');
+
+    // Add event listeners to remove buttons
+    document.querySelectorAll('.remove-tech-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-tech-index'));
+            selectedTechnicians.splice(index, 1);
+            updateModalTechniciansList();
+        });
+    });
+}
+
+// Event listeners for project selection in redesigned modal
+document.getElementById('projectSelect').addEventListener('change', function() {
+    const selectedProjectId = this.value;
+    selectedProjectForModal = selectedProjectId;
+
+    selectedTechnicians.length = 0;
+    leadTechnician = '';
+    updateModalTechniciansList();
+    renderProjectDetails(selectedProjectId);
+    
+    if (!selectedProjectId) {
+        document.getElementById('leadTechnicianSelect').innerHTML = '<option value="">-- Select lead --</option>';
+        document.getElementById('technicianPicker').innerHTML = '<option value="">-- Select to add --</option>';
+        return;
+    }
+
+    const project = availableProjects.find(p => p.id === selectedProjectId);
+    if (project) {
+        buildLeadDropdown(project.service);
+        buildTechnicianPicker(project.service);
+    }
+});
+
+// Add date range button
+const addDateRangeBtn = document.getElementById('addDateRangeBtn');
+if (addDateRangeBtn) {
+    addDateRangeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        addNewDateRange();
+    });
+}
+
+// Update technician list display when lead or technicians change
+const originalLeadChangeHandler = document.getElementById('leadTechnicianSelect');
+if (originalLeadChangeHandler) {
+    originalLeadChangeHandler.addEventListener('change', function() {
+        leadTechnician = this.value;
+        const selectedProjectId = document.getElementById('projectSelect').value;
+        const selectedProject = availableProjects.find(p => p.id === selectedProjectId);
+
+        // Reorganize technicians with lead first
+        const others = selectedTechnicians.filter(name => name !== leadTechnician);
+        selectedTechnicians.length = 0;
+        if (leadTechnician) {
+            selectedTechnicians.push(leadTechnician);
+        }
+        others.forEach(name => {
+            if (name !== leadTechnician) {
+                selectedTechnicians.push(name);
+            }
+        });
+        
+        updateModalTechniciansList();
+
+        if (selectedProject) {
+            buildTechnicianPicker(selectedProject.service);
+        }
+    });
+}
+
+// Update technician picker
+const technicianPicker = document.getElementById('technicianPicker');
+if (technicianPicker) {
+    technicianPicker.addEventListener('change', function() {
+        const selectedTech = this.value;
+        if (!selectedTech || selectedTechnicians.includes(selectedTech)) {
+            this.value = '';
+            return;
+        }
+
+        selectedTechnicians.push(selectedTech);
+        updateModalTechniciansList();
+
+        const selectedProjectId = document.getElementById('projectSelect').value;
+        if (selectedProjectId) {
+            const project = availableProjects.find(p => p.id === selectedProjectId);
+            if (project) {
+                buildTechnicianPicker(project.service);
+            }
+        }
+
+        this.value = '';
+    });
+}
 </script>
 
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
