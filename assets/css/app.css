@@ -681,10 +681,51 @@ body.dashboard-body.sidebar-collapsed > footer {
 }
 
 /* ---- Project details ---- */
+.report-tab-progress {
+    color: #2563eb;
+}
+
+.report-tab-incident {
+    color: #dc2626;
+}
+
+.report-tab-progress.active,
+.report-tab-progress:focus,
+.report-tab-progress:hover {
+    color: #1d4ed8;
+    border-color: #93c5fd #93c5fd #fff;
+}
+
+.report-tab-incident.active,
+.report-tab-incident:focus,
+.report-tab-incident:hover {
+    color: #b91c1c;
+    border-color: #fca5a5 #fca5a5 #fff;
+}
+
+.report-section-progress {
+    border-color: #bfdbfe !important;
+    background: linear-gradient(180deg, #eff6ff 0%, #ffffff 100%);
+    box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.08);
+}
+
+.report-section-incident {
+    border-color: #fecaca !important;
+    background: linear-gradient(180deg, #fef2f2 0%, #ffffff 100%);
+    box-shadow: inset 0 0 0 1px rgba(220, 38, 38, 0.08);
+}
+
+.report-section-completion {
+    border-color: #bbf7d0 !important;
+    background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+    box-shadow: inset 0 0 0 1px rgba(22, 163, 74, 0.08);
+}
+
 .report-photo {
     width: 100%;
     height: 140px;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
     background: #f8fafc;
 }
 

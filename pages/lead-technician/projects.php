@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const statusKey = getStatusKey(project.status);
         const badgeClass = statusClassMap[statusKey] || 'text-bg-light';
         const detailsHref = projectDetailsBaseUrl + '&id=' + encodeURIComponent(project.id) + '&status=' + encodeURIComponent(project.status);
-        const canMarkCompleted = statusKey === 'ongoing';
+        const canMarkCompleted = statusKey === 'in progress';
 
         return '<tr>'
             + '<td>' + escapeHtml(project.id) + '</td>'
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
             + '<td>'
             + '<a class="btn btn-sm btn-outline-primary" title="View Details" aria-label="View Details" href="' + detailsHref + '"><i class="bi bi-eye"></i></a>'
             + (canMarkCompleted
-                ? '<button type="button" class="btn btn-sm btn-success ms-2 mark-completed-btn" data-project-id="' + escapeHtml(project.id) + '" data-bs-toggle="modal" data-bs-target="#completionReportModal">Mark as Completed</button>'
+                ? '<button type="button" class="btn btn-sm btn-success ms-2 mark-completed-btn" data-project-id="' + escapeHtml(project.id) + '" data-bs-toggle="modal" data-bs-target="#completionReportModal">Completed</button>'
                 : '')
             + '</td>'
             + '</tr>';

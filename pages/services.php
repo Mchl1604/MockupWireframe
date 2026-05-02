@@ -37,7 +37,7 @@
             [
                 'title' => 'Ducting Fabrication',
                 'desc' => 'Custom-built ducting sections prepared for your building layout and airflow requirements.',
-                'file' => 'assets/img/68263097_2656966464316604_273684301172703232_n.jpg',
+                'file' => 'assets/img/fabrication.jpg',
                 'alt' => 'Team working on outdoor HVAC setup with ducting routes'
             ],
             [

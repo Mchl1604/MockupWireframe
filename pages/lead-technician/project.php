@@ -274,7 +274,7 @@ if ($projectQuotation !== null) {
                 <?php if ($statusKey === 'completed'): ?>
                 <div class="card border-0 shadow-sm mt-3">
                     <div class="card-header bg-white"><strong>Completion Report</strong></div>
-                    <div class="card-body">
+                    <div class="card-body report-section report-section-completion">
                         <?php if ($projectCompletionReport !== null): ?>
                             <div class="mb-2">
                                 <div class="small text-muted">Date</div>
@@ -801,9 +801,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return '<div class="row g-3">' + reportList.map(function (report) {
             const photos = Array.isArray(report.photos) ? report.photos : [];
+            const sectionClass = report.type === 'Progress Report'
+                ? 'report-section-progress'
+                : report.type === 'Incident Report'
+                    ? 'report-section-incident'
+                    : 'report-section-completion';
 
             return '<div class="col-12">'
-                + '<div class="border rounded-3 p-3 bg-white h-100">'
+                + '<div class="border rounded-3 p-3 report-section ' + sectionClass + ' h-100">'
                 + '<div class="mb-2">'
                 + '<div class="small text-muted">Date</div>'
                 + '<div class="fw-bold">' + escapeHtml(report.date) + '</div>'

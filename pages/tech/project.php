@@ -116,7 +116,7 @@ $reportsByProject = [
 ];
 $projectReports = $reportsByProject[$id] ?? [];
 
-if ($statusKey === 'ongoing') {
+if (in_array($statusKey, ['ongoing', 'in progress'], true)) {
     $projectReports = [
         [
             'type' => 'Progress Report',
@@ -326,7 +326,7 @@ if (!preg_match('/\b\d{4}\b/', $projectTimeline)) {
                                 <div class="row g-3">
                                     <?php foreach ($progressReports as $report): ?>
                                         <div class="col-12">
-                                            <div class="border rounded p-3">
+                                            <div class="border rounded p-3 report-section report-section-progress">
                                                 <div class="mb-2">
                                                     <div class="small text-muted">Date</div>
                                                     <div class="fw-bold"><?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
@@ -358,7 +358,7 @@ if (!preg_match('/\b\d{4}\b/', $projectTimeline)) {
                                 <div class="row g-3">
                                     <?php foreach ($incidentReports as $report): ?>
                                         <div class="col-12">
-                                            <div class="border rounded p-3">
+                                            <div class="border rounded p-3 report-section report-section-incident">
                                                 <div class="mb-2">
                                                     <div class="small text-muted">Date</div>
                                                     <div class="fw-bold"><?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>

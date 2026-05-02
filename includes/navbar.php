@@ -14,6 +14,12 @@ $isServicesPage = $requestPath === '/services';
 ?>
 <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top app-navbar">
     <div class="container-fluid px-3 px-lg-4 d-flex align-items-center">
+        <?php if ($isHomePage): ?>
+        <a class="navbar-brand home-navbar-brand d-inline-flex align-items-center gap-2 text-decoration-none me-3" href="<?php echo htmlspecialchars(app_url('/'), ENT_QUOTES, 'UTF-8'); ?>">
+            <img src="<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/coliconstruct-logo.svg', ENT_QUOTES, 'UTF-8'); ?>" alt="Coliconstruct logo" class="app-logo-sm">
+            <span class="fw-bold text-dark">Coliconstruct</span>
+        </a>
+        <?php endif; ?>
         <?php if ($sidebarRole !== ''): ?>
         <button type="button" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center justify-content-center me-3" id="sidebarToggle" aria-label="Toggle sidebar">
             <i class="bi bi-list fs-5"></i>

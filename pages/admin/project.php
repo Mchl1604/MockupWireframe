@@ -203,6 +203,36 @@ if ($minimumTechnicianCount > 0 && count($projectTeam) < $minimumTechnicianCount
 }
 
 $reportsByProject = [
+    'PRJ-1001' => [
+        [
+            'type' => 'Progress Report',
+            'date' => 'Apr 29, 2026',
+            'technician' => 'Tech. Anne Mendoza',
+            'summary' => 'Final ceiling-mounted units were tested, airflow was balanced, and the system passed the operational check.',
+            'photos' => ['imageSample.png', 'imageSample.png'],
+        ],
+        [
+            'type' => 'Progress Report',
+            'date' => 'Apr 24, 2026',
+            'technician' => 'Tech. Lito Ramos',
+            'summary' => 'Copper piping and insulation installation were completed for the remaining line sets.',
+            'photos' => ['imageSample.png'],
+        ],
+        [
+            'type' => 'Progress Report',
+            'date' => 'Apr 22, 2026',
+            'technician' => 'Tech. Carl Dominguez',
+            'summary' => 'Outdoor unit mounting and initial pressure testing were completed without leaks.',
+            'photos' => ['imageSample.png'],
+        ],
+        [
+            'type' => 'Incident Report',
+            'date' => 'Apr 26, 2026',
+            'technician' => 'Tech. John Gonzales',
+            'summary' => 'Minor wiring mismatch was detected during inspection and corrected before energizing the system.',
+            'photos' => ['imageSample.png'],
+        ],
+    ],
     'PRJ-1002' => [
         [
             'type' => 'Progress Report',
@@ -215,9 +245,30 @@ $reportsByProject = [
     'PRJ-1004' => [
         [
             'type' => 'Progress Report',
-            'date' => 'Apr 16, 2026',
+            'date' => 'Apr 22, 2026',
             'technician' => 'Tech. Carl Dominguez',
-            'summary' => 'Two indoor units were mounted and refrigerant lines were pressure-tested. No leaks detected and electrical rough-ins are complete for remaining units.',
+            'summary' => 'Electrical rough-ins were completed for the remaining units and final checks were logged.',
+            'photos' => ['imageSample.png'],
+        ],
+        [
+            'type' => 'Progress Report',
+            'date' => 'Apr 20, 2026',
+            'technician' => 'Tech. Lito Ramos',
+            'summary' => 'Refrigerant line pressure testing passed and insulation wrap was applied to the new runs.',
+            'photos' => ['imageSample.png', 'imageSample.png'],
+        ],
+        [
+            'type' => 'Progress Report',
+            'date' => 'Apr 18, 2026',
+            'technician' => 'Tech. Anne Mendoza',
+            'summary' => 'Indoor unit positions were marked and mounting brackets were secured for installation.',
+            'photos' => ['imageSample.png'],
+        ],
+        [
+            'type' => 'Incident Report',
+            'date' => 'Apr 19, 2026',
+            'technician' => 'Tech. John Gonzales',
+            'summary' => 'A temporary power interruption delayed testing for one zone. The issue was coordinated with site management and work resumed after power was restored.',
             'photos' => ['imageSample.png', 'imageSample.png'],
         ],
     ],
@@ -578,10 +629,10 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
 
             <ul class="nav nav-tabs mb-3" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="progressTab" data-bs-toggle="tab" data-bs-target="#progressReports" type="button" role="tab" aria-controls="progressReports" aria-selected="true">Progress Report</button>
+                    <button class="nav-link report-tab report-tab-progress active" id="progressTab" data-bs-toggle="tab" data-bs-target="#progressReports" type="button" role="tab" aria-controls="progressReports" aria-selected="true">Progress Report</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="incidentTab" data-bs-toggle="tab" data-bs-target="#incidentReports" type="button" role="tab" aria-controls="incidentReports" aria-selected="false">Incident Report</button>
+                    <button class="nav-link report-tab report-tab-incident" id="incidentTab" data-bs-toggle="tab" data-bs-target="#incidentReports" type="button" role="tab" aria-controls="incidentReports" aria-selected="false">Incident Report</button>
                 </li>
             </ul>
             <div class="tab-content">
@@ -590,7 +641,7 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                         <div class="row g-3">
                             <?php foreach ($progressReports as $report): ?>
                                 <div class="col-12">
-                                    <div class="border rounded p-3">
+                                    <div class="border rounded p-3 report-section report-section-progress">
                                         <div class="mb-2">
                                             <div class="small text-muted">Date</div>
                                             <div class="fw-bold"><?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>
@@ -620,7 +671,7 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                         <div class="row g-3">
                             <?php foreach ($incidentReports as $report): ?>
                                 <div class="col-12">
-                                    <div class="border rounded p-3">
+                                    <div class="border rounded p-3 report-section report-section-incident">
                                         <div class="mb-2">
                                             <div class="small text-muted">Date</div>
                                             <div class="fw-bold"><?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></div>

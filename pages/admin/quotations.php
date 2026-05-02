@@ -46,6 +46,115 @@ $quotes = [
 ];
 
 $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', 'PRJ-1006'];
+
+$assessmentByProject = [
+    'PRJ-1001' => [
+        'date' => 'Apr 08, 2026',
+        'technician' => 'Engr. Mario Santos',
+        'requiredTechnicians' => 2,
+        'summary' => 'Aircon system assessment completed. Building has 3 zones requiring individual indoor units. Existing electrical capacity adequate. Installation timeline: 8 days.',
+        'photos' => ['imageSample.png', 'imageSample.png', 'imageSample.png'],
+        'findings' => [
+            'Optimal placement for indoor units identified',
+            'Electrical panel can support new load',
+            'Room for outdoor condenser unit available',
+        ],
+        'materials' => [
+            ['name' => 'Copper Pipe', 'qty' => 8, 'unit' => 'roll'],
+            ['name' => 'Insulation', 'qty' => 10, 'unit' => 'roll'],
+            ['name' => 'Circuit Breaker', 'qty' => 6, 'unit' => 'pc'],
+        ],
+        'estimatedDays' => 8,
+    ],
+    'PRJ-1002' => [
+        'date' => 'Apr 07, 2026',
+        'technician' => 'Tech. Lito Ramos',
+        'requiredTechnicians' => 1,
+        'summary' => 'Aircon Repair assessment. Identified failing capacitor and worn fan motor. Parts in stock. Estimated repair time: 3 hours.',
+        'photos' => ['imageSample.png'],
+        'findings' => [
+            'Capacitor needs replacement',
+            'Fan motor showing wear',
+            'Refrigerant charge within normal range',
+        ],
+        'materials' => [
+            ['name' => 'Dual Capacitor', 'qty' => 2, 'unit' => 'pc'],
+            ['name' => 'Fan Motor', 'qty' => 1, 'unit' => 'pc'],
+        ],
+        'estimatedDays' => 1,
+    ],
+    'PRJ-1003' => [
+        'date' => 'Apr 09, 2026',
+        'technician' => 'Engr. Mario Santos',
+        'requiredTechnicians' => 3,
+        'summary' => 'Warehouse ducting assessment. Measurements completed for all zones. Existing ductwork requires partial replacement due to rust and deterioration.',
+        'photos' => ['imageSample.png', 'imageSample.png'],
+        'findings' => [
+            'Ductwork diameter: 12 inches (adequate)',
+            'Rust detected in 40% of existing ducts',
+            'New spiral duct estimated length: 250 linear feet',
+        ],
+        'materials' => [
+            ['name' => 'GI Sheet', 'qty' => 12, 'unit' => 'sheet'],
+            ['name' => 'Angle Bar', 'qty' => 14, 'unit' => 'pc'],
+            ['name' => 'Duct Sealant', 'qty' => 7, 'unit' => 'tube'],
+        ],
+        'estimatedDays' => 10,
+    ],
+    'PRJ-1004' => [
+        'date' => 'Apr 13, 2026',
+        'technician' => 'Tech. Carl Dominguez',
+        'requiredTechnicians' => 2,
+        'summary' => 'Site assessment completed for split-type AC upgrade. Wall locations are suitable for four indoor units and condenser placement is clear of obstructions.',
+        'photos' => ['imageSample.png', 'imageSample.png'],
+        'findings' => [
+            'Existing electrical trunk line can support added AC load',
+            'Condensate drainage path is available on both floors',
+            'Minor wall patching required after bracket anchoring',
+        ],
+        'materials' => [
+            ['name' => 'Copper Tubing Kit', 'qty' => 6, 'unit' => 'set'],
+            ['name' => 'Drain Hose', 'qty' => 8, 'unit' => 'pc'],
+            ['name' => 'Wall Bracket', 'qty' => 4, 'unit' => 'set'],
+        ],
+        'estimatedDays' => 9,
+    ],
+    'PRJ-1005' => [
+        'date' => 'Apr 11, 2026',
+        'technician' => 'Tech. John Gonzales',
+        'requiredTechnicians' => 2,
+        'summary' => 'Ventilation retrofit assessment completed for server room cooling support. Current airflow is below required load for peak operation and needs system upgrade.',
+        'photos' => ['imageSample.png', 'imageSample.png'],
+        'findings' => [
+            'Existing airflow distribution is uneven near rack rows',
+            'Return path needs balancing to improve circulation',
+            'Retrofit can be done without major ceiling reconstruction',
+        ],
+        'materials' => [
+            ['name' => 'Flexible Duct', 'qty' => 6, 'unit' => 'roll'],
+            ['name' => 'Insulation', 'qty' => 4, 'unit' => 'roll'],
+            ['name' => 'Diffuser Grill', 'qty' => 6, 'unit' => 'pc'],
+        ],
+        'estimatedDays' => 6,
+    ],
+    'PRJ-1006' => [
+        'date' => 'Apr 10, 2026',
+        'technician' => 'Tech. Anne Mendoza',
+        'requiredTechnicians' => 2,
+        'summary' => 'Lobby ventilation system assessment. System is undersized for current usage. Recommend upgrade to handle increased occupancy.',
+        'photos' => ['imageSample.png'],
+        'findings' => [
+            'Current CFM rating: 1500',
+            'Required CFM for occupancy: 2200',
+            'New system can be installed without major modifications',
+        ],
+        'materials' => [
+            ['name' => 'Flexible Duct', 'qty' => 5, 'unit' => 'roll'],
+            ['name' => 'Diffuser Grill', 'qty' => 8, 'unit' => 'pc'],
+        ],
+        'estimatedDays' => 3,
+    ],
+];
 ?>
 <main class="container py-4 flex-grow-1">
     <div class="d-flex align-items-center justify-content-between gap-3 mb-3 flex-wrap">
@@ -66,7 +175,7 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
             <thead class="table-light"><tr><th>Quotation</th><th>Project</th><th>Client</th><th>Total</th><th>Status</th><th class="text-end">Action</th></tr></thead>
             <tbody id="activeQuotationsBody">
             <?php foreach ($quotes as $q): ?>
-                <tr data-quote-id="<?php echo htmlspecialchars($q['id'], ENT_QUOTES, 'UTF-8'); ?>">
+                <tr data-quote-id="<?php echo htmlspecialchars($q['id'], ENT_QUOTES, 'UTF-8'); ?>" data-quote='<?php echo htmlspecialchars(json_encode($q), ENT_QUOTES, 'UTF-8'); ?>'>
                     <td><?php echo htmlspecialchars($q['id'], ENT_QUOTES, 'UTF-8'); ?></td>
                     <td><?php echo htmlspecialchars($q['project'], ENT_QUOTES, 'UTF-8'); ?></td>
                     <td><?php echo htmlspecialchars($q['client'], ENT_QUOTES, 'UTF-8'); ?></td>
@@ -95,9 +204,21 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row g-3">
+                        <div class="row g-3">
                         <div class="col-6"><small class="text-muted d-block">Quotation</small><strong id="qd-id"></strong></div>
                         <div class="col-6"><small class="text-muted d-block">Project</small><strong id="qd-project"></strong></div>
+                        <div class="col-md-6">
+                            <label class="form-label"></label>
+                            <button type="button" class="btn btn-outline-primary w-100" id="qd-view-assessment-btn">
+                                <i class="bi bi-file-text me-1"></i>View Assessment Report
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"></label>
+                            <button type="button" class="btn btn-outline-primary w-100" id="qd-auto-generate-btn">
+                                <i class="bi bi-magic me-1"></i>Auto Generate Quotation
+                            </button>
+                        </div>
                         <div class="col-12"><small class="text-muted d-block">Client</small><strong id="qd-client"></strong></div>
                         <div class="col-12"><small class="text-muted d-block">Status</small><span id="qd-status" class="badge"></span></div>
                         <div class="col-12">
@@ -189,13 +310,13 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Assessment</label>
-                                <button type="button" class="btn btn-outline-primary w-100">
+                                <label class="form-label"></label>
+                                <button type="button" class="btn btn-outline-primary w-100" id="viewAssessmentBtn">
                                     <i class="bi bi-file-text me-1"></i>View Assessment Report
                                 </button>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Auto Generate</label>
+                                <label class="form-label"></label>
                                 <button type="button" class="btn btn-outline-primary w-100">
                                     <i class="bi bi-magic me-1"></i>Auto Generate Quotation
                                 </button>
@@ -249,6 +370,64 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="assessmentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title">Assessment Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="assessmentEmptyState" class="alert alert-light border mb-0" style="display:none;">
+                        Select a project first to view its assessment report.
+                    </div>
+                    <div id="assessmentContent">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6"><small class="text-muted d-block">Project</small><strong id="assessment-project"></strong></div>
+                            <div class="col-md-6"><small class="text-muted d-block">Assessed By</small><strong id="assessment-technician"></strong></div>
+                            <div class="col-md-6"><small class="text-muted d-block">Assessment Date</small><strong id="assessment-date"></strong></div>
+                            <div class="col-md-6"><small class="text-muted d-block">Required Number of Technicians</small><strong id="assessment-technicians"></strong></div>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-2"><strong>Key Findings</strong></small>
+                            <ul class="small mb-0" id="assessment-findings"></ul>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-12">
+                                <small class="text-muted d-block mb-2"><strong>Materials Needed</strong></small>
+                                <div class="table-responsive border rounded">
+                                    <table class="table table-sm mb-0">
+                                        <thead class="table-light"><tr><th>Material</th><th>Qty</th><th>Unit</th></tr></thead>
+                                        <tbody id="assessment-materials"></tbody>
+                                    </table>
+                                </div>
+
+                                <div class="mt-3">
+                                    <small class="text-muted d-block">Assessment Summary</small>
+                                    <p class="mb-0" id="assessment-summary"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-12">
+                                <small class="text-muted d-block mb-2"><strong>Project Timeline</strong></small>
+                                <div class="border rounded p-3 bg-light h-100 d-flex align-items-center justify-content-center">
+                                    <div class="text-center">
+                                        <div class="h5 mb-1" id="assessment-days"></div>
+                                        <small class="text-muted">Estimated Working Days</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <script>
@@ -265,10 +444,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const quotationSearch = document.getElementById('quotationSearch');
     const createQuotationLaborCost = document.getElementById('createQuotationLaborCost');
     const createQuotationTotalCost = document.getElementById('createQuotationTotalCost');
+    const quotationProjectId = document.getElementById('quotationProjectId');
+    const viewAssessmentBtn = document.getElementById('viewAssessmentBtn');
+    const assessmentModalEl = document.getElementById('assessmentModal');
+    const assessmentEmptyState = document.getElementById('assessmentEmptyState');
+    const assessmentContent = document.getElementById('assessmentContent');
+    const assessmentProject = document.getElementById('assessment-project');
+    const assessmentTechnician = document.getElementById('assessment-technician');
+    const assessmentDate = document.getElementById('assessment-date');
+    const assessmentTechnicians = document.getElementById('assessment-technicians');
+    const assessmentSummary = document.getElementById('assessment-summary');
+    const assessmentFindings = document.getElementById('assessment-findings');
+    const assessmentMaterials = document.getElementById('assessment-materials');
+    const assessmentDays = document.getElementById('assessment-days');
+    const qdViewAssessmentBtn = document.getElementById('qd-view-assessment-btn');
+    const qdAutoGenerateBtn = document.getElementById('qd-auto-generate-btn');
+
+    const assetBasePath = '<?php echo htmlspecialchars(app_url('/assets/img/'), ENT_QUOTES, 'UTF-8'); ?>';
+    const assessmentData = <?php echo json_encode($assessmentByProject, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
 
     let activeQuote = null;
     let activeQuoteRow = null;
     let activeQuoteViewButton = null;
+    let assessmentModal = null;
 
     if (quotationSearch) {
         quotationSearch.addEventListener('input', function () {
@@ -470,6 +668,136 @@ document.addEventListener('DOMContentLoaded', function () {
         createQuotationLaborCost.addEventListener('input', updateCreateQuotationTotal);
     }
 
+    function renderAssessmentReport(projectId) {
+        if (!assessmentModalEl) return false;
+
+        const assessment = assessmentData[projectId];
+        const hasAssessment = !!assessment;
+
+        if (assessmentEmptyState) {
+            assessmentEmptyState.style.display = hasAssessment ? 'none' : '';
+        }
+
+        if (assessmentContent) {
+            assessmentContent.style.display = hasAssessment ? '' : 'none';
+        }
+
+        if (!hasAssessment) {
+            return false;
+        }
+
+        const selectedProjectLabel = quotationProjectId && quotationProjectId.value ? quotationProjectId.value : projectId;
+        if (assessmentProject) assessmentProject.textContent = selectedProjectLabel;
+        if (assessmentTechnician) assessmentTechnician.textContent = assessment.technician || '';
+        if (assessmentDate) assessmentDate.textContent = assessment.date || '';
+        if (assessmentTechnicians) assessmentTechnicians.textContent = String(assessment.requiredTechnicians || 1);
+        if (assessmentSummary) assessmentSummary.textContent = assessment.summary || '';
+        if (assessmentDays) assessmentDays.textContent = String(assessment.estimatedDays || 0);
+
+        if (assessmentFindings) {
+            assessmentFindings.innerHTML = Array.isArray(assessment.findings) && assessment.findings.length > 0
+                ? assessment.findings.map(function (finding) {
+                    return '<li>' + String(finding || '') + '</li>';
+                }).join('')
+                : '<li class="text-muted">No findings available.</li>';
+        }
+
+        if (assessmentMaterials) {
+            assessmentMaterials.innerHTML = Array.isArray(assessment.materials) && assessment.materials.length > 0
+                ? assessment.materials.map(function (material) {
+                    return '<tr>' +
+                        '<td>' + String(material.name || '') + '</td>' +
+                        '<td>' + String(material.qty || '') + '</td>' +
+                        '<td>' + String(material.unit || '') + '</td>' +
+                        '</tr>';
+                }).join('')
+                : '<tr><td colspan="3" class="text-muted small">No materials listed.</td></tr>';
+        }
+
+        // photos removed from modal — no action required
+
+        return true;
+    }
+
+    if (assessmentModalEl && typeof bootstrap !== 'undefined') {
+        assessmentModal = bootstrap.Modal.getOrCreateInstance(assessmentModalEl);
+    }
+
+    if (viewAssessmentBtn) {
+        viewAssessmentBtn.addEventListener('click', function () {
+            const projectId = quotationProjectId ? quotationProjectId.value : '';
+            const hasAssessment = renderAssessmentReport(projectId);
+
+            if (assessmentModal) {
+                assessmentModal.show();
+            }
+
+            if (!hasAssessment && assessmentEmptyState) {
+                assessmentEmptyState.style.display = '';
+            }
+        });
+    }
+
+    if (qdViewAssessmentBtn) {
+        qdViewAssessmentBtn.addEventListener('click', function () {
+            const projectId = activeQuote && activeQuote.project ? activeQuote.project : (document.getElementById('qd-project') ? document.getElementById('qd-project').textContent.trim() : '');
+            if (!projectId) return;
+            if (!assessmentData[projectId]) {
+                // auto-generate using activeQuote materials if available
+                const materials = activeQuote && Array.isArray(activeQuote.materials) ? activeQuote.materials.map(function (m) { return { name: m.name || '', qty: m.qty || 0, unit: m.unit || '' }; }) : [];
+                assessmentData[projectId] = {
+                    date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+                    technician: 'Auto-generated',
+                    requiredTechnicians: 1,
+                    summary: 'Auto-generated assessment for draft quotation.',
+                    findings: ['Auto-generated assessment created from draft quotation.'],
+                    materials: materials,
+                    estimatedDays: Math.max(1, Math.ceil((materials.length || 0) / 3))
+                };
+            }
+            renderAssessmentReport(projectId);
+            if (assessmentModal) assessmentModal.show();
+        });
+    }
+
+    if (qdAutoGenerateBtn) {
+        qdAutoGenerateBtn.addEventListener('click', function () {
+            // populate create modal with draft's materials and open create modal
+            if (!activeQuote) return;
+            // open create modal
+            const createModalEl = document.getElementById('createQuotationModal');
+            if (!createModalEl) return;
+            // set project select value if present
+            const projectSelect = createModalEl.querySelector('#quotationProjectId');
+            if (projectSelect) {
+                for (let i = 0; i < projectSelect.options.length; i++) {
+                    if (projectSelect.options[i].value === activeQuote.project) projectSelect.selectedIndex = i;
+                }
+            }
+            // populate materialsRows
+            const materialsRows = createModalEl.querySelector('#materialsRows');
+            if (materialsRows) {
+                materialsRows.innerHTML = '';
+                const mats = Array.isArray(activeQuote.materials) ? activeQuote.materials : [];
+                mats.forEach(function (m) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = '' +
+                        '<td><input type="text" class="form-control form-control-sm" value="' + (m.name || '') + '"></td>' +
+                        '<td><input type="number" class="form-control form-control-sm" min="1" step="1" value="' + (m.qty || 1) + '"></td>' +
+                        '<td><input type="text" class="form-control form-control-sm" value="' + (m.unit || '') + '" readonly tabindex="-1"></td>' +
+                        '<td><input type="number" class="form-control form-control-sm" min="0" step="0.01" value="' + (m.unitCost || 0) + '" readonly tabindex="-1"></td>' +
+                        '<td><input type="text" class="form-control form-control-sm text-start" value="' + formatCurrency((m.qty || 0) * (m.unitCost || 0)) + '" readonly tabindex="-1"></td>' +
+                        '<td class="text-start"><button type="button" class="btn btn-outline-danger btn-sm" data-remove-row><i class="bi bi-trash"></i></button></td>';
+                    materialsRows.appendChild(tr);
+                });
+                // trigger update total
+                const event = new Event('input', { bubbles: true });
+                materialsRows.dispatchEvent(event);
+            }
+            new bootstrap.Modal(createModalEl).show();
+        });
+    }
+
     if (qdSaveChanges) {
         qdSaveChanges.addEventListener('click', function () {
             if (!activeQuote || !qdLaborInput || activeQuote.status !== 'Draft') return;
@@ -537,7 +865,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (activeBody) {
         activeBody.addEventListener('click', function (event) {
-            const viewBtn = event.target.closest('button[data-quote]');
+            const rowViewAssessmentBtn = event.target.closest('button[data-view-assessment]');
+            if (rowViewAssessmentBtn) {
+                const projectId = rowViewAssessmentBtn.getAttribute('data-project') || (rowViewAssessmentBtn.closest('tr') && rowViewAssessmentBtn.closest('tr').querySelector('td:nth-child(2)') ? rowViewAssessmentBtn.closest('tr').querySelector('td:nth-child(2)').textContent.trim() : '');
+                if (projectId) {
+                    // auto-generate basic assessment if missing
+                    if (!assessmentData[projectId]) {
+                        const row = rowViewAssessmentBtn.closest('tr');
+                        let materials = [];
+                        const viewButton = row ? row.querySelector('[data-quote]') : null;
+                        if (viewButton) {
+                            try {
+                                const quote = JSON.parse(viewButton.dataset.quote || '{}');
+                                materials = Array.isArray(quote.materials) ? quote.materials.map(function (m) { return { name: m.name || '', qty: m.qty || 0, unit: m.unit || '' }; }) : [];
+                            } catch (e) {
+                                materials = [];
+                            }
+                        }
+                        assessmentData[projectId] = {
+                            date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+                            technician: 'Auto-generated',
+                            requiredTechnicians: 1,
+                            summary: 'Auto-generated assessment for draft quotation.',
+                            findings: ['Auto-generated assessment created from draft quotation.'],
+                            materials: materials,
+                            estimatedDays: Math.max(1, Math.ceil((materials.length || 0) / 3))
+                        };
+                    }
+
+                    renderAssessmentReport(projectId);
+                    if (assessmentModal) assessmentModal.show();
+                }
+                return;
+            }
+            const viewBtn = event.target.closest('[data-quote]');
             if (viewBtn && detailsModalEl && typeof bootstrap !== 'undefined') {
                 const quote = JSON.parse(viewBtn.dataset.quote || '{}');
                 activeQuote = quote;
@@ -558,6 +919,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (qdAddMaterial) {
                     qdAddMaterial.style.display = quote.status === 'Draft' ? '' : 'none';
                 }
+                if (qdAutoGenerateBtn) {
+                    qdAutoGenerateBtn.style.display = quote.status === 'Draft' ? '' : 'none';
+                }
 
                 const materials = Array.isArray(quote.materials) ? quote.materials : [];
                 renderDetailsMaterials(materials, quote.status === 'Draft');
@@ -575,7 +939,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (sendBtn) {
                 const row = sendBtn.closest('tr');
                 if (!row) return;
-                const viewButton = row.querySelector('button[data-quote]');
+                const viewButton = row.querySelector('[data-quote]');
                 if (!viewButton) return;
 
                 const quote = JSON.parse(viewButton.dataset.quote || '{}');
