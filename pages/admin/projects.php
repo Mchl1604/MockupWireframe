@@ -37,7 +37,7 @@ $projectScheduleMap = [
     'PRJ-1001' => 'Apr 21, 2026',
     'PRJ-1002' => 'Apr 05 - Apr 10, 2026',
     'PRJ-1004' => 'Apr 14 - Apr 22, 2026',
-    'PRJ-1006' => 'Apr 12 - Apr 14, 2026',
+    'PRJ-1006' => 'Apr 24 - Apr 30, 2026',
     'PRJ-1008' => 'Cancelled',
     'PRJ-1009' => 'Cancelled',
 ];

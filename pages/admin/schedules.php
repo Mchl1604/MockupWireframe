@@ -8,47 +8,38 @@ $schedules = [
     [
         'projectId' => 'PRJ-1001',
         'projectName' => 'Aircon Installation - ACME Holdings',
-        'startDate' => 12,
-        'endDate' => 22,
+        'startDate' => 21,
+        'endDate' => 21,
         'leadTechnician' => 'Engr. Mario Santos',
         'technicians' => ['Engr. Mario Santos', 'Tech. Carlo Reyes'],
         'color' => 'bg-primary',
     ],
     [
+        'projectId' => 'PRJ-1002',
+        'projectName' => 'Aircon Repair - J. Dela Cruz',
+        'startDate' => 5,
+        'endDate' => 10,
+        'leadTechnician' => 'Tech. Lito Ramos',
+        'technicians' => ['Tech. Lito Ramos'],
+        'color' => 'bg-success',
+    ],
+    [
         'projectId' => 'PRJ-1004',
         'projectName' => 'Aircon Installation - Northline Foods',
-        'startDate' => 18,
-        'endDate' => 21,
+        'startDate' => 14,
+        'endDate' => 22,
         'leadTechnician' => 'Tech. Carl Dominguez',
         'technicians' => ['Tech. Carl Dominguez'],
         'color' => 'bg-info',
     ],
     [
-        'projectId' => 'PRJ-1003',
-        'projectName' => 'Ducting Installation - Metro Storage',
-        'startDate' => 23,
-        'endDate' => 26,
-        'leadTechnician' => 'Engr. Mario Santos',
-        'technicians' => ['Engr. Mario Santos', 'Tech. Anne Mendoza'],
-        'color' => 'bg-secondary',
-    ],
-    [
         'projectId' => 'PRJ-1006',
         'projectName' => 'Ducting Installation - Grand Arc Tower',
-        'startDate' => 27,
+        'startDate' => 24,
         'endDate' => 30,
         'leadTechnician' => 'Tech. Anne Mendoza',
         'technicians' => ['Tech. Anne Mendoza'],
         'color' => 'bg-danger',
-    ],
-    [
-        'projectId' => 'PRJ-1005',
-        'projectName' => 'Ducting Fabrication - BluePeak IT',
-        'startDate' => 8,
-        'endDate' => 11,
-        'leadTechnician' => 'Tech. Lito Ramos',
-        'technicians' => ['Tech. Lito Ramos', 'Tech. Carlo Reyes'],
-        'color' => 'bg-warning',
     ],
 ];
 
@@ -65,11 +56,12 @@ foreach ($schedules as $schedule) {
 
 // Available projects for scheduling
 $availableProjects = [
-    ['id' => 'PRJ-1001', 'name' => 'Aircon Installation - ACME Holdings', 'service' => 'Aircon Installation', 'phase' => 'Assessment'],
-    ['id' => 'PRJ-1003', 'name' => 'Ducting Installation - Metro Storage', 'service' => 'Ducting Installation', 'phase' => 'Project Execution', 'requiredTechnicians' => 4, 'estimatedDays' => 4],
-    ['id' => 'PRJ-1004', 'name' => 'Aircon Installation - Northline Foods', 'service' => 'Aircon Installation', 'phase' => 'Project Execution', 'requiredTechnicians' => 3, 'estimatedDays' => 3],
-    ['id' => 'PRJ-1005', 'name' => 'Ducting Fabrication - BluePeak IT', 'service' => 'Ducting Fabrication', 'phase' => 'Project Execution', 'requiredTechnicians' => 5, 'estimatedDays' => 5],
-    ['id' => 'PRJ-1006', 'name' => 'Ducting Installation - Grand Arc Tower', 'service' => 'Ducting Installation', 'phase' => 'Project Execution', 'requiredTechnicians' => 3, 'estimatedDays' => 4],
+    ['id' => 'PRJ-1001', 'name' => 'Aircon Installation - ACME Holdings', 'service' => 'Aircon Installation', 'phase' => 'Assessment', 'status' => 'Scheduled'],
+    ['id' => 'PRJ-1002', 'name' => 'Aircon Repair - J. Dela Cruz', 'service' => 'Aircon Repair', 'phase' => 'Project Completion', 'status' => 'Completed', 'requiredTechnicians' => 1, 'estimatedDays' => 6],
+    ['id' => 'PRJ-1003', 'name' => 'Ducting Installation - Metro Storage', 'service' => 'Ducting Installation', 'phase' => 'Project Execution', 'status' => 'Scheduled', 'requiredTechnicians' => 4, 'estimatedDays' => 4],
+    ['id' => 'PRJ-1004', 'name' => 'Aircon Installation - Northline Foods', 'service' => 'Aircon Installation', 'phase' => 'Project Execution', 'status' => 'Ongoing', 'requiredTechnicians' => 3, 'estimatedDays' => 3],
+    ['id' => 'PRJ-1005', 'name' => 'Ducting Fabrication - BluePeak IT', 'service' => 'Ducting Fabrication', 'phase' => 'Project Execution', 'status' => 'Scheduled', 'requiredTechnicians' => 5, 'estimatedDays' => 5],
+    ['id' => 'PRJ-1006', 'name' => 'Ducting Installation - Grand Arc Tower', 'service' => 'Ducting Installation', 'phase' => 'Project Execution', 'status' => 'Scheduled', 'requiredTechnicians' => 3, 'estimatedDays' => 4],
 ];
 
 // All technicians with their skills
@@ -93,31 +85,62 @@ $technicians = [
         </div>
 
     <div class="card border-0 shadow-sm">
-        <div class="card-header bg-white"><strong>April 2026 Calendar</strong></div>
+        <div class="card-header bg-white d-flex justify-content-center align-items-center gap-2 flex-wrap">
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="calendarPrevMonthBtn" aria-label="Previous month" title="Previous month">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm px-3" id="calendarMonthPickerBtn" data-bs-toggle="modal" data-bs-target="#calendarMonthPickerModal">
+                <strong id="calendarMonthLabel">April 2026</strong>
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="calendarNextMonthBtn" aria-label="Next month" title="Next month">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
         <div class="card-body">
-            <div class="calendar-grid bg-white">
-                <?php foreach (['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] as $d): ?><div class="cal-header"><?php echo htmlspecialchars($d, ENT_QUOTES, 'UTF-8'); ?></div><?php endforeach; ?>
-                <?php for ($i = 1; $i <= 35; $i++): ?>
-                    <div class="cal-cell <?php echo $i === 12 ? 'today' : ''; ?>">
-                        <div class="cal-day <?php echo $i === 12 ? 'today-dot' : ''; ?>"><?php echo $i <= 30 ? $i : ''; ?></div>
-                        <?php if (isset($dateToSchedules[$i])): ?>
-                            <?php foreach ($dateToSchedules[$i] as $schedule): ?>
-                                <button
-                                    type="button"
-                                    class="cal-event <?php echo htmlspecialchars($schedule['color'], ENT_QUOTES, 'UTF-8'); ?> border-0 w-100 text-start"
-                                    title="<?php echo htmlspecialchars($schedule['projectName'] . ' (' . $schedule['startDate'] . '-' . $schedule['endDate'] . ')', ENT_QUOTES, 'UTF-8'); ?>"
-                                    data-project-id="<?php echo htmlspecialchars($schedule['projectId'], ENT_QUOTES, 'UTF-8'); ?>"
-                                >
-                                    <?php echo htmlspecialchars($schedule['projectId'], ENT_QUOTES, 'UTF-8'); ?>
-                                </button>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
-                <?php endfor; ?>
-            </div>
+            <div class="calendar-grid bg-white" id="scheduleCalendarGrid"></div>
         </div>
     </div>
 </main>
+
+<div class="modal fade" id="calendarMonthPickerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Month and Year</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-7">
+                        <label for="calendarMonthSelect" class="form-label">Month</label>
+                        <select class="form-select" id="calendarMonthSelect">
+                            <option value="0">January</option>
+                            <option value="1">February</option>
+                            <option value="2">March</option>
+                            <option value="3">April</option>
+                            <option value="4">May</option>
+                            <option value="5">June</option>
+                            <option value="6">July</option>
+                            <option value="7">August</option>
+                            <option value="8">September</option>
+                            <option value="9">October</option>
+                            <option value="10">November</option>
+                            <option value="11">December</option>
+                        </select>
+                    </div>
+                    <div class="col-5">
+                        <label for="calendarYearSelect" class="form-label">Year</label>
+                        <select class="form-select" id="calendarYearSelect"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="calendarMonthPickerApplyBtn">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Schedule Project Modal (Redesigned) -->
 <div class="modal fade" id="scheduleProjectModal" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
@@ -135,12 +158,9 @@ $technicians = [
             <div class="modal-body">
                 <form id="scheduleProjectForm" class="schedule-form">
                     <div class="row g-4">
-                        <!-- LEFT COLUMN: Project Information -->
+                        <!-- LEFT: Project Info (Select + Details) -->
                         <div class="col-lg-6">
-                           
-
-                            <!-- Project Selection Card -->
-                            <div class="info-card mb-4">
+                            <div class="info-card mb-3">
                                 <label for="projectSelect" class="form-label fw-600 mb-2">
                                     <i class="bi bi-briefcase me-2"></i>Select Project
                                 </label>
@@ -153,6 +173,7 @@ $technicians = [
                                             data-phase="<?php echo htmlspecialchars($proj['phase'], ENT_QUOTES, 'UTF-8'); ?>"
                                             data-required-technicians="<?php echo htmlspecialchars((string) ($proj['requiredTechnicians'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                                             data-estimated-days="<?php echo htmlspecialchars((string) ($proj['estimatedDays'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-status="<?php echo htmlspecialchars((string) ($proj['status'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                                         >
                                             <?php echo htmlspecialchars($proj['id'] . ' - ' . $proj['name'], ENT_QUOTES, 'UTF-8'); ?>
                                         </option>
@@ -160,8 +181,7 @@ $technicians = [
                                 </select>
                             </div>
 
-                            <!-- Project Details Display -->
-                            <div id="projectDetailsDisplay" class="project-details-box mb-4" style="display: none;">
+                            <div id="projectDetailsDisplay" class="project-details-box" style="display: none;">
                                 <div class="detail-row mb-2">
                                     <span class="detail-label">Service Type:</span>
                                     <span id="detailServiceType" class="detail-value badge bg-info bg-opacity-10 text-info">-</span>
@@ -169,6 +189,10 @@ $technicians = [
                                 <div class="detail-row mb-2">
                                     <span class="detail-label">Phase:</span>
                                     <span id="detailPhase" class="detail-value badge bg-warning bg-opacity-10 text-warning">-</span>
+                                </div>
+                                <div class="detail-row mb-2">
+                                    <span class="detail-label">Status:</span>
+                                    <span id="detailStatus" class="detail-value badge bg-secondary bg-opacity-10 text-secondary">-</span>
                                 </div>
                                 <div class="detail-row mb-2">
                                     <span class="detail-label">Required Technicians:</span>
@@ -179,36 +203,36 @@ $technicians = [
                                     <span id="detailDays" class="detail-value">- days</span>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Technicians Assignment -->
-                            <div class="info-card">
-                                <label class="form-label fw-600 mb-2">
-                                    <i class="bi bi-people me-2"></i>Assign Team
-                                </label>
+                        <!-- RIGHT: Assign Team (highlighted) + Scheduling below -->
+                        <div class="col-lg-6">
+                            <div class="schedule-section-header mb-3">
+                                <span class="badge bg-primary-soft text-primary-dark">ASSIGN TEAM</span>
+                                <div class="section-divider"></div>
+                            </div>
 
-                                <!-- Lead Technician -->
-                                <label for="leadTechnicianSelect" class="form-label small fw-500 mt-2">Lead Technician</label>
-                                <select class="form-select mb-3" id="leadTechnicianSelect" required>
-                                    <option value="">-- Select lead --</option>
-                                </select>
-
+                            <div class="info-card mb-4">
                                 <!-- Selected Technicians List -->
                                 <label class="form-label small fw-500">Team Members</label>
                                 <ul id="selectedTechniciansList" class="tech-list mb-3">
                                     <li class="text-muted small">No technicians selected yet.</li>
                                 </ul>
-
+                                <!-- Lead Technician (moved to bottom of assign team block) -->
+                                <label for="leadTechnicianSelect" class="form-label small fw-500">Lead Technician</label>
+                                <select class="form-select" id="leadTechnicianSelect" required>
+                                    <option value="">-- Select lead --</option>
+                                </select>
                                 <!-- Add Technician -->
                                 <label for="technicianPicker" class="form-label small fw-500">Add Technician</label>
-                                <select class="form-select form-select-sm" id="technicianPicker">
+                                <select class="form-select form-select-sm mb-3" id="technicianPicker">
                                     <option value="">-- Select to add --</option>
                                 </select>
-                                <small class="text-muted d-block mt-2">Suitable technicians shown first.</small>
-                            </div>
-                        </div>
+                                <small class="text-muted d-block mt-2 mb-3">Suitable technicians shown first.</small>
 
-                        <!-- RIGHT COLUMN: Scheduling -->
-                        <div class="col-lg-6">
+                                
+                            </div>
+
                             <!-- Scheduling Section Header -->
                             <div class="schedule-section-header mb-3">
                                 <span class="badge bg-success-soft text-success-dark">SCHEDULING</span>
@@ -230,15 +254,8 @@ $technicians = [
                                 <label class="form-label small fw-500 mb-2">
                                     <i class="bi bi-calendar-event me-2"></i>Timeline Overview
                                 </label>
-                                <div class="timeline-bar">
-                                    <div id="timelineVisualization" class="timeline-segments">
-                                        <!-- Timeline segments will be rendered here -->
-                                    </div>
-                                </div>
-                                <small class="text-muted d-block mt-2">Each segment represents a scheduled date range</small>
+                                <p class="mb-0 text-muted small" id="timelineTotalDaysText">Total Scheduled Days: 0</p>
                             </div>
-
-
                         </div>
                     </div>
                 </form>
@@ -249,7 +266,7 @@ $technicians = [
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">
                     <i class="bi bi-x-circle me-2"></i>Cancel
                 </button>
-                <button type="button" class="btn btn-primary" onclick="saveSchedule()">
+                <button type="button" class="btn btn-primary" id="saveScheduleBtn" onclick="saveSchedule()">
                     <i class="bi bi-calendar-check me-2"></i>Save Schedule
                 </button>
             </div>
@@ -328,75 +345,78 @@ $technicians = [
             <div class="modal-body">
                 <form id="detailScheduleProjectForm" class="schedule-form">
                     <div class="row g-4">
-                        <!-- LEFT COLUMN: Project Information -->
-                        <div class="col-lg-5">
-                            <!-- Project Info Section Header -->
+                        <div class="col-12">
+                            <div class="row g-3 mb-3">
+                                <div class="col-lg-6">
+                                    <!-- Project Info Section Header -->
+                                    <div class="schedule-section-header mb-3">
+                                        <span class="badge bg-primary-soft text-primary-dark">PROJECT INFO</span>
+                                        <div class="section-divider"></div>
+                                    </div>
+
+                                    <!-- Project Details Card -->
+                                    <div class="info-card mb-4">
+                                        <div class="detail-row mb-2">
+                                            <span class="detail-label">Project ID:</span>
+                                            <span id="detailProjectId" class="detail-value fw-600">-</span>
+                                        </div>
+                                        <div class="detail-row mb-3">
+                                            <span class="detail-label">Project Name:</span>
+                                            <span id="detailProjectName" class="detail-value fw-600">-</span>
+                                        </div>
+                                    </div>
+                                    <div id="projectDetailsDisplayDetail" class="project-details-box mb-0" style="display: none;">
+                                        <div class="detail-row mb-2">
+                                            <span class="detail-label">Service Type:</span>
+                                            <span id="detailServiceTypeDisplay" class="detail-value badge bg-info bg-opacity-10 text-info">-</span>
+                                        </div>
+                                        <div class="detail-row mb-2">
+                                            <span class="detail-label">Phase:</span>
+                                            <span id="detailPhaseDisplay" class="detail-value badge bg-warning bg-opacity-10 text-warning">-</span>
+                                        </div>
+                                        <div class="detail-row mb-2">
+                                            <span class="detail-label">Status:</span>
+                                            <span id="detailStatusDisplay" class="detail-value badge bg-secondary bg-opacity-10 text-secondary">-</span>
+                                        </div>
+                                        <div class="detail-row mb-2">
+                                            <span class="detail-label">Required Technicians:</span>
+                                            <span id="detailRequiredTechsDisplay" class="detail-value">-</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Est. Duration:</span>
+                                            <span id="detailDaysDisplay" class="detail-value">- days</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <!-- Assign Team Header -->
                             <div class="schedule-section-header mb-3">
-                                <span class="badge bg-primary-soft text-primary-dark">PROJECT INFO</span>
+                                <span class="badge bg-primary-soft text-primary-dark">ASSIGN TEAM</span>
                                 <div class="section-divider"></div>
                             </div>
 
-                            <!-- Project Details Card -->
                             <div class="info-card mb-4">
-                                <div class="detail-row mb-2">
-                                    <span class="detail-label">Project ID:</span>
-                                    <span id="detailProjectId" class="detail-value fw-600">-</span>
-                                </div>
-                                <div class="detail-row mb-3">
-                                    <span class="detail-label">Project Name:</span>
-                                    <span id="detailProjectName" class="detail-value fw-600">-</span>
-                                </div>
-                            </div>
-
-                            <!-- Project Details Display -->
-                            <div id="projectDetailsDisplayDetail" class="project-details-box mb-4" style="display: none;">
-                                <div class="detail-row mb-2">
-                                    <span class="detail-label">Service Type:</span>
-                                    <span id="detailServiceTypeDisplay" class="detail-value badge bg-info bg-opacity-10 text-info">-</span>
-                                </div>
-                                <div class="detail-row mb-2">
-                                    <span class="detail-label">Phase:</span>
-                                    <span id="detailPhaseDisplay" class="detail-value badge bg-warning bg-opacity-10 text-warning">-</span>
-                                </div>
-                                <div class="detail-row mb-2">
-                                    <span class="detail-label">Required Technicians:</span>
-                                    <span id="detailRequiredTechsDisplay" class="detail-value">-</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Est. Duration:</span>
-                                    <span id="detailDaysDisplay" class="detail-value">- days</span>
-                                </div>
-                            </div>
-
-                            <!-- Technicians Assignment -->
-                            <div class="info-card">
-                                <label class="form-label fw-600 mb-2">
-                                    <i class="bi bi-people me-2"></i>Assign Team
-                                </label>
-
-                                <!-- Lead Technician -->
-                                <label for="detailLeadSelect" class="form-label small fw-500 mt-2">Lead Technician</label>
-                                <select class="form-select mb-3" id="detailLeadSelect" required>
-                                    <option value="">-- Select lead --</option>
-                                </select>
-
                                 <!-- Selected Technicians List -->
                                 <label class="form-label small fw-500">Team Members</label>
                                 <ul id="detailAssignedTechnicians" class="tech-list mb-3">
                                     <li class="text-muted small">No technicians assigned.</li>
                                 </ul>
+                                <!-- Lead Technician (moved to bottom) -->
+                                <label for="detailLeadSelect" class="form-label small fw-500">Lead Technician</label>
+                                <select class="form-select" id="detailLeadSelect" required>
+                                    <option value="">-- Select lead --</option>
+                                </select>
 
                                 <!-- Add Technician -->
                                 <label for="detailTechnicianPicker" class="form-label small fw-500">Add Technician</label>
-                                <select class="form-select form-select-sm" id="detailTechnicianPicker">
+                                <select class="form-select form-select-sm mb-3" id="detailTechnicianPicker">
                                     <option value="">-- Select to add --</option>
                                 </select>
-                                <small class="text-muted d-block mt-2">Suitable technicians shown first.</small>
-                            </div>
-                        </div>
+                                <small class="text-muted d-block mt-2 mb-3">Suitable technicians shown first.</small>
 
-                        <!-- RIGHT COLUMN: Dates -->
-                        <div class="col-lg-7">
+                                
+                            </div>
+
                             <!-- Scheduling Section Header -->
                             <div class="schedule-section-header mb-3">
                                 <span class="badge bg-success-soft text-success-dark">SCHEDULING</span>
@@ -418,14 +438,13 @@ $technicians = [
                                 <label class="form-label small fw-500 mb-2">
                                     <i class="bi bi-calendar-event me-2"></i>Timeline Overview
                                 </label>
-                                <div class="timeline-bar">
-                                    <div id="detailTimelineVisualization" class="timeline-segments">
-                                        <!-- Timeline segments will be rendered here -->
-                                    </div>
+                                <p class="mb-0 text-muted small" id="detailTimelineTotalDaysText">Total Scheduled Days: 0</p>
+                            </div>
                                 </div>
-                                <small class="text-muted d-block mt-2">Current scheduled period</small>
                             </div>
                         </div>
+
+                        
                     </div>
                 </form>
             </div>
@@ -455,6 +474,20 @@ let detailSelectedTechnicians = [];
 
 function renderProjectPhaseNote(project) {
     // Deprecated: phase note display removed - details shown in project details box
+}
+
+function getStatusBadgeClass(status) {
+    const normalized = String(status || '').trim().toLowerCase();
+    if (normalized === 'completed') {
+        return 'badge bg-success bg-opacity-10 text-success';
+    }
+    if (normalized === 'ongoing') {
+        return 'badge bg-primary bg-opacity-10 text-primary';
+    }
+    if (normalized === 'scheduled') {
+        return 'badge bg-warning bg-opacity-10 text-warning';
+    }
+    return 'badge bg-secondary bg-opacity-10 text-secondary';
 }
 
 function dayToDateValue(day) {
@@ -489,25 +522,157 @@ function splitTechniciansForProject(projectId) {
 }
 
 function renderCalendarFromData() {
-    const cells = document.querySelectorAll('.calendar-grid .cal-cell');
-    cells.forEach(cell => {
-        cell.querySelectorAll('.cal-event').forEach(node => node.remove());
-        const dayText = cell.querySelector('.cal-day') ? cell.querySelector('.cal-day').textContent.trim() : '';
-        const day = Number(dayText);
-        if (!day || day > 30) {
+    renderCalendarGrid();
+}
+
+const calendarBaseYear = 2026;
+const calendarBaseMonthIndex = 3;
+let calendarViewDate = new Date(calendarBaseYear, calendarBaseMonthIndex, 1);
+
+function isTodayDate(year, monthIndex, day) {
+    const today = new Date();
+    return today.getFullYear() === year && today.getMonth() === monthIndex && today.getDate() === day;
+}
+
+function updateCalendarHeaderLabel() {
+    const label = document.getElementById('calendarMonthLabel');
+    if (!label) {
+        return;
+    }
+
+    const monthYear = calendarViewDate.toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric'
+    });
+    label.textContent = monthYear;
+}
+
+function getSchedulesForViewedMonth(day, year, monthIndex) {
+    if (year !== calendarBaseYear || monthIndex !== calendarBaseMonthIndex) {
+        return [];
+    }
+
+    return scheduleData.filter(schedule => day >= Number(schedule.startDate) && day <= Number(schedule.endDate));
+}
+
+function renderCalendarGrid() {
+    const grid = document.getElementById('scheduleCalendarGrid');
+    if (!grid) {
+        return;
+    }
+
+    updateCalendarHeaderLabel();
+    grid.innerHTML = '';
+
+    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(dayName => {
+        const header = document.createElement('div');
+        header.className = 'cal-header';
+        header.textContent = dayName;
+        grid.appendChild(header);
+    });
+
+    const year = calendarViewDate.getFullYear();
+    const monthIndex = calendarViewDate.getMonth();
+    const firstDayOfWeek = new Date(year, monthIndex, 1).getDay();
+    const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+    const totalCells = Math.ceil((firstDayOfWeek + daysInMonth) / 7) * 7;
+
+    for (let index = 0; index < totalCells; index += 1) {
+        const day = index - firstDayOfWeek + 1;
+        const inCurrentMonth = day >= 1 && day <= daysInMonth;
+        const isToday = inCurrentMonth && isTodayDate(year, monthIndex, day);
+
+        const cell = document.createElement('div');
+        cell.className = `cal-cell ${isToday ? 'today' : ''}`;
+
+        const dayLabel = document.createElement('div');
+        dayLabel.className = `cal-day ${isToday ? 'today-dot' : ''}`;
+        dayLabel.textContent = inCurrentMonth ? String(day) : '';
+        cell.appendChild(dayLabel);
+
+        if (inCurrentMonth) {
+            const daySchedules = getSchedulesForViewedMonth(day, year, monthIndex);
+            daySchedules.forEach(schedule => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = `cal-event ${schedule.color} border-0 w-100 text-start`;
+                button.setAttribute('title', `${schedule.projectName} (${schedule.startDate}-${schedule.endDate})`);
+                button.setAttribute('data-project-id', schedule.projectId);
+                button.textContent = schedule.projectId;
+                cell.appendChild(button);
+            });
+        }
+
+        grid.appendChild(cell);
+    }
+}
+
+const calendarPrevMonthBtn = document.getElementById('calendarPrevMonthBtn');
+if (calendarPrevMonthBtn) {
+    calendarPrevMonthBtn.addEventListener('click', function () {
+        calendarViewDate = new Date(calendarViewDate.getFullYear(), calendarViewDate.getMonth() - 1, 1);
+        renderCalendarGrid();
+    });
+}
+
+const calendarNextMonthBtn = document.getElementById('calendarNextMonthBtn');
+if (calendarNextMonthBtn) {
+    calendarNextMonthBtn.addEventListener('click', function () {
+        calendarViewDate = new Date(calendarViewDate.getFullYear(), calendarViewDate.getMonth() + 1, 1);
+        renderCalendarGrid();
+    });
+}
+
+const calendarMonthPickerModal = document.getElementById('calendarMonthPickerModal');
+const calendarMonthSelect = document.getElementById('calendarMonthSelect');
+const calendarYearSelect = document.getElementById('calendarYearSelect');
+const calendarMonthPickerApplyBtn = document.getElementById('calendarMonthPickerApplyBtn');
+
+function populateCalendarYearOptions() {
+    if (!calendarYearSelect) {
+        return;
+    }
+
+    calendarYearSelect.innerHTML = '';
+    const currentYear = calendarViewDate.getFullYear();
+    for (let year = currentYear - 10; year <= currentYear + 10; year += 1) {
+        const option = document.createElement('option');
+        option.value = String(year);
+        option.textContent = String(year);
+        calendarYearSelect.appendChild(option);
+    }
+}
+
+if (calendarMonthPickerModal) {
+    calendarMonthPickerModal.addEventListener('show.bs.modal', function () {
+        populateCalendarYearOptions();
+
+        if (calendarMonthSelect) {
+            calendarMonthSelect.value = String(calendarViewDate.getMonth());
+        }
+
+        if (calendarYearSelect) {
+            calendarYearSelect.value = String(calendarViewDate.getFullYear());
+        }
+    });
+}
+
+if (calendarMonthPickerApplyBtn) {
+    calendarMonthPickerApplyBtn.addEventListener('click', function () {
+        if (!calendarMonthSelect || !calendarYearSelect) {
             return;
         }
 
-        const daySchedules = scheduleData.filter(schedule => day >= Number(schedule.startDate) && day <= Number(schedule.endDate));
-        daySchedules.forEach(schedule => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = `cal-event ${schedule.color} border-0 w-100 text-start`;
-            button.setAttribute('title', `${schedule.projectName} (${schedule.startDate}-${schedule.endDate})`);
-            button.setAttribute('data-project-id', schedule.projectId);
-            button.textContent = schedule.projectId;
-            cell.appendChild(button);
-        });
+        const selectedMonth = Number(calendarMonthSelect.value);
+        const selectedYear = Number(calendarYearSelect.value);
+
+        if (!Number.isInteger(selectedMonth) || !Number.isInteger(selectedYear)) {
+            return;
+        }
+
+        calendarViewDate = new Date(selectedYear, selectedMonth, 1);
+        renderCalendarGrid();
+        bootstrap.Modal.getOrCreateInstance(calendarMonthPickerModal).hide();
     });
 }
 
@@ -612,6 +777,9 @@ function openCalendarProjectDetails(projectId) {
     if (project) {
         document.getElementById('detailServiceTypeDisplay').textContent = project.service || 'N/A';
         document.getElementById('detailPhaseDisplay').textContent = project.phase || 'Assessment';
+        const statusDisplay = document.getElementById('detailStatusDisplay');
+        statusDisplay.textContent = project.status || 'Scheduled';
+        statusDisplay.className = `detail-value ${getStatusBadgeClass(project.status || 'Scheduled')}`;
         document.getElementById('detailRequiredTechsDisplay').textContent = (project.requiredTechnicians || '-');
         document.getElementById('detailDaysDisplay').textContent = (project.estimatedDays || '-') + ' days';
         document.getElementById('projectDetailsDisplayDetail').style.display = 'block';
@@ -620,6 +788,10 @@ function openCalendarProjectDetails(projectId) {
     buildDetailLeadDropdown(schedule.projectId);
     renderDetailAssignedTechnicians();
     buildDetailTechnicianPicker(schedule.projectId);
+
+    // Make detail modal read-only if project is completed
+    const isDetailEditable = !(project && String(project.status || '').toLowerCase() === 'completed');
+    setDetailModalEditable(isDetailEditable);
 
     bootstrap.Modal.getOrCreateInstance(document.getElementById('calendarProjectDetailsModal')).show();
 }
@@ -859,9 +1031,9 @@ function updateDetailRangeDurationDisplay(rangeId) {
  */
 function updateDetailTimelineVisualization() {
     const timelineSection = document.getElementById('detailTimelineSection');
-    const timelineVisualization = document.getElementById('detailTimelineVisualization');
+    const totalDaysText = document.getElementById('detailTimelineTotalDaysText');
 
-    if (!timelineSection || !timelineVisualization) return;
+    if (!timelineSection || !totalDaysText) return;
 
     // Collect all valid date ranges
     const validRanges = detailDateRanges
@@ -874,27 +1046,18 @@ function updateDetailTimelineVisualization() {
     // Show/hide timeline section
     if (validRanges.length === 0) {
         timelineSection.style.display = 'none';
+        totalDaysText.textContent = 'Total Scheduled Days: 0';
         return;
     }
 
     timelineSection.style.display = 'block';
-
-    // Generate timeline segments
-    let html = '';
-    validRanges.forEach((range, index) => {
+    const totalDays = validRanges.reduce((sum, range) => {
         const start = new Date(range.start);
         const end = new Date(range.end);
         const diffDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-        const segmentClass = `segment-${(index % 5) + 1}`;
-        
-        html += `
-            <div class="timeline-segment ${segmentClass}" title="${range.start} to ${range.end}">
-                <div class="timeline-segment-tooltip">${diffDays} day${diffDays !== 1 ? 's' : ''}</div>
-            </div>
-        `;
-    });
-
-    timelineVisualization.innerHTML = html;
+        return sum + diffDays;
+    }, 0);
+    totalDaysText.textContent = `Total Scheduled Days: ${totalDays}`;
 }
 
 // Add Date Range button event listener
@@ -1048,25 +1211,7 @@ document.getElementById('leadTechnicianSelect').addEventListener('change', funct
     }
 });
 
-document.getElementById('projectSelect').addEventListener('change', function() {
-    const selectedProjectId = this.value;
-    const selectedProject = availableProjects.find(p => p.id === selectedProjectId);
-    const leadSelect = document.getElementById('leadTechnicianSelect');
-    const technicianPicker = document.getElementById('technicianPicker');
 
-    selectedTechnicians.length = 0;
-    leadTechnician = '';
-    renderSelectedTechnicians();
-    
-    if (!selectedProject) {
-        leadSelect.innerHTML = '<option value="">-- Select lead technician --</option>';
-        technicianPicker.innerHTML = '<option value="">-- Select technician to add --</option>';
-        return;
-    }
-
-    buildLeadDropdown(selectedProject.service);
-    buildTechnicianPicker(selectedProject.service);
-});
 
 function saveSchedule() {
     const projectId = document.getElementById('projectSelect').value;
@@ -1116,6 +1261,8 @@ if (scheduleProjectModal) {
         addNewDateRange();
         renderProjectDetails(null);
         updateTimelineVisualization();
+        // Ensure modal is editable by default when opening
+        setScheduleModalEditable(true);
     });
 }
 
@@ -1223,9 +1370,9 @@ function updateDurationDisplay(rangeId) {
  */
 function updateTimelineVisualization() {
     const timelineSection = document.getElementById('timelineSection');
-    const timelineVisualization = document.getElementById('timelineVisualization');
+    const totalDaysText = document.getElementById('timelineTotalDaysText');
 
-    if (!timelineSection || !timelineVisualization) return;
+    if (!timelineSection || !totalDaysText) return;
 
     // Collect all valid date ranges
     const validRanges = dateRanges
@@ -1238,27 +1385,18 @@ function updateTimelineVisualization() {
     // Show/hide timeline section
     if (validRanges.length === 0) {
         timelineSection.style.display = 'none';
+        totalDaysText.textContent = 'Total Scheduled Days: 0';
         return;
     }
 
     timelineSection.style.display = 'block';
-
-    // Generate timeline segments
-    let html = '';
-    validRanges.forEach((range, index) => {
+    const totalDays = validRanges.reduce((sum, range) => {
         const start = new Date(range.start);
         const end = new Date(range.end);
         const diffDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-        const segmentClass = `segment-${(index % 5) + 1}`;
-        
-        html += `
-            <div class="timeline-segment ${segmentClass}" title="${range.start} to ${range.end}">
-                <div class="timeline-segment-tooltip">${diffDays} day${diffDays !== 1 ? 's' : ''}</div>
-            </div>
-        `;
-    });
-
-    timelineVisualization.innerHTML = html;
+        return sum + diffDays;
+    }, 0);
+    totalDaysText.textContent = `Total Scheduled Days: ${totalDays}`;
 }
 
 /**
@@ -1281,6 +1419,9 @@ function renderProjectDetails(projectId) {
 
     document.getElementById('detailServiceType').textContent = project.service || 'N/A';
     document.getElementById('detailPhase').textContent = project.phase || 'Assessment';
+    const statusDisplay = document.getElementById('detailStatus');
+    statusDisplay.textContent = project.status || 'Scheduled';
+    statusDisplay.className = `detail-value ${getStatusBadgeClass(project.status || 'Scheduled')}`;
     document.getElementById('detailRequiredTechs').textContent = (project.requiredTechnicians || '-');
     document.getElementById('detailDays').textContent = (project.estimatedDays || '-') + ' days';
 
@@ -1342,7 +1483,42 @@ document.getElementById('projectSelect').addEventListener('change', function() {
         buildLeadDropdown(project.service);
         buildTechnicianPicker(project.service);
     }
+    // Make modal read-only if project is completed
+    const isEditable = !(project && String(project.status || '').toLowerCase() === 'completed');
+    setScheduleModalEditable(isEditable);
 });
+
+function setScheduleModalEditable(isEditable) {
+    const lead = document.getElementById('leadTechnicianSelect');
+    const picker = document.getElementById('technicianPicker');
+    const addBtn = document.getElementById('addDateRangeBtn');
+    const saveBtn = document.getElementById('saveScheduleBtn');
+
+    if (lead) lead.disabled = !isEditable;
+    if (picker) picker.disabled = !isEditable;
+    if (addBtn) addBtn.disabled = !isEditable;
+    if (saveBtn) saveBtn.disabled = !isEditable;
+
+    // disable existing date inputs and remove buttons
+    document.querySelectorAll('#dateRangesWrapper .start-date-input, #dateRangesWrapper .end-date-input').forEach(el => el.disabled = !isEditable);
+    document.querySelectorAll('#dateRangesWrapper .remove-range-btn').forEach(btn => btn.disabled = !isEditable);
+}
+
+function setDetailModalEditable(isEditable) {
+    const lead = document.getElementById('detailLeadSelect');
+    const picker = document.getElementById('detailTechnicianPicker');
+    const addBtn = document.getElementById('addDetailDateRangeBtn');
+    const saveBtn = document.getElementById('saveDetailChangesBtn');
+
+    if (lead) lead.disabled = !isEditable;
+    if (picker) picker.disabled = !isEditable;
+    if (addBtn) addBtn.disabled = !isEditable;
+    if (saveBtn) saveBtn.disabled = !isEditable;
+
+    // disable existing detail date inputs and remove buttons
+    document.querySelectorAll('#detailDateRangesWrapper .detail-start-date-input, #detailDateRangesWrapper .detail-end-date-input').forEach(el => el.disabled = !isEditable);
+    document.querySelectorAll('#detailDateRangesWrapper .detail-remove-range-btn').forEach(btn => btn.disabled = !isEditable);
+}
 
 // Add date range button
 const addDateRangeBtn = document.getElementById('addDateRangeBtn');

@@ -34,7 +34,7 @@ $projectMetadata = [
     'PRJ-1003' => ['client' => 'Metro Storage', 'service' => 'Ducting Installation', 'timeline' => '', 'target' => 'TBD', 'location' => '45 Pioneer Rd, Mandaluyong City'],
     'PRJ-1004' => ['client' => 'Northline Foods', 'service' => 'Aircon Installation', 'timeline' => 'Apr 14 - Apr 22, 2026', 'target' => 'Apr 22, 2026', 'location' => '8 Westbank Ave, Quezon City'],
     'PRJ-1005' => ['client' => 'BluePeak IT', 'service' => 'Ducting Fabrication', 'timeline' => '', 'target' => 'TBD', 'location' => '11 East Ridge Dr, Taguig City'],
-    'PRJ-1006' => ['client' => 'Grand Arc Tower', 'service' => 'Ducting Installation', 'timeline' => 'Apr 12 - Apr 14, 2026', 'target' => 'Apr 14, 2026', 'location' => '900 Aurora Blvd, Cubao, Quezon City'],
+    'PRJ-1006' => ['client' => 'Grand Arc Tower', 'service' => 'Ducting Installation', 'timeline' => 'Apr 24 - Apr 30, 2026', 'target' => 'Apr 14, 2026', 'location' => '900 Aurora Blvd, Cubao, Quezon City'],
     'PRJ-1007' => ['client' => 'Riverside Mall', 'service' => 'Ducting Installation', 'timeline' => '', 'target' => 'TBD', 'location' => '120 Riverside Ave, Mandaluyong City'],
     'PRJ-1008' => ['client' => 'Hillcrest Suites', 'service' => 'Aircon Repair', 'timeline' => '', 'target' => 'Cancelled', 'location' => '89 Northfield St, Pasig City'],
     'PRJ-1009' => ['client' => 'Westline Depot', 'service' => 'Ducting Fabrication', 'timeline' => '', 'target' => 'Cancelled', 'location' => '22 Harbor Ave, Manila City'],

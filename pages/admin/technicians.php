@@ -65,6 +65,405 @@ $attendanceByTech = [
     'Elena Cruz' => [],
     'Francis Tan' => [],
 ];
+
+$scheduleByTech = [
+    'Mark Santos' => [
+        [
+            'projectId' => 'PRJ-1001',
+            'startDate' => '2026-04-14',
+            'endDate' => '2026-04-18',
+            'title' => 'Aircon Installation - ACME Holdings',
+            'location' => 'ACME Corporate Center, Makati City',
+            'status' => 'In Progress',
+            'color' => 'primary',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-14',
+                    'dueDate' => '2026-04-15',
+                    'description' => 'Site assessment and measurements.',
+                    'status' => 'Completed',
+                ],
+                [
+                    'dateStarted' => '2026-04-16',
+                    'dueDate' => '2026-04-18',
+                    'description' => 'Install indoor units and line set rough-in.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+        [
+            'projectId' => 'PRJ-1003',
+            'startDate' => '2026-04-20',
+            'endDate' => '2026-04-25',
+            'title' => 'Ducting Installation - Metro Storage',
+            'location' => 'Metro Storage Warehouse, Pasig City',
+            'status' => 'Assigned',
+            'color' => 'warning',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-20',
+                    'dueDate' => '2026-04-22',
+                    'description' => 'Verify duct path and hanger points.',
+                    'status' => 'Incomplete',
+                ],
+                [
+                    'dateStarted' => '2026-04-23',
+                    'dueDate' => '2026-04-25',
+                    'description' => 'Assist duct installation and seal joints.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Carlo Reyes' => [
+        [
+            'projectId' => 'PRJ-1004',
+            'startDate' => '2026-04-12',
+            'endDate' => '2026-04-16',
+            'title' => 'Aircon Repair - Northline Foods',
+            'location' => 'Northline Foods Building, Pasig City',
+            'status' => 'In Progress',
+            'color' => 'success',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-12',
+                    'dueDate' => '2026-04-13',
+                    'description' => 'Diagnose compressor and electrical faults.',
+                    'status' => 'Completed',
+                ],
+                [
+                    'dateStarted' => '2026-04-14',
+                    'dueDate' => '2026-04-16',
+                    'description' => 'Replace failed parts and run testing.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+        [
+            'projectId' => 'PRJ-1007',
+            'startDate' => '2026-04-21',
+            'endDate' => '2026-04-24',
+            'title' => 'Preventive Maintenance - City Med Center',
+            'location' => 'City Med Center, Mandaluyong City',
+            'status' => 'Assigned',
+            'color' => 'danger',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-21',
+                    'dueDate' => '2026-04-22',
+                    'description' => 'Filter cleaning and fan motor inspection.',
+                    'status' => 'Incomplete',
+                ],
+                [
+                    'dateStarted' => '2026-04-23',
+                    'dueDate' => '2026-04-24',
+                    'description' => 'Refrigerant pressure check and report.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Jude Flores' => [
+        [
+            'projectId' => 'PRJ-1006',
+            'startDate' => '2026-04-10',
+            'endDate' => '2026-04-14',
+            'title' => 'Aircon Installation - Sunvale Offices',
+            'location' => 'Sunvale Offices, Quezon City',
+            'status' => 'Assigned',
+            'color' => 'info',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-10',
+                    'dueDate' => '2026-04-12',
+                    'description' => 'Mount indoor and outdoor units.',
+                    'status' => 'Incomplete',
+                ],
+                [
+                    'dateStarted' => '2026-04-13',
+                    'dueDate' => '2026-04-14',
+                    'description' => 'Electrical termination and commissioning assist.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Lito Ramos' => [
+        [
+            'projectId' => 'PRJ-1008',
+            'startDate' => '2026-04-11',
+            'endDate' => '2026-04-15',
+            'title' => 'Ducting Fabrication - GreenArc Mall',
+            'location' => 'GreenArc Mall Service Area, Taguig City',
+            'status' => 'In Progress',
+            'color' => 'secondary',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-11',
+                    'dueDate' => '2026-04-13',
+                    'description' => 'Fabricate rectangular duct sections in shop.',
+                    'status' => 'Completed',
+                ],
+                [
+                    'dateStarted' => '2026-04-14',
+                    'dueDate' => '2026-04-15',
+                    'description' => 'Install fabricated ducts on level 2.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Carl Dominguez' => [
+        [
+            'projectId' => 'PRJ-1009',
+            'startDate' => '2026-04-18',
+            'endDate' => '2026-04-22',
+            'title' => 'Aircon Cleaning - Meridian Suites',
+            'location' => 'Meridian Suites, Manila City',
+            'status' => 'Assigned',
+            'color' => 'info',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-18',
+                    'dueDate' => '2026-04-19',
+                    'description' => 'Clean indoor coil and drain pan units 301-306.',
+                    'status' => 'Incomplete',
+                ],
+                [
+                    'dateStarted' => '2026-04-20',
+                    'dueDate' => '2026-04-22',
+                    'description' => 'Pressure wash condenser units and test run.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Anne Mendoza' => [
+        [
+            'projectId' => 'PRJ-1010',
+            'startDate' => '2026-04-09',
+            'endDate' => '2026-04-13',
+            'title' => 'Ducting Installation - Skybridge Offices',
+            'location' => 'Skybridge Offices, Pasay City',
+            'status' => 'In Progress',
+            'color' => 'danger',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-09',
+                    'dueDate' => '2026-04-10',
+                    'description' => 'Mark hanger locations and drill supports.',
+                    'status' => 'Completed',
+                ],
+                [
+                    'dateStarted' => '2026-04-11',
+                    'dueDate' => '2026-04-13',
+                    'description' => 'Install main trunk line and flexible connectors.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'John Gonzales' => [
+        [
+            'projectId' => 'PRJ-1011',
+            'startDate' => '2026-04-24',
+            'endDate' => '2026-04-28',
+            'title' => 'Aircon Installation - Ridgeway School',
+            'location' => 'Ridgeway School Annex, Marikina City',
+            'status' => 'Assigned',
+            'color' => 'primary',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-24',
+                    'dueDate' => '2026-04-26',
+                    'description' => 'Install wall brackets and set indoor units.',
+                    'status' => 'Incomplete',
+                ],
+                [
+                    'dateStarted' => '2026-04-27',
+                    'dueDate' => '2026-04-28',
+                    'description' => 'Run refrigerant piping and leak test.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Paolo Herrera' => [
+        [
+            'projectId' => 'PRJ-1012',
+            'startDate' => '2026-04-16',
+            'endDate' => '2026-04-20',
+            'title' => 'Ducting Fabrication - Harbor Point Depot',
+            'location' => 'Harbor Point Depot, Paranaque City',
+            'status' => 'In Progress',
+            'color' => 'success',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-16',
+                    'dueDate' => '2026-04-18',
+                    'description' => 'Cut and fold GI sheets for branch ducts.',
+                    'status' => 'Completed',
+                ],
+                [
+                    'dateStarted' => '2026-04-19',
+                    'dueDate' => '2026-04-20',
+                    'description' => 'Assemble and reinforce elbows and reducers.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Nina Cortez' => [
+        [
+            'projectId' => 'PRJ-1013',
+            'startDate' => '2026-04-06',
+            'endDate' => '2026-04-10',
+            'title' => 'Aircon Repair - Grandview Residences',
+            'location' => 'Grandview Residences, Makati City',
+            'status' => 'Assigned',
+            'color' => 'warning',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-06',
+                    'dueDate' => '2026-04-08',
+                    'description' => 'Inspect faulty inverter boards and thermistors.',
+                    'status' => 'Incomplete',
+                ],
+                [
+                    'dateStarted' => '2026-04-09',
+                    'dueDate' => '2026-04-10',
+                    'description' => 'Replace components and verify cooling load.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Ben Navarro' => [
+        [
+            'projectId' => 'PRJ-1014',
+            'startDate' => '2026-04-26',
+            'endDate' => '2026-04-30',
+            'title' => 'Ducting Installation - Arcadia Foods Plant',
+            'location' => 'Arcadia Foods Plant, Pasig City',
+            'status' => 'In Progress',
+            'color' => 'info',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-26',
+                    'dueDate' => '2026-04-27',
+                    'description' => 'Install main supply duct line at processing area.',
+                    'status' => 'Completed',
+                ],
+                [
+                    'dateStarted' => '2026-04-28',
+                    'dueDate' => '2026-04-30',
+                    'description' => 'Seal joints and install balancing dampers.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Claire Santos' => [
+        [
+            'projectId' => 'PRJ-1015',
+            'startDate' => '2026-04-17',
+            'endDate' => '2026-04-21',
+            'title' => 'Aircon Cleaning - Crestline Tower',
+            'location' => 'Crestline Tower, Quezon City',
+            'status' => 'Assigned',
+            'color' => 'secondary',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-17',
+                    'dueDate' => '2026-04-18',
+                    'description' => 'Clean evaporator units on floors 5 to 7.',
+                    'status' => 'Incomplete',
+                ],
+                [
+                    'dateStarted' => '2026-04-19',
+                    'dueDate' => '2026-04-21',
+                    'description' => 'Outdoor condenser washing and amperage checks.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Darren Uy' => [
+        [
+            'projectId' => 'PRJ-1016',
+            'startDate' => '2026-04-07',
+            'endDate' => '2026-04-11',
+            'title' => 'Aircon Repair - Maple Court',
+            'location' => 'Maple Court Offices, Quezon City',
+            'status' => 'In Progress',
+            'color' => 'primary',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-07',
+                    'dueDate' => '2026-04-08',
+                    'description' => 'Trace intermittent power trip issue.',
+                    'status' => 'Completed',
+                ],
+                [
+                    'dateStarted' => '2026-04-09',
+                    'dueDate' => '2026-04-11',
+                    'description' => 'Replace contactor and retest all circuits.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Elena Cruz' => [
+        [
+            'projectId' => 'PRJ-1017',
+            'startDate' => '2026-04-22',
+            'endDate' => '2026-04-26',
+            'title' => 'Ducting Fabrication - Midtown Complex',
+            'location' => 'Midtown Complex, Manila City',
+            'status' => 'Assigned',
+            'color' => 'danger',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-22',
+                    'dueDate' => '2026-04-24',
+                    'description' => 'Fabricate transition pieces for AHU connection.',
+                    'status' => 'Incomplete',
+                ],
+                [
+                    'dateStarted' => '2026-04-25',
+                    'dueDate' => '2026-04-26',
+                    'description' => 'Deliver fabricated sections and prep installation.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+    'Francis Tan' => [
+        [
+            'projectId' => 'PRJ-1018',
+            'startDate' => '2026-04-29',
+            'endDate' => '2026-05-03',
+            'title' => 'Aircon Installation - Pearlview Hotel',
+            'location' => 'Pearlview Hotel Annex, Pasay City',
+            'status' => 'Assigned',
+            'color' => 'success',
+            'tasks' => [
+                [
+                    'dateStarted' => '2026-04-29',
+                    'dueDate' => '2026-05-01',
+                    'description' => 'Install outdoor units and anti-vibration pads.',
+                    'status' => 'Incomplete',
+                ],
+                [
+                    'dateStarted' => '2026-05-02',
+                    'dueDate' => '2026-05-03',
+                    'description' => 'Perform vacuuming and commissioning checks.',
+                    'status' => 'Incomplete',
+                ],
+            ],
+        ],
+    ],
+];
 ?>
 <main class="container py-4 flex-grow-1">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
@@ -145,13 +544,35 @@ $attendanceByTech = [
                         </div>
                         <div class="col-md-6 col-lg-8 d-flex justify-content-md-end gap-2">
                             <button type="button" class="btn btn-outline-secondary" id="calendarPrevMonth"><i class="bi bi-chevron-left"></i></button>
-                            <div id="calendarMonthLabel" class="fw-semibold align-self-center px-2"></div>
+                            <button type="button" class="btn btn-outline-secondary" id="calendarCurrentMonth">Today</button>
                             <button type="button" class="btn btn-outline-secondary" id="calendarNextMonth"><i class="bi bi-chevron-right"></i></button>
                         </div>
                     </div>
 
-                    <div id="scheduleSelectedTech" class="small text-muted mb-2">Enter a technician name to view project assignments.</div>
-                    <div id="scheduleCalendar" class="border rounded overflow-hidden"></div>
+                    <div id="scheduleSelectedTech" class="small text-muted mb-3">Enter a technician name to view project assignments.</div>
+
+                    <div class="row g-3">
+                        <div class="col-lg-8">
+                            <div class="border rounded-3 p-3 bg-white h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <p class="text-secondary small mb-1">Calendar View</p>
+                                        <h3 class="h5 mb-0" id="calendarMonthLabel"></h3>
+                                    </div>
+                                </div>
+                                <div class="calendar-grid" id="scheduleCalendar" aria-label="Technician schedule calendar"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="border rounded-3 p-3 bg-white h-100">
+                                <p class="text-secondary small mb-1">Selected Date</p>
+                                <h4 class="h6 fw-semibold mb-3" id="scheduleSelectedDateLabel">No date selected</h4>
+                                <ul class="list-group list-group-flush" id="scheduleDayProjectList">
+                                    <li class="list-group-item px-0 text-secondary">Select a date to see assignments.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -230,6 +651,7 @@ $attendanceByTech = [
 
 <script>
 const attendanceByTech = <?php echo json_encode($attendanceByTech, JSON_UNESCAPED_SLASHES); ?>;
+const scheduleByTech = <?php echo json_encode($scheduleByTech, JSON_UNESCAPED_SLASHES); ?>;
 const techData = <?php echo json_encode($sortedTechs, JSON_UNESCAPED_SLASHES); ?>;
 let currentTechIndex = -1;
 let currentTechSkills = [];
@@ -238,10 +660,15 @@ const technicianSearch = document.getElementById('technicianSearch');
 const scheduleTechnicianName = document.getElementById('scheduleTechnicianName');
 const calendarPrevMonth = document.getElementById('calendarPrevMonth');
 const calendarNextMonth = document.getElementById('calendarNextMonth');
+const calendarCurrentMonth = document.getElementById('calendarCurrentMonth');
 const calendarMonthLabel = document.getElementById('calendarMonthLabel');
 const scheduleCalendar = document.getElementById('scheduleCalendar');
 const scheduleSelectedTech = document.getElementById('scheduleSelectedTech');
+const scheduleSelectedDateLabel = document.getElementById('scheduleSelectedDateLabel');
+const scheduleDayProjectList = document.getElementById('scheduleDayProjectList');
+const today = new Date();
 const calendarMonthState = new Date(2026, 3, 1);
+let selectedScheduleDateKey = '2026-04-01';
 const attendancePeriodInput = document.getElementById('attendancePeriodInput');
 let activeAttendanceTechName = '';
 
@@ -266,6 +693,12 @@ function parseRecordDate(dateText) {
     return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
+function escapeHtml(value) {
+    const temp = document.createElement('div');
+    temp.textContent = value == null ? '' : String(value);
+    return temp.innerHTML;
+}
+
 function findTechnicianName(inputValue) {
     const normalized = String(inputValue || '').trim().toLowerCase();
     if (!normalized) {
@@ -283,6 +716,150 @@ function findTechnicianName(inputValue) {
         return String(tech.name || '').toLowerCase().includes(normalized);
     });
     return containsMatch ? containsMatch.name : '';
+}
+
+function formatTaskDate(value) {
+    const raw = String(value || '').trim();
+    if (!raw) {
+        return '';
+    }
+
+    const dateObj = new Date(raw + 'T00:00:00');
+    if (Number.isNaN(dateObj.getTime())) {
+        return raw;
+    }
+
+    return dateObj.toLocaleDateString([], { month: 'long', day: '2-digit', year: 'numeric' });
+}
+
+function getStatusBadgeClass(status) {
+    const statusKey = String(status || '').toLowerCase().trim();
+    if (statusKey === 'in progress') return 'text-bg-success';
+    if (statusKey === 'assigned') return 'text-bg-primary';
+    if (statusKey === 'for assessment') return 'text-bg-warning';
+    if (statusKey === 'completed') return 'text-bg-success';
+    return 'text-bg-light border';
+}
+
+function getProjectColorClass(project, colorIndexMap, nextColorRef) {
+    const preferred = String(project.color || '').trim();
+    if (preferred !== '') {
+        return preferred;
+    }
+
+    const projectId = String(project.projectId || 'N/A');
+    if (!colorIndexMap[projectId]) {
+        const palette = ['primary', 'success', 'warning', 'danger', 'info', 'secondary'];
+        colorIndexMap[projectId] = palette[nextColorRef.value % palette.length];
+        nextColorRef.value += 1;
+    }
+
+    return colorIndexMap[projectId];
+}
+
+function getCalendarEventStyle(colorKey) {
+    const palette = {
+        primary: { bg: '#2563eb', text: '#ffffff' },
+        success: { bg: '#16a34a', text: '#ffffff' },
+        warning: { bg: '#f59e0b', text: '#111827' },
+        danger: { bg: '#e11d48', text: '#ffffff' },
+        info: { bg: '#06b6d4', text: '#083344' },
+        secondary: { bg: '#ec4899', text: '#ffffff' },
+    };
+
+    const selected = palette[String(colorKey || '').toLowerCase()] || { bg: '#334155', text: '#ffffff' };
+    return `background-color: ${selected.bg}; color: ${selected.text}; font-weight: 600;`;
+}
+
+function getSchedulesByDate(techName, dateKey) {
+    const projects = scheduleByTech[techName] || [];
+    const groupedByProject = {};
+    const colorIndexMap = {};
+    const nextColorRef = { value: 0 };
+
+    projects.forEach(function (project) {
+        const tasks = Array.isArray(project.tasks) ? project.tasks : [];
+        const projectColor = getProjectColorClass(project, colorIndexMap, nextColorRef);
+
+        tasks.forEach(function (task) {
+            const taskStartDate = task && task.dateStarted ? String(task.dateStarted) : '';
+            const taskDueDate = task && task.dueDate ? String(task.dueDate) : taskStartDate;
+
+            if (taskStartDate !== '' && taskDueDate !== '' && dateKey >= taskStartDate && dateKey <= taskDueDate) {
+                const projectKey = String(project.projectId || 'N/A');
+                if (!groupedByProject[projectKey]) {
+                    groupedByProject[projectKey] = {
+                        projectId: project.projectId,
+                        title: project.title,
+                        location: project.location,
+                        status: project.status,
+                        color: projectColor,
+                        startDate: project.startDate,
+                        endDate: project.endDate,
+                        tasks: [],
+                    };
+                }
+
+                groupedByProject[projectKey].tasks.push({
+                    startDate: taskStartDate,
+                    dueDate: taskDueDate,
+                    description: task.description || '',
+                    status: task.status || 'Incomplete',
+                });
+            }
+        });
+    });
+
+    return Object.keys(groupedByProject).map(function (projectKey) {
+        return groupedByProject[projectKey];
+    });
+}
+
+function renderSelectedScheduleDay(dateObj, matchedTechName) {
+    if (!scheduleSelectedDateLabel || !scheduleDayProjectList) {
+        return;
+    }
+
+    if (!matchedTechName) {
+        scheduleSelectedDateLabel.textContent = 'No date selected';
+        scheduleDayProjectList.innerHTML = '<li class="list-group-item px-0 text-secondary">Select a valid technician to see assignments.</li>';
+        return;
+    }
+
+    const dateKey = formatDateKey(dateObj);
+    const daySchedules = getSchedulesByDate(matchedTechName, dateKey);
+    scheduleSelectedDateLabel.textContent = dateObj.toLocaleDateString([], {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+    });
+
+    if (!daySchedules.length) {
+        scheduleDayProjectList.innerHTML = '<li class="list-group-item px-0 text-secondary">No assignment for this date.</li>';
+        return;
+    }
+
+    scheduleDayProjectList.innerHTML = daySchedules.map(function (project) {
+        const taskItems = (Array.isArray(project.tasks) ? project.tasks : []).map(function (task) {
+            const rangeStart = formatTaskDate(task.startDate || dateKey);
+            const rangeEnd = formatTaskDate(task.dueDate || dateKey);
+            return '<div class="small mb-2 p-2 border-start border-3 border-primary rounded-2 bg-white shadow-sm text-dark">'
+                + '<p class="fw-semibold mb-1 text-primary">' + escapeHtml(rangeStart) + ' - ' + escapeHtml(rangeEnd) + '</p>'
+                + '<p class="mb-1">' + escapeHtml(task.description || 'No task description provided.') + '</p>'
+                + '<span class="badge ' + getStatusBadgeClass(task.status) + '">' + escapeHtml(task.status || 'Incomplete') + '</span>'
+                + '</div>';
+        }).join('');
+
+        return '<li class="list-group-item px-0">'
+            + '<p class="small text-primary fw-semibold mb-1">' + escapeHtml(project.projectId || 'N/A') + '</p>'
+            + '<p class="fw-semibold small mb-1">' + escapeHtml(project.title || 'Untitled Project') + '</p>'
+            + '<p class="small mb-2 text-secondary"><i class="bi bi-geo-alt me-1"></i>' + escapeHtml(project.location || 'No location provided') + '</p>'
+            + '<div class="mb-2"><span class="badge ' + getStatusBadgeClass(project.status) + '">' + escapeHtml(project.status || 'Assigned') + '</span></div>'
+            + '<p class="fw-bold fs-6 mb-2"><i class="bi bi-list-task me-1"></i>Tasks</p>'
+            + '<div class="mb-2">' + taskItems + '</div>'
+            + '</li>';
+    }).join('');
 }
 
 function renderScheduleCalendar() {
@@ -308,67 +885,77 @@ function renderScheduleCalendar() {
         scheduleSelectedTech.textContent = `Showing schedule for ${matchedTechName}`;
     }
 
-    const records = matchedTechName ? (attendanceByTech[matchedTechName] || []) : [];
-    const recordsByDate = {};
+    const weekdayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const totalCells = Math.ceil((startWeekday + totalDays) / 7) * 7;
 
-    records.forEach(function (record) {
-        const parsedDate = parseRecordDate(record.date || '');
-        if (!parsedDate) {
-            return;
-        }
-        const attendanceStatus = String(record.status || 'Present').toLowerCase();
-        const projectId = String(record.project || '').trim();
-        if (attendanceStatus !== 'present' || projectId === '' || projectId === '-') {
-            return;
-        }
-        const dateKey = formatDateKey(parsedDate);
-        if (!recordsByDate[dateKey]) {
-            recordsByDate[dateKey] = [];
-        }
-        recordsByDate[dateKey].push(projectId);
+    scheduleCalendar.innerHTML = '';
+
+    weekdayHeaders.forEach(function (dayName) {
+        const headerCell = document.createElement('div');
+        headerCell.className = 'cal-header';
+        headerCell.textContent = dayName;
+        scheduleCalendar.appendChild(headerCell);
     });
 
-    const weekdayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    let calendarHtml = '<div class="table-responsive">'
-        + '<table class="table table-bordered table-sm mb-0 align-middle">'
-        + '<thead class="table-light"><tr>'
-        + weekdayHeaders.map(function (weekday) {
-            return `<th class="text-center">${weekday}</th>`;
-        }).join('')
-        + '</tr></thead><tbody>';
+    for (let cellIndex = 0; cellIndex < totalCells; cellIndex += 1) {
+        const dayNumber = cellIndex - startWeekday + 1;
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'cal-cell text-start border-0';
 
-    let dayCounter = 1;
-    for (let week = 0; week < 6; week += 1) {
-        calendarHtml += '<tr>';
-        for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek += 1) {
-            const isEmptyLeading = week === 0 && dayOfWeek < startWeekday;
-            const isPastMonth = dayCounter > totalDays;
-            if (isEmptyLeading || isPastMonth) {
-                calendarHtml += '<td class="bg-light" style="height: 110px;"></td>';
-            } else {
-                const dateObject = new Date(currentYear, currentMonth, dayCounter);
-                const dateKey = formatDateKey(dateObject);
-                const projects = recordsByDate[dateKey] || [];
+        if (dayNumber < 1 || dayNumber > totalDays) {
+            cell.classList.add('empty');
+            scheduleCalendar.appendChild(cell);
+            continue;
+        }
 
-                calendarHtml += '<td style="height: 110px; vertical-align: top;">'
-                    + `<div class="small fw-semibold mb-1">${dayCounter}</div>`
-                    + (projects.length > 0
-                        ? projects.map(function (project) {
-                            return `<div class="badge text-bg-primary d-block text-start mb-1">${project}</div>`;
-                        }).join('')
-                        : '<div class="small text-muted"></div>')
-                    + '</td>';
-                dayCounter += 1;
-            }
+        const thisDate = new Date(currentYear, currentMonth, dayNumber);
+        const thisDateKey = formatDateKey(thisDate);
+        const isToday = thisDateKey === formatDateKey(today);
+        const isSelected = thisDateKey === selectedScheduleDateKey;
+        const schedules = matchedTechName ? getSchedulesByDate(matchedTechName, thisDateKey) : [];
+
+        if (isToday) {
+            cell.classList.add('today');
         }
-        calendarHtml += '</tr>';
-        if (dayCounter > totalDays) {
-            break;
+        if (isSelected) {
+            cell.classList.add('tech-cal-selected');
         }
+
+        const dayPill = document.createElement('div');
+        dayPill.className = 'cal-day' + (isToday ? ' today-dot' : '');
+        dayPill.textContent = String(dayNumber);
+        cell.appendChild(dayPill);
+
+        schedules.slice(0, 2).forEach(function (project) {
+            const tag = document.createElement('div');
+            tag.className = 'cal-event';
+            tag.style.cssText = getCalendarEventStyle(project.color || 'secondary');
+            tag.textContent = project.projectId || 'N/A';
+            cell.appendChild(tag);
+        });
+
+        if (schedules.length > 2) {
+            const moreTag = document.createElement('div');
+            moreTag.className = 'small text-secondary mt-1';
+            moreTag.textContent = '+' + (schedules.length - 2) + ' more';
+            cell.appendChild(moreTag);
+        }
+
+        cell.addEventListener('click', function () {
+            selectedScheduleDateKey = thisDateKey;
+            renderScheduleCalendar();
+            renderSelectedScheduleDay(thisDate, matchedTechName);
+        });
+
+        scheduleCalendar.appendChild(cell);
     }
 
-    calendarHtml += '</tbody></table></div>';
-    scheduleCalendar.innerHTML = calendarHtml;
+    const selectedDateParts = selectedScheduleDateKey.split('-').map(Number);
+    renderSelectedScheduleDay(
+        new Date(selectedDateParts[0], selectedDateParts[1] - 1, selectedDateParts[2]),
+        matchedTechName
+    );
 }
 
 if (scheduleTechnicianName) {
@@ -385,6 +972,15 @@ if (calendarPrevMonth) {
 if (calendarNextMonth) {
     calendarNextMonth.addEventListener('click', function () {
         calendarMonthState.setMonth(calendarMonthState.getMonth() + 1);
+        renderScheduleCalendar();
+    });
+}
+
+if (calendarCurrentMonth) {
+    calendarCurrentMonth.addEventListener('click', function () {
+        calendarMonthState.setMonth(today.getMonth());
+        calendarMonthState.setFullYear(today.getFullYear());
+        selectedScheduleDateKey = formatDateKey(today);
         renderScheduleCalendar();
     });
 }
