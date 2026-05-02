@@ -68,7 +68,7 @@ $requests = [
     </div>
     <div class="table-responsive card border-0 shadow-sm">
         <table class="table table-hover mb-0">
-            <thead class="table-light"><tr><th>ID</th><th>Client</th><th>Service</th><th>Date</th><th>Status</th><th class="text-start">Action</th></tr></thead>
+            <thead class="table-light"><tr><th>ID</th><th>Client</th><th>Service</th><th>Assessment Date</th><th>Status</th><th class="text-start">Action</th></tr></thead>
             <tbody id="requestsTableBody">
             <?php foreach ($requests as $item): ?>
                 <tr>
@@ -105,7 +105,7 @@ $requests = [
                         <div class="col-md-6"><small class="text-muted d-block">Request ID</small><strong id="req-id"></strong></div>
                         <div class="col-md-6"><small class="text-muted d-block">Client</small><strong id="req-client"></strong></div>
                         <div class="col-md-6"><small class="text-muted d-block">Service</small><strong id="req-service"></strong></div>
-                        <div class="col-md-6"><small class="text-muted d-block">Requested Date</small><strong id="req-date"></strong></div>
+                        <div class="col-md-6"><small class="text-muted d-block">Assessment Date</small><strong id="req-date"></strong></div>
                         <div class="col-md-6"><small class="text-muted d-block">Phone</small><strong id="req-phone"></strong></div>
                         <div class="col-md-6"><small class="text-muted d-block">Address</small><strong id="req-address"></strong></div>
                         <div class="col-12"><small class="text-muted d-block">Description</small><p class="mb-0" id="req-desc"></p></div>

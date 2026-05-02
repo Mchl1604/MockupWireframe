@@ -10,7 +10,7 @@ $quotes = [
         'project' => 'PRJ-1001',
         'client' => 'ACME Holdings',
         'amount' => 245000,
-        'status' => 'Sent',
+        'status' => 'Pending Approval',
         'laborCost' => 55000,
         'materials' => [
             ['name' => 'Copper Pipe', 'qty' => 8, 'unit' => 'roll', 'unitCost' => 8500],
@@ -71,7 +71,7 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
                     <td><?php echo htmlspecialchars($q['project'], ENT_QUOTES, 'UTF-8'); ?></td>
                     <td><?php echo htmlspecialchars($q['client'], ENT_QUOTES, 'UTF-8'); ?></td>
                     <td>₱<?php echo number_format((float) $q['amount'], 2); ?></td>
-                    <td><span class="badge quote-status-badge <?php echo $q['status'] === 'Approved' ? 'bg-success' : ($q['status'] === 'Sent' ? 'bg-primary' : 'bg-secondary'); ?>"><?php echo htmlspecialchars($q['status'], ENT_QUOTES, 'UTF-8'); ?></span></td>
+                    <td><span class="badge quote-status-badge <?php echo $q['status'] === 'Approved' ? 'bg-success' : ($q['status'] === 'Pending Approval' ? 'bg-primary' : 'bg-secondary'); ?>"><?php echo htmlspecialchars($q['status'], ENT_QUOTES, 'UTF-8'); ?></span></td>
                     <td class="text-end">
                         <div class="d-flex justify-content-end flex-wrap gap-1 quote-actions">
                             <?php if ($q['status'] === 'Draft'): ?>
@@ -88,7 +88,7 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
     </div>
 
     <div class="modal fade" id="quotationDetailsModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header">
                     <h5 class="modal-title">Quotation Details</h5>
@@ -99,8 +99,7 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
                         <div class="col-6"><small class="text-muted d-block">Quotation</small><strong id="qd-id"></strong></div>
                         <div class="col-6"><small class="text-muted d-block">Project</small><strong id="qd-project"></strong></div>
                         <div class="col-12"><small class="text-muted d-block">Client</small><strong id="qd-client"></strong></div>
-                        <div class="col-6"><small class="text-muted d-block">Total</small><strong id="qd-total"></strong></div>
-                        <div class="col-6"><small class="text-muted d-block">Status</small><span id="qd-status" class="badge"></span></div>
+                        <div class="col-12"><small class="text-muted d-block">Status</small><span id="qd-status" class="badge"></span></div>
                         <div class="col-12">
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <small class="text-muted d-block mb-0">Materials</small>
@@ -124,9 +123,17 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
                                 </table>
                             </div>
                         </div>
-                        <div class="col-12">
-                            <small class="text-muted d-block">Labor Cost</small>
-                            <input type="number" class="form-control" id="qd-labor-input" min="0" step="0.01">
+                        <div class="col-12 d-flex justify-content-md-end">
+                            <div class="w-100" style="max-width: 360px;">
+                                <div class="mb-3">
+                                    <small class="text-muted d-block text-start">Labor Cost</small>
+                                    <input type="number" class="form-control text-end" id="qd-labor-input" min="0" step="0.01">
+                                </div>
+                                <div>
+                                    <small class="text-muted d-block text-start">Total Cost</small>
+                                    <input type="text" class="form-control text-end" id="qd-total" readonly tabindex="-1">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -216,9 +223,17 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Labor Cost</label>
-                                <input type="number" class="form-control" min="0" step="0.01" placeholder="0.00">
+                            <div class="col-12 d-flex justify-content-md-end">
+                                <div class="w-100" style="max-width: 360px;">
+                                    <div class="mb-3">
+                                        <label class="form-label d-block text-start">Labor Cost</label>
+                                        <input type="number" class="form-control text-end" id="createQuotationLaborCost" min="0" step="0.01" placeholder="0.00">
+                                    </div>
+                                    <div>
+                                        <label class="form-label d-block text-start">Total Cost</label>
+                                        <input type="text" class="form-control text-end" id="createQuotationTotalCost" value="₱0.00" readonly tabindex="-1">
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Notes</label>
@@ -248,6 +263,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const qdSaveChanges = document.getElementById('qd-save-changes');
     const qdAddMaterial = document.getElementById('qd-add-material');
     const quotationSearch = document.getElementById('quotationSearch');
+    const createQuotationLaborCost = document.getElementById('createQuotationLaborCost');
+    const createQuotationTotalCost = document.getElementById('createQuotationTotalCost');
 
     let activeQuote = null;
     let activeQuoteRow = null;
@@ -268,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function statusBadgeClass(status) {
         if (status === 'Approved') return 'bg-success';
-        if (status === 'Sent') return 'bg-primary';
+        if (status === 'Pending Approval') return 'bg-primary';
         return 'bg-secondary';
     }
 
@@ -398,6 +415,23 @@ document.addEventListener('DOMContentLoaded', function () {
             '<td><input type="text" class="form-control form-control-sm text-start" value="' + formatCurrency(0) + '" readonly tabindex="-1"></td>' +
             '<td class="text-start"><button type="button" class="btn btn-outline-danger btn-sm" data-remove-row><i class="bi bi-trash"></i></button></td>';
         rowsContainer.appendChild(tr);
+        updateCreateQuotationTotal();
+    }
+
+    function updateCreateQuotationTotal() {
+        if (!createQuotationTotalCost || !rowsContainer) return;
+
+        let materialsTotal = 0;
+        rowsContainer.querySelectorAll('tr').forEach(function (row) {
+            const qtyEl = row.querySelector('td:nth-child(2) input');
+            const costEl = row.querySelector('td:nth-child(4) input');
+            if (!qtyEl || !costEl) return;
+
+            materialsTotal += Number(qtyEl.value || 0) * Number(costEl.value || 0);
+        });
+
+        const laborCost = Number(createQuotationLaborCost ? createQuotationLaborCost.value : 0);
+        createQuotationTotalCost.value = formatCurrency(materialsTotal + laborCost);
     }
 
     if (rowsContainer && addRowButton) {
@@ -412,7 +446,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (rowsContainer.children.length === 0) {
                 createMaterialRow();
+                return;
             }
+
+            updateCreateQuotationTotal();
         });
 
         rowsContainer.addEventListener('input', function (event) {
@@ -423,9 +460,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const totalEl = row.querySelector('td:nth-child(5) input');
             if (!qtyEl || !costEl || !totalEl) return;
             totalEl.value = formatCurrency(Number(qtyEl.value || 0) * Number(costEl.value || 0));
+            updateCreateQuotationTotal();
         });
 
         createMaterialRow();
+    }
+
+    if (createQuotationLaborCost) {
+        createQuotationLaborCost.addEventListener('input', updateCreateQuotationTotal);
     }
 
     if (qdSaveChanges) {
@@ -460,7 +502,7 @@ document.addEventListener('DOMContentLoaded', function () {
             activeQuote.amount = materialsTotal + Number(activeQuote.laborCost || 0);
 
             if (detailsModalEl) {
-                detailsModalEl.querySelector('#qd-total').textContent = formatCurrency(activeQuote.amount || 0);
+                detailsModalEl.querySelector('#qd-total').value = formatCurrency(activeQuote.amount || 0);
             }
 
             syncActiveRow();
@@ -505,7 +547,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 detailsModalEl.querySelector('#qd-id').textContent = quote.id || '';
                 detailsModalEl.querySelector('#qd-project').textContent = quote.project || '';
                 detailsModalEl.querySelector('#qd-client').textContent = quote.client || '';
-                detailsModalEl.querySelector('#qd-total').textContent = formatCurrency(quote.amount || 0);
+                detailsModalEl.querySelector('#qd-total').value = formatCurrency(quote.amount || 0);
                 if (qdLaborInput) {
                     qdLaborInput.value = Number(quote.laborCost || 0);
                     qdLaborInput.disabled = quote.status !== 'Draft';
@@ -537,13 +579,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!viewButton) return;
 
                 const quote = JSON.parse(viewButton.dataset.quote || '{}');
-                quote.status = 'Sent';
+                quote.status = 'Pending Approval';
                 viewButton.dataset.quote = JSON.stringify(quote);
 
                 const statusBadge = row.querySelector('.quote-status-badge');
                 if (statusBadge) {
-                    statusBadge.textContent = 'Sent';
-                    statusBadge.className = 'badge quote-status-badge ' + statusBadgeClass('Sent');
+                    statusBadge.textContent = 'Pending Approval';
+                    statusBadge.className = 'badge quote-status-badge ' + statusBadgeClass('Pending Approval');
                 }
 
                 sendBtn.remove();
@@ -552,8 +594,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     activeQuote = quote;
                     activeQuoteRow = row;
                     activeQuoteViewButton = viewButton;
-                    detailsModalEl.querySelector('#qd-status').textContent = 'Sent';
-                    detailsModalEl.querySelector('#qd-status').className = 'badge ' + statusBadgeClass('Sent');
+                    detailsModalEl.querySelector('#qd-status').textContent = 'Pending Approval';
+                    detailsModalEl.querySelector('#qd-status').className = 'badge ' + statusBadgeClass('Pending Approval');
                     if (qdLaborInput) qdLaborInput.disabled = true;
                     if (qdSaveChanges) qdSaveChanges.style.display = 'none';
                 }

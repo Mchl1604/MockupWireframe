@@ -70,6 +70,13 @@ $activityLogs = [
     ['id' => 'LOG-008', 'timestamp' => '2026-04-12 13:20:18', 'user' => 'Admin Two', 'action' => 'Configuration Changed', 'description' => 'Updated system settings'],
     ['id' => 'LOG-009', 'timestamp' => '2026-04-12 12:40:10', 'user' => 'Admin Two', 'action' => 'Material Deleted', 'description' => 'Deleted obsolete material: Old AC Unit'],
 ];
+
+$systemSettings = [
+    'companyName' => 'Coli Construct',
+    'supportEmail' => 'support@coliconstruct.com',
+    'contactNumber' => '0917-000-0000',
+    'businessAddress' => '20 NHA Commercial and Industrial Compound, Barangay Gavino Maderan, Luzon Avenue, General Mariano Alvarez, Cavite.',
+];
 ?>
 <main class="container py-4 flex-grow-1">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -87,6 +94,9 @@ $activityLogs = [
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="materials-tab" data-bs-toggle="tab" data-bs-target="#materials-pane" type="button" role="tab" aria-controls="materials-pane" aria-selected="false">Materials</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="system-settings-tab" data-bs-toggle="tab" data-bs-target="#system-settings-pane" type="button" role="tab" aria-controls="system-settings-pane" aria-selected="false">System Settings</button>
         </li>
     </ul>
 
@@ -281,6 +291,67 @@ $activityLogs = [
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Settings Pane -->
+        <div class="tab-pane fade" id="system-settings-pane" role="tabpanel" aria-labelledby="system-settings-tab" tabindex="0">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h5 fw-bold mb-0">System Settings</h3>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <form id="systemSettingsForm" class="needs-validation" novalidate>
+                        <div class="row g-4">
+                            <div class="col-lg-4">
+                                <div class="border rounded-3 p-3 h-100 bg-light-subtle">
+                                    <label for="companyLogoInput" class="form-label fw-semibold">Company Logo</label>
+                                    <div class="text-center mb-3">
+                                        <img
+                                            id="companyLogoPreview"
+                                            src="<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/logo.png', ENT_QUOTES, 'UTF-8'); ?>"
+                                            alt="Company Logo Preview"
+                                            class="img-fluid border rounded bg-white p-2"
+                                            style="max-height: 160px; width: auto;"
+                                            onerror="this.onerror=null; this.src='<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/defaultProfile.png', ENT_QUOTES, 'UTF-8'); ?>';"
+                                        >
+                                    </div>
+                                    <input class="form-control form-control-sm" type="file" id="companyLogoInput" accept="image/*">
+                                    <div class="small text-muted mt-2">Upload JPG, PNG, or WEBP logo. Preview updates instantly.</div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-8">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="companyNameInput" class="form-label">Company Name</label>
+                                        <input type="text" class="form-control" id="companyNameInput" value="<?php echo htmlspecialchars($systemSettings['companyName'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="supportEmailInput" class="form-label">Support Email</label>
+                                        <input type="email" class="form-control" id="supportEmailInput" value="<?php echo htmlspecialchars($systemSettings['supportEmail'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="contactNumberInput" class="form-label">Contact Number</label>
+                                        <input type="text" class="form-control" id="contactNumberInput" value="<?php echo htmlspecialchars($systemSettings['contactNumber'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="businessAddressInput" class="form-label">Business Address</label>
+                                        <input type="text" class="form-control" id="businessAddressInput" value="<?php echo htmlspecialchars($systemSettings['businessAddress'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-4 gap-2">
+                            <button type="reset" class="btn btn-outline-secondary" id="resetSystemSettingsBtn">Reset</button>
+                            <button type="submit" class="btn btn-primary">Save System Settings</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -502,6 +573,61 @@ $activityLogs = [
                 btn.closest('tr').style.opacity = '0.5';
                 btn.disabled = true;
             }
+        }
+
+        const companyLogoInput = document.getElementById('companyLogoInput');
+        const companyLogoPreview = document.getElementById('companyLogoPreview');
+        if (companyLogoInput && companyLogoPreview) {
+            companyLogoInput.addEventListener('change', function (event) {
+                const file = event.target.files && event.target.files[0] ? event.target.files[0] : null;
+                if (!file) {
+                    return;
+                }
+
+                if (!String(file.type || '').startsWith('image/')) {
+                    alert('Please upload a valid image file.');
+                    companyLogoInput.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (loadEvent) {
+                    companyLogoPreview.src = String(loadEvent.target && loadEvent.target.result ? loadEvent.target.result : '');
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        const systemSettingsForm = document.getElementById('systemSettingsForm');
+        if (systemSettingsForm) {
+            systemSettingsForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const companyNameInput = document.getElementById('companyNameInput');
+                const supportEmailInput = document.getElementById('supportEmailInput');
+                if (!companyNameInput || !supportEmailInput) {
+                    return;
+                }
+
+                if (!companyNameInput.value.trim() || !supportEmailInput.value.trim()) {
+                    alert('Company name and support email are required.');
+                    return;
+                }
+
+                alert('System settings saved for ' + companyNameInput.value.trim() + '.');
+            });
+        }
+
+        const resetSystemSettingsBtn = document.getElementById('resetSystemSettingsBtn');
+        if (resetSystemSettingsBtn && systemSettingsForm) {
+            resetSystemSettingsBtn.addEventListener('click', function () {
+                setTimeout(function () {
+                    const logoPreview = document.getElementById('companyLogoPreview');
+                    if (logoPreview) {
+                        logoPreview.src = '<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/logo.png', ENT_QUOTES, 'UTF-8'); ?>';
+                    }
+                }, 0);
+            });
         }
     </script>
 </main>

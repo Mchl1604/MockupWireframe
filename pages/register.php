@@ -44,9 +44,15 @@
 
                         <div class="row g-2">
                             <div class="col-md-6">
-                                <label class="form-label fw-medium">Full Name</label>
-                                <input type="text" class="form-control" name="name" placeholder="Juan Dela Cruz" required>
-                                <div class="invalid-feedback">Please enter your name.</div>
+                                <label class="form-label fw-medium">Last Name</label>
+                                <input type="text" class="form-control" name="last_name" placeholder="Dela Cruz" required>
+                                <div class="invalid-feedback">Please enter your last name.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">First Name</label>
+                                <input type="text" class="form-control" name="first_name" placeholder="Juan" required>
+                                <div class="invalid-feedback">Please enter your first name.</div>
                             </div>
 
                             <div class="col-md-6">
@@ -61,8 +67,8 @@
                                 <div class="invalid-feedback">Please enter your contact number.</div>
                             </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label fw-medium">Address</label>
+                            <div class="col-12">
+                                <label class="form-label fw-medium">Full Address</label>
                                 <input type="text" class="form-control" name="address" placeholder="123 Main St, Makati City" required>
                                 <div class="invalid-feedback">Please enter your address.</div>
                             </div>
@@ -124,7 +130,7 @@
 
                 <h6 class="fw-bold mt-3">3. ACCOUNT REGISTRATION AND SECURITY</h6>
                 <ol>
-                    <li>You are required to provide your full name, valid contact number, email address, and service location during registration.</li>
+                    <li>You are required to provide your first name, last name, valid contact number, email address, and service location during registration.</li>
                     <li>You are responsible for maintaining the confidentiality of your account credentials. You must not share your username or password with any third party.</li>
                     <li>You agree to notify the administrator immediately of any unauthorized use of your account.</li>
                     <li>Coliconstruct Engineering Services reserves the right to deactivate or terminate any account found to be in violation of these Terms and Conditions.</li>

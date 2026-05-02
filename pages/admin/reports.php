@@ -180,7 +180,6 @@
                                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#generateReportModal">
                                             <i class="bi bi-file-earmark-text me-1"></i>Generate Report
                                         </button>
-                                        <span class="text-muted small">Requests, Ongoing, Pending, Completed</span>
                                     </div>
                                 </div>
                                 <div class="card-body">

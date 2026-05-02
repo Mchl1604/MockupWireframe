@@ -98,7 +98,16 @@
             'timeline' => '',
             'address' => 'Bonifacio Global City',
             'description' => 'Awaiting schedule confirmation before onsite service deployment.',
-            'quotation' => [],
+            'quotation' => [
+                'materials' => [
+                    ['name' => 'Copper Pipe', 'qty' => 4, 'unit' => 'roll', 'cost' => 6000],
+                    ['name' => 'Rubber Insulation', 'qty' => 4, 'unit' => 'roll', 'cost' => 2200],
+                    ['name' => 'Circuit Breaker', 'qty' => 3, 'unit' => 'pc', 'cost' => 1800],
+                ],
+                'materialsCost' => 10000,
+                'laborCost' => 8500,
+                'totalCost' => 18500,
+            ],
             'progressReports' => [],
         ],
         [
@@ -448,17 +457,7 @@
                         <div class="col-12 mt-2" id="pv-progress-section">
                             <hr class="my-2">
                             <div class="fw-bold mb-2">Progress Report</div>
-                            <div class="table-responsive border rounded">
-                                <table class="table table-sm mb-0 align-middle">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th style="width: 140px;">Date</th>
-                                            <th>Report</th>
-                                            <th style="width: 120px;">Picture</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="pv-progress-body"></tbody>
-                                </table>
+                            <div class="border rounded p-2" id="pv-progress-body">
                             </div>
                             <p class="small text-muted mb-0 mt-2" id="pv-progress-empty" style="display:none;">No progress report submitted yet.</p>
                         </div>
@@ -557,8 +556,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function shouldShowQuotationButton(status) {
         const statusKey = normalizeStatus(status);
-        const hideStatuses = ['for approval', 'for assessment'];
+        const hideStatuses = ['for approval', 'for assessment', 'awaiting quotation approval'];
         return !hideStatuses.includes(statusKey);
+    }
+
+    function shouldAutoOpenQuotation(status) {
+        return normalizeStatus(status) === 'awaiting quotation approval';
     }
 
     function shouldShowProgressSection(status) {
@@ -602,6 +605,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 viewQuotationBtn.hidden = !showQuotationButton;
             }
 
+            if (shouldAutoOpenQuotation(status)) {
+                if (quotationSection) quotationSection.style.display = '';
+                renderQuotation(data);
+            }
+
             modalEl.querySelector('#pv-name').textContent = data.name || '';
             modalEl.querySelector('#pv-service').textContent = data.serviceType || '';
             modalEl.querySelector('#pv-address').textContent = data.address || '';
@@ -623,11 +631,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     if (progressEmpty) progressEmpty.style.display = 'none';
                     progressBody.innerHTML = progressReports.map(function (entry) {
-                        return '<tr>' +
-                            '<td class="small">' + esc(entry.date || '') + '</td>' +
-                            '<td class="small">' + esc(entry.report || '') + '</td>' +
-                            '<td class="small"><img src="' + esc(progressImagePath) + '" alt="Progress report photo" class="img-thumbnail" style="width:72px;height:72px;object-fit:cover;"></td>' +
-                            '</tr>';
+                        return '<div class="border rounded p-3 mb-2 bg-white">' +
+                            '<small class="text-muted d-block">Date</small>' +
+                            '<div class="small mb-2">' + esc(entry.date || '') + '</div>' +
+                            '<small class="text-muted d-block">Description</small>' +
+                            '<div class="small mb-2">' + esc(entry.report || '') + '</div>' +
+                            '<small class="text-muted d-block">Picture</small>' +
+                            '<div><img src="' + esc(progressImagePath) + '" alt="Progress report photo" class="img-thumbnail mt-1" style="width:120px;height:120px;object-fit:cover;"></div>' +
+                            '</div>';
                     }).join('');
                 }
             }
@@ -795,6 +806,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 viewQuotationBtn.hidden = !showQuotationButton;
             }
 
+            if (shouldAutoOpenQuotation(status)) {
+                if (quotationSection) quotationSection.style.display = '';
+                renderQuotation(data);
+            }
+
             modalEl.querySelector('#pv-name').textContent = data.name || '';
             modalEl.querySelector('#pv-service').textContent = data.serviceType || '';
             modalEl.querySelector('#pv-address').textContent = data.address || '';
@@ -816,11 +832,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     if (progressEmpty) progressEmpty.style.display = 'none';
                     progressBody.innerHTML = progressReports.map(function (entry) {
-                        return '<tr>' +
-                            '<td class="small">' + esc(entry.date || '') + '</td>' +
-                            '<td class="small">' + esc(entry.report || '') + '</td>' +
-                            '<td class="small"><img src="' + esc(progressImagePath) + '" alt="Progress report photo" class="img-thumbnail" style="width:72px;height:72px;object-fit:cover;"></td>' +
-                            '</tr>';
+                        return '<div class="border rounded p-3 mb-2 bg-white">' +
+                            '<small class="text-muted d-block">Date</small>' +
+                            '<div class="small mb-2">' + esc(entry.date || '') + '</div>' +
+                            '<small class="text-muted d-block">Description</small>' +
+                            '<div class="small mb-2">' + esc(entry.report || '') + '</div>' +
+                            '<small class="text-muted d-block">Picture</small>' +
+                            '<div><img src="' + esc(progressImagePath) + '" alt="Progress report photo" class="img-thumbnail mt-1" style="width:120px;height:120px;object-fit:cover;"></div>' +
+                            '</div>';
                     }).join('');
                 }
             }
