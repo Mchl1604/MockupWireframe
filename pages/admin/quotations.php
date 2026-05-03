@@ -183,9 +183,7 @@ $assessmentByProject = [
                     <td><span class="badge quote-status-badge <?php echo $q['status'] === 'Approved' ? 'bg-success' : ($q['status'] === 'Pending Approval' ? 'bg-primary' : 'bg-secondary'); ?>"><?php echo htmlspecialchars($q['status'], ENT_QUOTES, 'UTF-8'); ?></span></td>
                     <td class="text-end">
                         <div class="d-flex justify-content-end flex-wrap gap-1 quote-actions">
-                            <?php if ($q['status'] === 'Draft'): ?>
-                                <button type="button" class="btn btn-primary btn-sm" data-send-quote>Send Quotation</button>
-                            <?php endif; ?>
+                            
                             <button type="button" class="btn btn-outline-secondary btn-sm" title="View Details" aria-label="View Details" data-quote='<?php echo htmlspecialchars(json_encode($q), ENT_QUOTES, 'UTF-8'); ?>'><i class="bi bi-eye"></i></button>
                             <button type="button" class="btn btn-outline-danger btn-sm" title="Archive" aria-label="Archive" data-archive-quote><i class="bi bi-trash"></i></button>
                         </div>
@@ -259,8 +257,8 @@ $assessmentByProject = [
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="qd-save-changes" style="display:none;">Save Changes</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Save Changes</button>
+                    <button type="button" class="btn btn-primary" id="qd-save-changes" style="display:none;">Send to Client</button>
                 </div>
             </div>
         </div>
@@ -363,8 +361,9 @@ $assessmentByProject = [
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save Quotation</button>
+                        <button type="button" class="btn btn-outline-secondary" id="saveDraftBtn">Save Draft</button>
+                        <button type="button" class="btn btn-primary" id="sendToClientBtn">Send to Client</button>
+                        
                     </div>
                 </form>
             </div>

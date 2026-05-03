@@ -30,7 +30,12 @@ $statusClassMap = [
         <div class="card-body pb-0">
             <ul class="nav nav-tabs" id="projectTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="assessment-tab" data-bs-toggle="tab" data-bs-target="#assessment-pane" type="button" role="tab" aria-controls="assessment-pane" aria-selected="true">
+                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-pane" type="button" role="tab" aria-controls="all-pane" aria-selected="true">
+                        All
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="assessment-tab" data-bs-toggle="tab" data-bs-target="#assessment-pane" type="button" role="tab" aria-controls="assessment-pane" aria-selected="false">
                         Assessment
                     </button>
                 </li>
@@ -48,7 +53,17 @@ $statusClassMap = [
         </div>
 
         <div class="tab-content p-3 pt-2">
-            <div class="tab-pane fade show active" id="assessment-pane" role="tabpanel" aria-labelledby="assessment-tab" tabindex="0">
+            <div class="tab-pane fade show active" id="all-pane" role="tabpanel" aria-labelledby="all-tab" tabindex="0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light"><tr><th>ID</th><th>Project</th><th>Schedule</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="allProjectsBody"></tbody>
+                    </table>
+                </div>
+                <p class="text-muted small mb-0 mt-3 d-none" id="allEmpty">No projects available.</p>
+            </div>
+
+            <div class="tab-pane fade" id="assessment-pane" role="tabpanel" aria-labelledby="assessment-tab" tabindex="0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light"><tr><th>ID</th><th>Project</th><th>Schedule</th><th>Action</th></tr></thead>
@@ -87,9 +102,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const statusClassMap = <?php echo json_encode($statusClassMap, JSON_UNESCAPED_SLASHES); ?>;
     const projects = <?php echo json_encode($projects, JSON_UNESCAPED_SLASHES); ?>;
 
+    const allProjectsBody = document.getElementById('allProjectsBody');
     const assessmentProjectsBody = document.getElementById('assessmentProjectsBody');
     const ongoingProjectsBody = document.getElementById('ongoingProjectsBody');
     const completedProjectsBody = document.getElementById('completedProjectsBody');
+    const allEmpty = document.getElementById('allEmpty');
     const assessmentEmpty = document.getElementById('assessmentEmpty');
     const ongoingEmpty = document.getElementById('ongoingEmpty');
     const completedEmpty = document.getElementById('completedEmpty');
@@ -137,15 +154,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function renderProjectTabs() {
         const buckets = {
+            all: [],
             assessment: [],
             ongoing: [],
             completed: []
         };
 
         projects.forEach(function (project) {
-            buckets[getTabKeyByStatus(project.status)].push(project);
+            const tabKey = getTabKeyByStatus(project.status);
+            buckets.all.push(project);
+            buckets[tabKey].push(project);
         });
 
+        allProjectsBody.innerHTML = buckets.all.map(function (project) {
+            return buildProjectRow(project, true);
+        }).join('');
         assessmentProjectsBody.innerHTML = buckets.assessment.map(function (project) {
             return buildProjectRow(project, false);
         }).join('');
@@ -156,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return buildProjectRow(project, true);
         }).join('');
 
+        allEmpty.classList.toggle('d-none', buckets.all.length > 0);
         assessmentEmpty.classList.toggle('d-none', buckets.assessment.length > 0);
         ongoingEmpty.classList.toggle('d-none', buckets.ongoing.length > 0);
         completedEmpty.classList.toggle('d-none', buckets.completed.length > 0);

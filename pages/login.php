@@ -1,7 +1,6 @@
 <?php $pageTitle = 'Login'; ?>
 <?php include __DIR__ . '/../includes/head.php'; ?>
 <body class="bg-light min-vh-100 d-flex flex-column">
-<?php include __DIR__ . '/../includes/navbar.php'; ?>
 
 <div class="container py-5 my-auto">
     <div class="row justify-content-center">
@@ -38,7 +37,7 @@
                                    placeholder="••••••••" required>
                             <div class="invalid-feedback">Please enter your password.</div>
                         </div>
-
+                        
                         <div class="mb-4">
                             <label class="form-label fw-medium">Login as <span class="text-muted">(Demo)</span></label>
                             <div class="d-flex gap-2" id="roleButtons">
@@ -52,7 +51,7 @@
                             </div>
                             <input type="hidden" name="role" id="roleInput" value="client">
                         </div>
-
+                       
                         <button type="submit" class="btn btn-primary w-100">Sign In</button>
                     </form>
 
@@ -78,4 +77,4 @@ document.querySelectorAll('.role-btn').forEach(function (btn) {
 });
 </script>
 
-<?php include __DIR__ . '/../includes/footer.php'; ?>
+

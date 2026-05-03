@@ -167,7 +167,7 @@
             'id' => 'COL-2026-0006',
             'name' => 'Aircon Installation - Grand Arc Tower',
             'serviceType' => 'Aircon Installation',
-            'status' => 'For Approval',
+            'status' => 'Pending Request Approval',
             'timeline' => 'Apr 24, 2026 - Apr 30, 2026',
             'address' => 'Ortigas Center',
             'description' => 'Replacement of aircon system for office building in Ortigas Center.',
@@ -189,7 +189,7 @@
     ];
 
     $statusOrder = [
-        'For Approval' => 1,
+        'Pending Request Approval' => 1,
         'For Assessment' => 2,
         'Awaiting Quotation Approval' => 3,
         'Pending Schedule' => 4,
@@ -211,7 +211,7 @@
     });
 
     $requestStatuses = [
-        'For Approval',
+        'Pending Request Approval',
     ];
 
     $requestProjects = array_values(array_filter($projects, function ($project) use ($requestStatuses) {
@@ -263,7 +263,12 @@
         <div class="card-body pb-0">
             <ul class="nav nav-tabs" id="clientProjectTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="requests-tab" data-bs-toggle="tab" data-bs-target="#requests-pane" type="button" role="tab" aria-controls="requests-pane" aria-selected="true">
+                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-pane" type="button" role="tab" aria-controls="all-pane" aria-selected="true">
+                        All
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="requests-tab" data-bs-toggle="tab" data-bs-target="#requests-pane" type="button" role="tab" aria-controls="requests-pane" aria-selected="false">
                         Requests
                     </button>
                 </li>
@@ -286,7 +291,67 @@
         </div>
 
         <div class="tab-content" id="clientProjectTabsContent">
-            <div class="tab-pane fade show active" id="requests-pane" role="tabpanel" aria-labelledby="requests-tab" tabindex="0">
+            <div class="tab-pane fade show active" id="all-pane" role="tabpanel" aria-labelledby="all-tab" tabindex="0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Reference No</th>
+                                <th>Service Type</th>
+                                <th>Status</th>
+                                <th>Timeline</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php if (empty($projects)): ?>
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">No projects found.</td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($projects as $project): ?>
+                                <?php $status = $project['status']; ?>
+                                <?php $displayStatus = $status === 'Pending' ? 'Scheduled' : ($status === 'For Approval' ? 'Pending' : $status); ?>
+                                <?php $timelineDisplay = $status === 'Awaiting Quotation Approval' ? '' : ($project['timeline'] ?? 'TBD'); ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($project['id'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($project['serviceType'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td>
+                                        <span class="badge <?php echo htmlspecialchars($badgeClassForStatus($status), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8'); ?></span>
+                                    </td>
+                                    <td><?php echo htmlspecialchars($timelineDisplay, ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td>
+                                        <a
+                                            href="<?php echo htmlspecialchars(app_url('/client/project', ['id' => $project['id'], 'status' => $project['status']]), ENT_QUOTES, 'UTF-8'); ?>"
+                                            class="btn btn-outline-primary btn-sm"
+                                            title="View Details"
+                                            aria-label="View Details"
+                                        >
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <?php if ($status === 'Pending Request Approval'): ?>
+                                            <button
+                                                type="button"
+                                                class="btn btn-danger btn-sm ms-2"
+                                                data-cancel-project
+                                            >
+                                                Cancel
+                                            </button>
+                                        <?php endif; ?>
+                                        <?php if (($project['id'] ?? '') === 'COL-2026-0008' && $status === 'In Progress'): ?>
+                                            <button type="button" class="btn btn-success btn-sm ms-2 js-service-complete" data-service-complete>Service Complete</button>
+                                        <?php endif; ?>
+                                                                        </td>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="requests-pane" role="tabpanel" aria-labelledby="requests-tab" tabindex="0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
@@ -305,12 +370,11 @@
                         <?php else: ?>
                             <?php foreach ($requestProjects as $project): ?>
                                 <?php $status = $project['status']; ?>
-                                <?php $displayStatus = $status === 'For Approval' ? 'Pending' : $status; ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars($project['id'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><?php echo htmlspecialchars($project['serviceType'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td>
-                                        <span class="badge <?php echo htmlspecialchars($badgeClassForStatus($displayStatus), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($displayStatus, ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <span class="badge <?php echo htmlspecialchars($badgeClassForStatus($status), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8'); ?></span>
                                     </td>
                                     <td>
                                         <a
@@ -376,7 +440,7 @@
                                             <i class="bi bi-eye"></i>
                                         </a>
                                         <?php if (($project['id'] ?? '') === 'COL-2026-0008' && $status === 'In Progress'): ?>
-                                            <button type="button" class="btn btn-success btn-sm ms-2 js-service-complete" data-service-complete>Service Completed</button>
+                                            <button type="button" class="btn btn-success btn-sm ms-2 js-service-complete" data-service-complete>Service Complete</button>
                                         <?php endif; ?>
                                     </td>
                                 </tr>

@@ -57,6 +57,10 @@ $attendanceProjects = ['PRJ-1001', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005'];
             <div class="modal-body">
                 <form id="logAttendanceForm">
                     <div class="mb-3">
+                        <label for="attendanceDate" class="form-label">Date</label>
+                        <input id="attendanceDate" class="form-control" type="text" value="<?php echo date('M d, Y'); ?>" readonly>
+                    </div>
+                    <div class="mb-3">
                         <label for="attendanceProject" class="form-label">Project ID</label>
                         <select id="attendanceProject" class="form-select" required>
                             <option value="">Select project</option>

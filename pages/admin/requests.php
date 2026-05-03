@@ -11,7 +11,7 @@ $requests = [
         'service' => 'Aircon Installation',
         'date' => 'Apr 12, 2026',
         'status' => 'Pending',
-        'address' => 'Makati Business Park',
+        'address' => 'Blk 4 Lot 5 Konsehales St. Makati Business Park',
         'phone' => '09171234567',
         'description' => 'Install three 2.5HP split-type AC units for office rooms.',
     ],
@@ -63,7 +63,7 @@ $requests = [
         <div class="d-flex flex-nowrap align-items-center gap-2 ms-auto">
             
             <input type="search" id="requestSearch" class="form-control form-control-sm" placeholder="Search requests..." style="width: 280px; max-width: 100%;">
-            <a class="btn btn-danger btn-sm" href="<?php echo htmlspecialchars(app_url('/admin/requests', ['view' => 'archives']), ENT_QUOTES, 'UTF-8'); ?>"><i class="bi bi-trash"></i></a>
+            <a class="btn btn-danger btn-sm" href="<?php echo htmlspecialchars(app_url('/admin/requests', ['view' => 'archives']), ENT_QUOTES, 'UTF-8'); ?>">View Archives</a>
         </div>
     </div>
     <div class="table-responsive card border-0 shadow-sm">
@@ -116,7 +116,7 @@ $requests = [
                         <button type="button" class="btn btn-danger btn-sm" data-modal-request-action="reject">Reject</button>
                         <button type="button" class="btn btn-success btn-sm" data-modal-request-action="approve">Approve</button>
                     </div>
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    
                 </div>
             </div>
         </div>

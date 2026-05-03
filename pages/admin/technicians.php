@@ -617,7 +617,7 @@ $scheduleByTech = [
 </div>
 
 <div class="modal fade" id="technicianAttendanceModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-lg" style="max-width: 900px;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Technician Attendance</h5>
@@ -625,22 +625,47 @@ $scheduleByTech = [
             </div>
             <div class="modal-body">
                 <div class="mb-2"><strong>Name:</strong> <span id="attendanceTechName"></span></div>
-                <div class="mb-3">
-                    <label for="attendancePeriodInput" class="form-label mb-1"><strong>Month and Year</strong></label>
-                    <input type="month" id="attendancePeriodInput" class="form-control form-control-sm" value="2026-04">
+                <div class="row g-2 mb-3">
+                    <div class="col-md-6">
+                        <label for="attendanceMonthInput" class="form-label mb-1"><strong>Month</strong></label>
+                        <select id="attendanceMonthInput" class="form-select form-select-sm">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4" selected>April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="attendanceYearInput" class="form-label mb-1"><strong>Year</strong></label>
+                        <select id="attendanceYearInput" class="form-select form-select-sm">
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026" selected>2026</option>
+                            <option value="2027">2027</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-sm table-bordered mb-0 align-middle">
+                    <table class="table table-hover mb-0 align-middle">
                         <thead class="table-light">
                             <tr>
                                 <th>Project ID</th>
                                 <th>Date</th>
                                 <th>Status</th>
                                 <th>Remarks</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="attendanceTableBody">
-                            <tr><td class="text-muted" colspan="4">No attendance records.</td></tr>
+                            <tr><td class="text-muted" colspan="5">No attendance records.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -669,7 +694,8 @@ const scheduleDayProjectList = document.getElementById('scheduleDayProjectList')
 const today = new Date();
 const calendarMonthState = new Date(2026, 3, 1);
 let selectedScheduleDateKey = '2026-04-01';
-const attendancePeriodInput = document.getElementById('attendancePeriodInput');
+const attendanceMonthInput = document.getElementById('attendanceMonthInput');
+const attendanceYearInput = document.getElementById('attendanceYearInput');
 let activeAttendanceTechName = '';
 
 if (technicianSearch) {
@@ -1151,8 +1177,11 @@ document.querySelectorAll('.view-tech-attendance').forEach(button => {
         activeAttendanceTechName = techName;
         document.getElementById('attendanceTechName').textContent = techName;
 
-        if (attendancePeriodInput) {
-            attendancePeriodInput.value = '2026-04';
+        if (attendanceMonthInput) {
+            attendanceMonthInput.value = '4';
+        }
+        if (attendanceYearInput) {
+            attendanceYearInput.value = '2026';
         }
 
         renderAttendanceTable();
@@ -1167,10 +1196,8 @@ function renderAttendanceTable() {
         return;
     }
 
-    const periodValue = attendancePeriodInput ? attendancePeriodInput.value : '2026-04';
-    const periodParts = String(periodValue).split('-');
-    const selectedYear = Number(periodParts[0]);
-    const selectedMonth = Number(periodParts[1]) - 1;
+    const selectedMonth = Number(attendanceMonthInput ? attendanceMonthInput.value : '4') - 1;
+    const selectedYear = Number(attendanceYearInput ? attendanceYearInput.value : '2026');
     const records = attendanceByTech[activeAttendanceTechName] || [];
 
     const filteredRecords = records.filter(function (record) {
@@ -1190,19 +1217,44 @@ function renderAttendanceTable() {
             const remarks = record.remarks || 'Confirmed';
             const statusBadgeClass = String(status).toLowerCase() === 'present' ? 'text-bg-success' : 'text-bg-danger';
             const remarksBadgeClass = String(remarks).toLowerCase() === 'confirmed' ? 'text-bg-primary' : 'text-bg-warning';
+            const canConfirm = String(remarks).toLowerCase() === 'pending';
             return '<tr>'
                 + `<td>${record.project || 'PRJ-0000'}</td>`
                 + `<td>${record.date || '-'}</td>`
                 + `<td><span class="badge ${statusBadgeClass}">${status}</span></td>`
                 + `<td><span class="badge ${remarksBadgeClass}">${remarks}</span></td>`
+                + '<td>'
+                + (canConfirm ? '<button type="button" class="btn btn-sm btn-primary confirm-attendance-btn" data-date="' + escapeHtml(record.date || '') + '">Confirm</button>' : '-')
+                + '</td>'
                 + '</tr>';
         }).join('')
-        : '<tr><td class="text-muted" colspan="4">No attendance records for selected month.</td></tr>';
+        : '<tr><td class="text-muted" colspan="5">No attendance records for selected month.</td></tr>';
 }
 
-if (attendancePeriodInput) {
-    attendancePeriodInput.addEventListener('change', renderAttendanceTable);
+if (attendanceMonthInput) {
+    attendanceMonthInput.addEventListener('change', renderAttendanceTable);
 }
+if (attendanceYearInput) {
+    attendanceYearInput.addEventListener('change', renderAttendanceTable);
+}
+
+document.addEventListener('click', function (event) {
+    const confirmButton = event.target.closest('.confirm-attendance-btn');
+    if (!confirmButton) {
+        return;
+    }
+
+    const dateValue = confirmButton.getAttribute('data-date');
+    const records = attendanceByTech[activeAttendanceTechName] || [];
+    const record = records.find(function (r) {
+        return r.date === dateValue;
+    });
+
+    if (record && record.remarks === 'Pending') {
+        record.remarks = 'Confirmed';
+        renderAttendanceTable();
+    }
+});
 </script>
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
 

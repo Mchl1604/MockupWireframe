@@ -75,7 +75,7 @@
     $systemReports = [
         'currentProjects' => [
             'requests' => 9,
-            'ongoing' => 11,
+            'ongoing' => 3,
             'pending' => 6,
             'completed' => 15,
         ],
@@ -139,11 +139,13 @@
                             </thead>
                             <tbody id="technicianReportsTableBody">
                                 <?php foreach ($technicianReports as $report): ?>
+                                    <?php $reportTypeKey = strtolower(trim((string) $report['type'])); ?>
+                                    <?php $reportTypeBadgeClass = $reportTypeKey === 'assessment' ? 'bg-info-subtle text-info-emphasis' : ($reportTypeKey === 'progress' ? 'bg-primary' : 'bg-danger'); ?>
                                     <tr>
                                         <td><code><?php echo htmlspecialchars($report['id'], ENT_QUOTES, 'UTF-8'); ?></code></td>
                                         <td><?php echo htmlspecialchars($report['projectId'], ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td><?php echo htmlspecialchars($report['technician'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td><span class="badge bg-info"><?php echo htmlspecialchars($report['type'], ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                        <td><span class="badge <?php echo htmlspecialchars($reportTypeBadgeClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($report['type'], ENT_QUOTES, 'UTF-8'); ?></span></td>
                                         <td><?php echo htmlspecialchars($report['date'], ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td>
                                             <button class="btn btn-sm btn-outline-primary viewReportBtn" 
@@ -266,7 +268,7 @@
                                                     <tr>
                                                         <td><?php echo htmlspecialchars($quotation['client'], ENT_QUOTES, 'UTF-8'); ?></td>
                                                         <td><?php echo htmlspecialchars($quotation['service'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                                        <td>PHP <?php echo number_format((float) ($quotation['price'] ?? 0), 2); ?></td>
+                                                        <td>₱<?php echo number_format((float) ($quotation['price'] ?? 0), 2); ?></td>
                                                         <td>
                                                             <span class="badge <?php echo $statusKey === 'approved' ? 'bg-success' : 'bg-warning text-dark'; ?>">
                                                                 <?php echo htmlspecialchars($quotation['status'], ENT_QUOTES, 'UTF-8'); ?>

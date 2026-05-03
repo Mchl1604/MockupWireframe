@@ -292,7 +292,7 @@ $projectCancellationReason = (string) ($project['cancellationReason'] ?? ($cance
                                 <th>Material</th>
                                 <th style="width: 110px;">Qty</th>
                                 <th style="width: 110px;">Unit</th>
-                                <th class="text-end" style="width: 130px;">Cost</th>
+                                <th class="text-start" style="width: 130px;">Cost</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -301,16 +301,16 @@ $projectCancellationReason = (string) ($project['cancellationReason'] ?? ($cance
                                     <td class="small"><?php echo htmlspecialchars((string) ($item['name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td class="small"><?php echo htmlspecialchars((string) ($item['qty'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td class="small"><?php echo htmlspecialchars((string) ($item['unit'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td class="small text-end">PHP <?php echo number_format((float) ($item['cost'] ?? 0), 2); ?></td>
+                                    <td class="small text-start">₱<?php echo number_format((float) ($item['cost'] ?? 0), 2); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
                 <div class="row g-2">
-                    <div class="col-md-4"><small class="text-muted d-block">Material Cost</small><strong>PHP <?php echo number_format((float) ($quotation['materialsCost'] ?? 0), 2); ?></strong></div>
-                    <div class="col-md-4"><small class="text-muted d-block">Labor Cost</small><strong>PHP <?php echo number_format((float) ($quotation['laborCost'] ?? 0), 2); ?></strong></div>
-                    <div class="col-md-4"><small class="text-muted d-block">Total Cost</small><strong>PHP <?php echo number_format((float) ($quotation['totalCost'] ?? 0), 2); ?></strong></div>
+                    <div class="col-md-4"><small class="text-muted d-block">Material Cost</small><strong>₱<?php echo number_format((float) ($quotation['materialsCost'] ?? 0), 2); ?></strong></div>
+                    <div class="col-md-4"><small class="text-muted d-block">Labor Cost</small><strong>₱<?php echo number_format((float) ($quotation['laborCost'] ?? 0), 2); ?></strong></div>
+                    <div class="col-md-4"><small class="text-muted d-block">Total Cost</small><strong>₱<?php echo number_format((float) ($quotation['totalCost'] ?? 0), 2); ?></strong></div>
                 </div>
                 <?php if ($statusKey === 'awaiting quotation approval'): ?>
                     <div class="mt-3 d-flex justify-content-end gap-2" id="quotation-actions">

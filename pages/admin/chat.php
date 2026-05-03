@@ -53,14 +53,14 @@
                      data-name="<?php echo htmlspecialchars($client['name'], ENT_QUOTES, 'UTF-8'); ?>"
                      data-messages='<?php echo json_encode($client['messages']); ?>'>
                     <div class="fw-semibold small"><?php echo htmlspecialchars($client['name'], ENT_QUOTES, 'UTF-8'); ?></div>
-                    <div class="text-muted small"><?php echo htmlspecialchars($client['lastMessage'], ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="text-white-50 small"><?php echo htmlspecialchars($client['lastMessage'], ENT_QUOTES, 'UTF-8'); ?></div>
                 </div>
             <?php endforeach; ?>
         </aside>
         <section class="chat-main">
-            <div class="border-bottom px-3 py-2 fw-semibold" id="chatHeader"><?php echo htmlspecialchars($clients[0]['name'], ENT_QUOTES, 'UTF-8'); ?></div>
+            <div class="chat-header-bar px-3 py-2 fw-semibold" id="chatHeader"><?php echo htmlspecialchars($clients[0]['name'], ENT_QUOTES, 'UTF-8'); ?></div>
             <div class="chat-messages" id="chatMessages"></div>
-            <div class="border-top p-2 d-flex gap-2"><textarea id="chatInput" class="form-control" rows="1" placeholder="Type a reply..."></textarea><button id="chatSend" class="btn btn-primary">Send</button></div>
+            <div class="chat-input-bar p-2 d-flex gap-2"><textarea id="chatInput" class="form-control" rows="1" placeholder="Type a reply..."></textarea><button id="chatSend" class="btn btn-primary">Send</button></div>
         </section>
     </div>
 </main>

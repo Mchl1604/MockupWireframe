@@ -527,29 +527,31 @@ body.dashboard-body.sidebar-collapsed > footer {
     border: 1px solid #dee2e6;
     border-radius: 0.5rem;
     overflow: hidden;
-    background: #fff;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
 }
 
 .chat-list {
     width: 280px;
-    border-right: 1px solid #dee2e6;
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
     overflow-y: auto;
     flex-shrink: 0;
+    background: var(--sidebar-bg);
 }
 
 .chat-list-item {
     cursor: pointer;
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid #f1f5f9;
-    transition: background 0.15s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.15s, color 0.15s;
+    color: #e2e8f0;
 }
 
 .chat-list-item:hover {
-    background: #f8fafc;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .chat-list-item.active {
-    background: #eff6ff;
+    background: rgba(255, 255, 255, 0.14);
 }
 
 .chat-main {
@@ -559,10 +561,42 @@ body.dashboard-body.sidebar-collapsed > footer {
     min-width: 0;
 }
 
+.chat-header-bar {
+    background: var(--sidebar-bg);
+    color: #fff;
+}
+
+.chat-header-bar .text-white-50,
+.chat-header-bar .badge {
+    color: #cbd5e1 !important;
+}
+
+.chat-input-bar {
+    background: var(--sidebar-bg);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.chat-input-bar .form-control {
+    background: rgba(255, 255, 255, 0.92);
+    border: 0;
+    box-shadow: none;
+}
+
+.chat-input-bar .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.2);
+}
+
+.chat-input-bar .btn {
+    background: #475569;
+    border-color: #475569;
+    color: #fff;
+}
+
 .chat-messages {
     flex: 1;
     overflow-y: auto;
     padding: 1rem;
+    background: rgba(255, 255, 255, 0.55);
 }
 
 .chat-bubble {

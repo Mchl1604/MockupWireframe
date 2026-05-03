@@ -213,7 +213,7 @@
                             <li>Safety-first workmanship on every job</li>
                             <li>Clear communication from start to finish</li>
                             <li>Quality checks before handover</li>
-                            <li>Long-term support and maintenance</li>
+                            
                         </ul>
                     </div>
                 </div>

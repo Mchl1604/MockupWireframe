@@ -9,12 +9,12 @@
 
     <div class="chat-wrapper shadow-sm">
         <section class="chat-main">
-            <div class="border-bottom px-3 py-3 d-flex align-items-center justify-content-between">
+            <div class="chat-header-bar px-3 py-3 d-flex align-items-center justify-content-between">
                 <div>
                     <div class="fw-semibold" id="chatHeader">Admin</div>
-                    <div class="text-muted small">Chat with the admin team only</div>
+                    <div class="text-white-50 small"></div>
                 </div>
-                <span class="badge bg-primary-subtle text-primary-emphasis">Online</span>
+                <span class="badge bg-success-subtle text-success-emphasis">Online</span>
             </div>
 
             <div class="chat-messages" id="chatMessages">
@@ -44,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="border-top p-2 d-flex gap-2">
+            <div class="chat-input-bar p-2 d-flex gap-2">
                 <textarea id="chatInput" class="form-control" rows="1" placeholder="Type a message..."></textarea>
                 <button id="chatSend" class="btn btn-primary">Send</button>
             </div>

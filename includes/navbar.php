@@ -14,8 +14,8 @@ $isServicesPage = $requestPath === '/services';
 ?>
 <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top app-navbar">
     <div class="container-fluid px-3 px-lg-4 d-flex align-items-center">
-        <?php if ($isHomePage): ?>
-        <a class="navbar-brand home-navbar-brand d-inline-flex align-items-center gap-2 text-decoration-none me-3" href="<?php echo htmlspecialchars(app_url('/'), ENT_QUOTES, 'UTF-8'); ?>">
+        <?php if ($sidebarRole === ''): ?>
+        <a class="navbar-brand home-navbar-brand d-inline-flex align-items-center gap-2 text-decoration-none me-3 flex-shrink-0" href="<?php echo htmlspecialchars(app_url('/'), ENT_QUOTES, 'UTF-8'); ?>">
             <img src="<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/coliconstruct-logo.svg', ENT_QUOTES, 'UTF-8'); ?>" alt="Coliconstruct logo" class="app-logo-sm">
             <span class="fw-bold text-dark">Coliconstruct</span>
         </a>
@@ -49,16 +49,25 @@ $isServicesPage = $requestPath === '/services';
             </ul>
         </div>
         <?php else: ?>
-        <div class="ms-auto d-flex gap-2 flex-wrap justify-content-end">
-            <a href="<?php echo htmlspecialchars(app_url('/'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm <?php echo $isHomePage ? 'btn-primary' : 'btn-outline-secondary'; ?>">Home</a>
-            <a href="<?php echo htmlspecialchars(app_url('/services'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm <?php echo $isServicesPage ? 'btn-primary' : 'btn-outline-secondary'; ?>">Services</a>
-            <a href="<?php echo htmlspecialchars(app_url('/about'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm <?php echo $isAboutPage ? 'btn-primary' : 'btn-outline-secondary'; ?>">About</a>
+        <div class="d-none d-md-flex align-items-center justify-content-center gap-2 flex-grow-1">
+            <a href="<?php echo htmlspecialchars(app_url('/'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm <?php echo $isHomePage ? 'btn-primary' : 'text-secondary'; ?>">Home</a>
+            <a href="<?php echo htmlspecialchars(app_url('/services'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm <?php echo $isServicesPage ? 'btn-primary' : 'text-secondary'; ?>">Services</a>
+            <a href="<?php echo htmlspecialchars(app_url('/about'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm <?php echo $isAboutPage ? 'btn-primary' : 'text-secondary'; ?>">About</a>
+            
+        </div>
+        <div class="ms-auto d-flex gap-2 flex-wrap">
+            <a href="<?php echo htmlspecialchars(app_url('/'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm d-md-none <?php echo $isHomePage ? 'btn-primary' : 'btn-outline-secondary'; ?>">Home</a>
+            <a href="<?php echo htmlspecialchars(app_url('/about'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm d-md-none <?php echo $isAboutPage ? 'btn-primary' : 'btn-outline-secondary'; ?>">About</a>
+            <a href="<?php echo htmlspecialchars(app_url('/services'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm d-md-none <?php echo $isServicesPage ? 'btn-primary' : 'btn-outline-secondary'; ?>">Services</a>
+            
             <a href="<?php echo htmlspecialchars(app_url('/client/projects'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Client</a>
             <a href="<?php echo htmlspecialchars(app_url('/admin/dashboard'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Admin</a>
             <a href="<?php echo htmlspecialchars(app_url('/tech/schedule'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Technician</a>
             <a href="<?php echo htmlspecialchars(app_url('/lead-technician/schedule'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-secondary btn-sm">Lead Technician</a>
+            
             <a href="<?php echo htmlspecialchars(app_url('/login'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-outline-primary btn-sm">Login</a>
             <a href="<?php echo htmlspecialchars(app_url('/register'), ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-primary btn-sm">Register</a>
+                
         </div>
         <?php endif; ?>
     </div>

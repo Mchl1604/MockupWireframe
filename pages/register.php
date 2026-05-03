@@ -1,7 +1,6 @@
 <?php $pageTitle = 'Register'; ?>
 <?php include __DIR__ . '/../includes/head.php'; ?>
 <body class="bg-light min-vh-100 d-flex flex-column">
-<?php include __DIR__ . '/../includes/navbar.php'; ?>
 
 <div class="container py-3 py-md-4 my-auto">
     <div class="row justify-content-center">
@@ -67,11 +66,6 @@
                                 <div class="invalid-feedback">Please enter your contact number.</div>
                             </div>
 
-                            <div class="col-12">
-                                <label class="form-label fw-medium">Full Address</label>
-                                <input type="text" class="form-control" name="address" placeholder="123 Main St, Makati City" required>
-                                <div class="invalid-feedback">Please enter your address.</div>
-                            </div>
 
                             <div class="col-md-6">
                                 <label class="form-label fw-medium">Password</label>
@@ -236,4 +230,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<?php include __DIR__ . '/../includes/footer.php'; ?>
+

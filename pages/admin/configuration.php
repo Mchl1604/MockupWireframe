@@ -279,7 +279,7 @@ $systemSettings = [
                                     <td><code><?php echo htmlspecialchars($mat['id'], ENT_QUOTES, 'UTF-8'); ?></code></td>
                                     <td><?php echo htmlspecialchars($mat['name'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><span class="badge bg-info"><?php echo htmlspecialchars($mat['service'], ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                    <td>PHP <?php echo number_format($mat['cost'], 2); ?></td>
+                                    <td>₱<?php echo number_format($mat['cost'], 2); ?></td>
                                     <td><?php echo htmlspecialchars($mat['unit'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td>
                                         <div class="d-flex gap-2">

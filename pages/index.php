@@ -7,7 +7,7 @@
     <div class="container py-5 text-center">
         <h1 class="display-4 fw-bold mb-3">Professional HVAC Solutions</h1>
         <p class="lead mb-4 opacity-90 mx-auto" style="max-width:580px;">
-            Coliconstruct Engineering Services provides expert Aircon Installation, maintenance,
+            Coliconstruct Engineering Services provides expert Aircon Installation,
             ducting, and repair for residential and commercial clients.
         </p>
         <div class="d-flex gap-3 justify-content-center flex-wrap">
