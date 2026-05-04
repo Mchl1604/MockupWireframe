@@ -10,8 +10,8 @@ $schedules = [
         'projectName' => 'Aircon Installation - ACME Holdings',
         'startDate' => 21,
         'endDate' => 21,
-        'leadTechnician' => 'Engr. Mario Santos',
-        'technicians' => ['Engr. Mario Santos', 'Tech. Carlo Reyes'],
+        'leadTechnician' => 'Tech. Mario Santos',
+        'technicians' => ['Tech. Mario Santos', 'Tech. Carlo Reyes'],
         'color' => 'bg-primary',
     ],
     [
@@ -66,7 +66,7 @@ $availableProjects = [
 
 // All technicians with their skills
 $technicians = [
-    ['name' => 'Engr. Mario Santos', 'skills' => ['Aircon Installation', 'Ducting Installation', 'Ducting Fabrication']],
+    ['name' => 'Tech. Mario Santos', 'skills' => ['Aircon Installation', 'Ducting Installation', 'Ducting Fabrication']],
     ['name' => 'Tech. Carlo Reyes', 'skills' => ['Aircon Installation', 'Ducting Installation']],
     ['name' => 'Tech. Lito Ramos', 'skills' => ['Aircon Repair', 'Ducting Fabrication']],
     ['name' => 'Tech. Carl Dominguez', 'skills' => ['Aircon Installation']],
@@ -189,10 +189,6 @@ $technicians = [
                                 <div class="detail-row mb-2">
                                     <span class="detail-label">Phase:</span>
                                     <span id="detailPhase" class="detail-value badge bg-warning bg-opacity-10 text-warning">-</span>
-                                </div>
-                                <div class="detail-row mb-2">
-                                    <span class="detail-label">Status:</span>
-                                    <span id="detailStatus" class="detail-value badge bg-secondary bg-opacity-10 text-secondary">-</span>
                                 </div>
                                 <div class="detail-row mb-2">
                                     <span class="detail-label">Required Technicians:</span>
@@ -1419,9 +1415,6 @@ function renderProjectDetails(projectId) {
 
     document.getElementById('detailServiceType').textContent = project.service || 'N/A';
     document.getElementById('detailPhase').textContent = project.phase || 'Assessment';
-    const statusDisplay = document.getElementById('detailStatus');
-    statusDisplay.textContent = project.status || 'Scheduled';
-    statusDisplay.className = `detail-value ${getStatusBadgeClass(project.status || 'Scheduled')}`;
     document.getElementById('detailRequiredTechs').textContent = (project.requiredTechnicians || '-');
     document.getElementById('detailDays').textContent = (project.estimatedDays || '-') + ' days';
 

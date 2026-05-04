@@ -36,22 +36,22 @@ usort($sortedTechs, static function ($left, $right) use ($leadTechnicians) {
 });
 $attendanceByTech = [
     'Mark Santos' => [
-        ['date' => 'Apr 1, 2026', 'project' => 'PRJ-1001', 'status' => 'Present', 'remarks' => 'Confirmed'],
-        ['date' => 'Apr 3, 2026', 'project' => 'PRJ-1003', 'status' => 'Present', 'remarks' => 'Confirmed'],
-        ['date' => 'Apr 4, 2026', 'project' => 'PRJ-1001', 'status' => 'Present', 'remarks' => 'Pending'],
-        ['date' => 'Apr 8, 2026', 'project' => 'PRJ-1005', 'status' => 'Present', 'remarks' => 'Confirmed'],
-        ['date' => 'Apr 12, 2026', 'project' => 'PRJ-1001', 'status' => 'Absent', 'remarks' => 'Pending'],
+        ['date' => 'Apr 1, 2026', 'project' => 'PRJ-1001', 'time_in' => '08:00 AM', 'time_out' => '05:00 PM', 'status' => 'Present', 'remarks' => 'Confirmed'],
+        ['date' => 'Apr 3, 2026', 'project' => 'PRJ-1003', 'time_in' => '08:15 AM', 'time_out' => '05:15 PM', 'status' => 'Present', 'remarks' => 'Confirmed'],
+        ['date' => 'Apr 4, 2026', 'project' => 'PRJ-1001', 'time_in' => '08:00 AM', 'time_out' => '-', 'status' => 'Present', 'remarks' => 'Pending'],
+        ['date' => 'Apr 8, 2026', 'project' => 'PRJ-1005', 'time_in' => '08:30 AM', 'time_out' => '05:30 PM', 'status' => 'Present', 'remarks' => 'Confirmed'],
+        ['date' => 'Apr 12, 2026', 'project' => 'PRJ-1001', 'time_in' => '-', 'time_out' => '-', 'status' => 'Absent', 'remarks' => 'Pending'],
     ],
     'Carlo Reyes' => [
-        ['date' => 'Apr 1, 2026', 'project' => 'PRJ-1001', 'status' => 'Present', 'remarks' => 'Confirmed'],
-        ['date' => 'Apr 2, 2026', 'project' => 'PRJ-1004', 'status' => 'Present', 'remarks' => 'Confirmed'],
-        ['date' => 'Apr 5, 2026', 'project' => 'PRJ-1005', 'status' => 'Absent', 'remarks' => 'Pending'],
-        ['date' => 'Apr 9, 2026', 'project' => 'PRJ-1003', 'status' => 'Present', 'remarks' => 'Confirmed'],
+        ['date' => 'Apr 1, 2026', 'project' => 'PRJ-1001', 'time_in' => '08:00 AM', 'time_out' => '05:00 PM', 'status' => 'Present', 'remarks' => 'Confirmed'],
+        ['date' => 'Apr 2, 2026', 'project' => 'PRJ-1004', 'time_in' => '08:10 AM', 'time_out' => '05:10 PM', 'status' => 'Present', 'remarks' => 'Confirmed'],
+        ['date' => 'Apr 5, 2026', 'project' => 'PRJ-1005', 'time_in' => '-', 'time_out' => '-', 'status' => 'Absent', 'remarks' => 'Pending'],
+        ['date' => 'Apr 9, 2026', 'project' => 'PRJ-1003', 'time_in' => '08:00 AM', 'time_out' => '05:00 PM', 'status' => 'Present', 'remarks' => 'Confirmed'],
     ],
     'Jude Flores' => [
-        ['date' => 'Apr 2, 2026', 'project' => 'PRJ-1006', 'status' => 'Present', 'remarks' => 'Confirmed'],
-        ['date' => 'Apr 6, 2026', 'project' => 'PRJ-1003', 'status' => 'Absent', 'remarks' => 'Pending'],
-        ['date' => 'Apr 10, 2026', 'project' => 'PRJ-1006', 'status' => 'Present', 'remarks' => 'Pending'],
+        ['date' => 'Apr 2, 2026', 'project' => 'PRJ-1006', 'time_in' => '08:20 AM', 'time_out' => '05:20 PM', 'status' => 'Present', 'remarks' => 'Confirmed'],
+        ['date' => 'Apr 6, 2026', 'project' => 'PRJ-1003', 'time_in' => '-', 'time_out' => '-', 'status' => 'Absent', 'remarks' => 'Pending'],
+        ['date' => 'Apr 10, 2026', 'project' => 'PRJ-1006', 'time_in' => '08:05 AM', 'time_out' => '-', 'status' => 'Present', 'remarks' => 'Pending'],
     ],
     'Lito Ramos' => [],
     'Carl Dominguez' => [],
@@ -659,6 +659,8 @@ $scheduleByTech = [
                             <tr>
                                 <th>Project ID</th>
                                 <th>Date</th>
+                                <th>Time In</th>
+                                <th>Time Out</th>
                                 <th>Status</th>
                                 <th>Remarks</th>
                                 <th>Action</th>
@@ -1215,20 +1217,27 @@ function renderAttendanceTable() {
         ? filteredRecords.map(function (record) {
             const status = record.status || 'Present';
             const remarks = record.remarks || 'Confirmed';
+            const timeIn = record.time_in || '-';
+            const timeOut = record.time_out || '-';
             const statusBadgeClass = String(status).toLowerCase() === 'present' ? 'text-bg-success' : 'text-bg-danger';
-            const remarksBadgeClass = String(remarks).toLowerCase() === 'confirmed' ? 'text-bg-primary' : 'text-bg-warning';
-            const canConfirm = String(remarks).toLowerCase() === 'pending';
+            let remarksBadgeClass = 'text-bg-warning';
+            if (String(remarks).toLowerCase() === 'confirmed') remarksBadgeClass = 'text-bg-primary';
+            if (String(remarks).toLowerCase() === 'invalid') remarksBadgeClass = 'text-bg-danger';
+            const canTakeAction = String(remarks).toLowerCase() === 'pending';
             return '<tr>'
                 + `<td>${record.project || 'PRJ-0000'}</td>`
                 + `<td>${record.date || '-'}</td>`
+                + `<td>${timeIn}</td>`
+                + `<td>${timeOut}</td>`
                 + `<td><span class="badge ${statusBadgeClass}">${status}</span></td>`
                 + `<td><span class="badge ${remarksBadgeClass}">${remarks}</span></td>`
                 + '<td>'
-                + (canConfirm ? '<button type="button" class="btn btn-sm btn-primary confirm-attendance-btn" data-date="' + escapeHtml(record.date || '') + '">Confirm</button>' : '-')
+                + (canTakeAction ? '<button type="button" class="btn btn-sm btn-primary confirm-attendance-btn me-1" data-date="' + escapeHtml(record.date || '') + '">Confirm</button>'
+                    + '<button type="button" class="btn btn-sm btn-danger invalid-attendance-btn" data-date="' + escapeHtml(record.date || '') + '">Invalid</button>' : '-')
                 + '</td>'
                 + '</tr>';
         }).join('')
-        : '<tr><td class="text-muted" colspan="5">No attendance records for selected month.</td></tr>';
+        : '<tr><td class="text-muted" colspan="7">No attendance records for selected month.</td></tr>';
 }
 
 if (attendanceMonthInput) {
@@ -1240,20 +1249,29 @@ if (attendanceYearInput) {
 
 document.addEventListener('click', function (event) {
     const confirmButton = event.target.closest('.confirm-attendance-btn');
-    if (!confirmButton) {
+    const invalidButton = event.target.closest('.invalid-attendance-btn');
+
+    if (!confirmButton && !invalidButton) {
         return;
     }
 
-    const dateValue = confirmButton.getAttribute('data-date');
+    const dateValue = confirmButton ? confirmButton.getAttribute('data-date') : invalidButton.getAttribute('data-date');
     const records = attendanceByTech[activeAttendanceTechName] || [];
     const record = records.find(function (r) {
         return r.date === dateValue;
     });
 
-    if (record && record.remarks === 'Pending') {
-        record.remarks = 'Confirmed';
-        renderAttendanceTable();
+    if (!record || String(record.remarks).toLowerCase() !== 'pending') {
+        return;
     }
+
+    if (confirmButton) {
+        record.remarks = 'Confirmed';
+    } else if (invalidButton) {
+        record.remarks = 'Invalid';
+    }
+
+    renderAttendanceTable();
 });
 </script>
 <?php include __DIR__ . '/../../includes/footer.php'; ?>

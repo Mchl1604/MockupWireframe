@@ -43,6 +43,19 @@ $quotes = [
             ['name' => 'Duct Sealant', 'qty' => 7, 'unit' => 'tube', 'unitCost' => 900],
         ],
     ],
+    [
+        'id' => 'QT-104',
+        'project' => 'PRJ-1004',
+        'client' => 'Northpoint Towers',
+        'amount' => 158900,
+        'status' => 'Rejected',
+        'laborCost' => 32000,
+        'materials' => [
+            ['name' => 'Copper Tubing Kit', 'qty' => 6, 'unit' => 'set', 'unitCost' => 7800],
+            ['name' => 'Drain Hose', 'qty' => 8, 'unit' => 'pc', 'unitCost' => 650],
+            ['name' => 'Wall Bracket', 'qty' => 4, 'unit' => 'set', 'unitCost' => 2100],
+        ],
+    ],
 ];
 
 $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', 'PRJ-1006'];
@@ -50,7 +63,7 @@ $projectOptions = ['PRJ-1001', 'PRJ-1002', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005', '
 $assessmentByProject = [
     'PRJ-1001' => [
         'date' => 'Apr 08, 2026',
-        'technician' => 'Engr. Mario Santos',
+        'technician' => 'Tech. Mario Santos',
         'requiredTechnicians' => 2,
         'summary' => 'Aircon system assessment completed. Building has 3 zones requiring individual indoor units. Existing electrical capacity adequate. Installation timeline: 8 days.',
         'photos' => ['imageSample.png', 'imageSample.png', 'imageSample.png'],
@@ -85,7 +98,7 @@ $assessmentByProject = [
     ],
     'PRJ-1003' => [
         'date' => 'Apr 09, 2026',
-        'technician' => 'Engr. Mario Santos',
+        'technician' => 'Tech. Mario Santos',
         'requiredTechnicians' => 3,
         'summary' => 'Warehouse ducting assessment. Measurements completed for all zones. Existing ductwork requires partial replacement due to rust and deterioration.',
         'photos' => ['imageSample.png', 'imageSample.png'],
@@ -180,11 +193,11 @@ $assessmentByProject = [
                     <td><?php echo htmlspecialchars($q['project'], ENT_QUOTES, 'UTF-8'); ?></td>
                     <td><?php echo htmlspecialchars($q['client'], ENT_QUOTES, 'UTF-8'); ?></td>
                     <td>₱<?php echo number_format((float) $q['amount'], 2); ?></td>
-                    <td><span class="badge quote-status-badge <?php echo $q['status'] === 'Approved' ? 'bg-success' : ($q['status'] === 'Pending Approval' ? 'bg-primary' : 'bg-secondary'); ?>"><?php echo htmlspecialchars($q['status'], ENT_QUOTES, 'UTF-8'); ?></span></td>
+                    <td><span class="badge quote-status-badge <?php echo $q['status'] === 'Approved' ? 'bg-success' : ($q['status'] === 'Pending Approval' ? 'bg-primary' : ($q['status'] === 'Rejected' ? 'bg-danger' : 'bg-secondary')); ?>"><?php echo htmlspecialchars($q['status'], ENT_QUOTES, 'UTF-8'); ?></span></td>
                     <td class="text-end">
                         <div class="d-flex justify-content-end flex-wrap gap-1 quote-actions">
                             
-                            <button type="button" class="btn btn-outline-secondary btn-sm" title="View Details" aria-label="View Details" data-quote='<?php echo htmlspecialchars(json_encode($q), ENT_QUOTES, 'UTF-8'); ?>'><i class="bi bi-eye"></i></button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" title="View Details" aria-label="View Details" data-quote='<?php echo htmlspecialchars(json_encode($q), ENT_QUOTES, 'UTF-8'); ?>'><i class="bi bi-pencil"></i></button>
                             <button type="button" class="btn btn-outline-danger btn-sm" title="Archive" aria-label="Archive" data-archive-quote><i class="bi bi-trash"></i></button>
                         </div>
                     </td>
@@ -483,7 +496,32 @@ document.addEventListener('DOMContentLoaded', function () {
     function statusBadgeClass(status) {
         if (status === 'Approved') return 'bg-success';
         if (status === 'Pending Approval') return 'bg-primary';
+        if (status === 'Rejected') return 'bg-danger';
         return 'bg-secondary';
+    }
+
+    function syncRowActions(row, quote) {
+        if (!row || !quote) return;
+
+        const actionsWrap = row.querySelector('.quote-actions');
+        if (!actionsWrap) return;
+
+        const archiveButton = actionsWrap.querySelector('button[data-archive-quote]');
+        const sendButton = actionsWrap.querySelector('button[data-send-quote]');
+
+        if (quote.status === 'Draft' && !sendButton) {
+            const newSendButton = document.createElement('button');
+            newSendButton.type = 'button';
+            newSendButton.className = 'btn btn-primary btn-sm';
+            newSendButton.setAttribute('data-send-quote', '');
+            newSendButton.textContent = 'Send';
+            if (archiveButton) actionsWrap.insertBefore(newSendButton, archiveButton);
+            else actionsWrap.appendChild(newSendButton);
+        }
+
+        if (quote.status !== 'Draft' && sendButton) {
+            sendButton.remove();
+        }
     }
 
     function computeMaterialsTotal(quote) {
@@ -582,24 +620,7 @@ document.addEventListener('DOMContentLoaded', function () {
             activeQuoteViewButton.dataset.quote = JSON.stringify(activeQuote);
         }
 
-        const actionsWrap = activeQuoteRow.querySelector('.quote-actions');
-        if (!actionsWrap) return;
-
-        const existingSendButton = actionsWrap.querySelector('button[data-send-quote]');
-        if (activeQuote.status === 'Draft' && !existingSendButton) {
-            const sendButton = document.createElement('button');
-            sendButton.type = 'button';
-            sendButton.className = 'btn btn-primary btn-sm';
-            sendButton.setAttribute('data-send-quote', '');
-            sendButton.textContent = 'Send';
-            const archiveButton = actionsWrap.querySelector('button[data-archive-quote]');
-            if (archiveButton) actionsWrap.insertBefore(sendButton, archiveButton);
-            else actionsWrap.appendChild(sendButton);
-        }
-
-        if (activeQuote.status !== 'Draft' && existingSendButton) {
-            existingSendButton.remove();
-        }
+        syncRowActions(activeQuoteRow, activeQuote);
     }
 
     function createMaterialRow() {
@@ -952,6 +973,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 sendBtn.remove();
+                syncRowActions(row, quote);
 
                 if (activeQuote && activeQuote.id === quote.id && detailsModalEl) {
                     activeQuote = quote;

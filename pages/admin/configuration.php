@@ -40,12 +40,12 @@ $materials = [
 $users = [
     ['id' => 'USR-001', 'name' => 'Admin One', 'email' => 'admin@coliconstruct.com', 'role' => 'Admin', 'status' => 'Active'],
     ['id' => 'USR-002', 'name' => 'Admin Two', 'email' => 'admin2@coliconstruct.com', 'role' => 'Admin', 'status' => 'Active'],
-    ['id' => 'USR-003', 'name' => 'Mario Santos', 'email' => 'mario.santos@example.com', 'role' => 'Technician', 'status' => 'Active'],
-    ['id' => 'USR-004', 'name' => 'Carlo Reyes', 'email' => 'carlo.reyes@example.com', 'role' => 'Technician', 'status' => 'Active'],
+    ['id' => 'USR-003', 'name' => 'Mario Santos', 'email' => 'mario.santos@example.com', 'role' => 'Lead Technician', 'status' => 'Active'],
+    ['id' => 'USR-004', 'name' => 'Carlo Reyes', 'email' => 'carlo.reyes@example.com', 'role' => 'Lead Technician', 'status' => 'Active'],
     ['id' => 'USR-005', 'name' => 'Jude Flores', 'email' => 'jude.flores@example.com', 'role' => 'Technician', 'status' => 'Active'],
-    ['id' => 'USR-006', 'name' => 'Lito Ramos', 'email' => 'lito.ramos@example.com', 'role' => 'Technician', 'status' => 'Active'],
-    ['id' => 'USR-007', 'name' => 'Carl Dominguez', 'email' => 'carl.dominguez@example.com', 'role' => 'Technician', 'status' => 'Active'],
-    ['id' => 'USR-008', 'name' => 'Anne Mendoza', 'email' => 'anne.mendoza@example.com', 'role' => 'Technician', 'status' => 'Active'],
+    ['id' => 'USR-006', 'name' => 'Lito Ramos', 'email' => 'lito.ramos@example.com', 'role' => 'Lead Technician', 'status' => 'Active'],
+    ['id' => 'USR-007', 'name' => 'Carl Dominguez', 'email' => 'carl.dominguez@example.com', 'role' => 'Lead Technician', 'status' => 'Active'],
+    ['id' => 'USR-008', 'name' => 'Anne Mendoza', 'email' => 'anne.mendoza@example.com', 'role' => 'Lead Technician', 'status' => 'Active'],
     ['id' => 'USR-009', 'name' => 'John Gonzales', 'email' => 'john.gonzales@example.com', 'role' => 'Technician', 'status' => 'Active'],
     ['id' => 'USR-010', 'name' => 'Paolo Herrera', 'email' => 'paolo.herrera@example.com', 'role' => 'Technician', 'status' => 'Active'],
     ['id' => 'USR-011', 'name' => 'Nina Cortez', 'email' => 'nina.cortez@example.com', 'role' => 'Technician', 'status' => 'Active'],
@@ -72,10 +72,11 @@ $activityLogs = [
 ];
 
 $systemSettings = [
-    'companyName' => 'Coli Construct',
+    'companyName' => 'Coliconstruct',
     'supportEmail' => 'support@coliconstruct.com',
     'contactNumber' => '0917-000-0000',
     'businessAddress' => '20 NHA Commercial and Industrial Compound, Barangay Gavino Maderan, Luzon Avenue, General Mariano Alvarez, Cavite.',
+    'servicesOffered' => ['Aircon Installation', 'Aircon Repair', 'Aircon Cleaning', 'Ducting Fabrication', 'Ducting Installation'],
 ];
 ?>
 <main class="container py-4 flex-grow-1">
@@ -101,21 +102,21 @@ $systemSettings = [
     </ul>
 
     <div class="tab-content">
-        <!-- Users Pane (Active) -->
+        <!-- Users Pane -->
         <div class="tab-pane fade show active" id="users-pane" role="tabpanel" aria-labelledby="users-tab" tabindex="0">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3 class="h5 fw-bold mb-0">Users Management</h3>
                 <div class="d-flex flex-wrap align-items-center gap-2">
                     <input type="search" id="userSearch" class="form-control form-control-sm" placeholder="Search users..." style="width: 220px;">
-                    <button class="btn btn-outline-secondary btn-sm me-2">View Archive</button>
                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">Add User</button>
+                    <button class="btn btn-outline-secondary btn-sm">View Archive</button>
                 </div>
             </div>
 
-            <!-- Staff Table (Technicians & Admins) -->
+            <!-- Staff Table -->
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0 fw-bold">Staff</h6>
+                    <h6 class="mb-0 fw-bold">Employees</h6>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
@@ -131,15 +132,17 @@ $systemSettings = [
                         </thead>
                         <tbody id="staffTableBody">
                             <?php foreach ($users as $u): ?>
-                                <?php if ($u['role'] === 'Technician' || $u['role'] === 'Admin'): ?>
+                                <?php if ($u['role'] === 'Technician' || $u['role'] === 'Lead Technician' || $u['role'] === 'Admin'): ?>
                                     <tr>
                                         <td><code><?php echo htmlspecialchars($u['id'], ENT_QUOTES, 'UTF-8'); ?></code></td>
                                         <td><?php echo htmlspecialchars($u['name'], ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td>
-                                            <?php if ($u['role'] === 'Technician'): ?>
-                                                <span class="badge bg-primary">Technician</span>
-                                            <?php else: ?>
+                                            <?php if ($u['role'] === 'Admin'): ?>
                                                 <span class="badge bg-danger">Admin</span>
+                                            <?php elseif ($u['role'] === 'Lead Technician'): ?>
+                                                <span class="badge bg-info">Lead Technician</span>
+                                            <?php else: ?>
+                                                <span class="badge bg-primary">Technician</span>
                                             <?php endif; ?>
                                         </td>
                                         <td><?php echo htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8'); ?></td>
@@ -152,9 +155,16 @@ $systemSettings = [
                                         </td>
                                         <td>
                                             <div class="d-flex gap-2">
-                                                <button type="button" class="btn btn-sm btn-outline-primary editUserBtn" data-id="<?php echo htmlspecialchars($u['id'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($u['name'], ENT_QUOTES, 'UTF-8'); ?>" data-email="<?php echo htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8'); ?>" data-role="<?php echo htmlspecialchars($u['role'], ENT_QUOTES, 'UTF-8'); ?>" data-bs-toggle="modal" data-bs-target="#editUserModal">Edit</button>
-                                                <button type="button" class="btn btn-sm btn-outline-warning">Deactivate</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger" title="Archive" aria-label="Archive"><i class="bi bi-trash"></i></button>
+                                                <button type="button" class="btn btn-sm btn-primary editUserBtn" title="Edit"
+                                                    data-id="<?php echo htmlspecialchars($u['id'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-name="<?php echo htmlspecialchars($u['name'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-email="<?php echo htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-role="<?php echo htmlspecialchars($u['role'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-bs-toggle="modal" data-bs-target="#editUserModal">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-warning" title="Deactivate"><i class="bi bi-lock"></i></button>
+                                                <button type="button" class="btn btn-sm btn-danger" title="Archive"><i class="bi bi-trash"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -197,9 +207,16 @@ $systemSettings = [
                                         </td>
                                         <td>
                                             <div class="d-flex gap-2">
-                                                <button type="button" class="btn btn-sm btn-outline-primary editUserBtn" data-id="<?php echo htmlspecialchars($u['id'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($u['name'], ENT_QUOTES, 'UTF-8'); ?>" data-email="<?php echo htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8'); ?>" data-role="<?php echo htmlspecialchars($u['role'], ENT_QUOTES, 'UTF-8'); ?>" data-bs-toggle="modal" data-bs-target="#editUserModal">Edit</button>
-                                                <button type="button" class="btn btn-sm btn-outline-warning">Deactivate</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger" title="Archive" aria-label="Archive"><i class="bi bi-trash"></i></button>
+                                                <button type="button" class="btn btn-sm btn-primary editUserBtn" title="Edit"
+                                                    data-id="<?php echo htmlspecialchars($u['id'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-name="<?php echo htmlspecialchars($u['name'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-email="<?php echo htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-role="<?php echo htmlspecialchars($u['role'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-bs-toggle="modal" data-bs-target="#editUserModal">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-warning" title="Deactivate"><i class="bi bi-lock"></i></button>
+                                                <button type="button" class="btn btn-sm btn-danger" title="Archive"><i class="bi bi-trash"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -220,7 +237,6 @@ $systemSettings = [
                     <button class="btn btn-sm btn-outline-secondary">Filter</button>
                 </div>
             </div>
-
             <div class="card border-0 shadow-sm">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
@@ -235,11 +251,24 @@ $systemSettings = [
                         </thead>
                         <tbody>
                             <?php foreach ($activityLogs as $log): ?>
+                                <?php
+                                $actionBadgeClass = 'bg-secondary';
+                                $actionKey = strtolower((string) $log['action']);
+                                if ($actionKey === 'user login') { $actionBadgeClass = 'bg-success'; }
+                                elseif ($actionKey === 'project updated') { $actionBadgeClass = 'bg-primary'; }
+                                elseif ($actionKey === 'material added') { $actionBadgeClass = 'bg-info text-dark'; }
+                                elseif ($actionKey === 'user created') { $actionBadgeClass = 'bg-success'; }
+                                elseif ($actionKey === 'material modified') { $actionBadgeClass = 'bg-warning text-dark'; }
+                                elseif ($actionKey === 'report generated') { $actionBadgeClass = 'bg-info text-dark'; }
+                                elseif ($actionKey === 'user deactivated') { $actionBadgeClass = 'bg-danger'; }
+                                elseif ($actionKey === 'configuration changed') { $actionBadgeClass = 'bg-primary'; }
+                                elseif ($actionKey === 'material deleted') { $actionBadgeClass = 'bg-danger'; }
+                                ?>
                                 <tr>
                                     <td><code><?php echo htmlspecialchars($log['id'], ENT_QUOTES, 'UTF-8'); ?></code></td>
                                     <td><?php echo htmlspecialchars($log['timestamp'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><?php echo htmlspecialchars($log['user'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><span class="badge bg-secondary"><?php echo htmlspecialchars($log['action'], ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                    <td><span class="badge <?php echo htmlspecialchars($actionBadgeClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($log['action'], ENT_QUOTES, 'UTF-8'); ?></span></td>
                                     <td><?php echo htmlspecialchars($log['description'], ENT_QUOTES, 'UTF-8'); ?></td>
                                 </tr>
                             <?php endforeach; ?>
@@ -255,11 +284,10 @@ $systemSettings = [
                 <h3 class="h5 fw-bold mb-0">Materials List</h3>
                 <div class="d-flex flex-wrap align-items-center gap-2">
                     <input type="search" id="materialSearch" class="form-control form-control-sm" placeholder="Search materials..." style="width: 220px;">
-                    <button class="btn btn-outline-secondary btn-sm me-2">View Archive</button>
+                    <button class="btn btn-outline-secondary btn-sm">View Archive</button>
                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addMaterialModal">Add Material</button>
                 </div>
             </div>
-            
             <div class="card border-0 shadow-sm">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
@@ -283,8 +311,20 @@ $systemSettings = [
                                     <td><?php echo htmlspecialchars($mat['unit'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td>
                                         <div class="d-flex gap-2">
-                                            <button class="btn btn-sm btn-outline-primary editMaterialBtn" data-id="<?php echo htmlspecialchars($mat['id'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($mat['name'], ENT_QUOTES, 'UTF-8'); ?>" data-cost="<?php echo htmlspecialchars($mat['cost'], ENT_QUOTES, 'UTF-8'); ?>" data-unit="<?php echo htmlspecialchars($mat['unit'], ENT_QUOTES, 'UTF-8'); ?>" data-service="<?php echo htmlspecialchars($mat['service'], ENT_QUOTES, 'UTF-8'); ?>" data-bs-toggle="modal" data-bs-target="#editMaterialModal">Edit Details</button>
-                                            <button class="btn btn-sm btn-outline-danger" title="Archive" aria-label="Archive" data-material-id="<?php echo htmlspecialchars($mat['id'], ENT_QUOTES, 'UTF-8'); ?>" onclick="archiveMaterial(this)"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-sm btn-primary editMaterialBtn" title="Edit"
+                                                data-id="<?php echo htmlspecialchars($mat['id'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                data-name="<?php echo htmlspecialchars($mat['name'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                data-cost="<?php echo htmlspecialchars($mat['cost'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                data-unit="<?php echo htmlspecialchars($mat['unit'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                data-service="<?php echo htmlspecialchars($mat['service'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                data-bs-toggle="modal" data-bs-target="#editMaterialModal">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" title="Archive"
+                                                data-material-id="<?php echo htmlspecialchars($mat['id'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                onclick="archiveMaterial(this)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -305,13 +345,15 @@ $systemSettings = [
                 <div class="card-body">
                     <form id="systemSettingsForm" class="needs-validation" novalidate>
                         <div class="row g-4">
+
+                            <!-- Logo -->
                             <div class="col-lg-4">
                                 <div class="border rounded-3 p-3 h-100 bg-light-subtle">
                                     <label for="companyLogoInput" class="form-label fw-semibold">Company Logo</label>
                                     <div class="text-center mb-3">
                                         <img
                                             id="companyLogoPreview"
-                                            src="<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/logo.png', ENT_QUOTES, 'UTF-8'); ?>"
+                                            src="<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/coliconstruct-logo.svg', ENT_QUOTES, 'UTF-8'); ?>"
                                             alt="Company Logo Preview"
                                             class="img-fluid border rounded bg-white p-2"
                                             style="max-height: 160px; width: auto;"
@@ -323,6 +365,7 @@ $systemSettings = [
                                 </div>
                             </div>
 
+                            <!-- Fields -->
                             <div class="col-lg-8">
                                 <div class="row g-3">
                                     <div class="col-md-6">
@@ -333,7 +376,6 @@ $systemSettings = [
                                         <label for="supportEmailInput" class="form-label">Support Email</label>
                                         <input type="email" class="form-control" id="supportEmailInput" value="<?php echo htmlspecialchars($systemSettings['supportEmail'], ENT_QUOTES, 'UTF-8'); ?>" required>
                                     </div>
-
                                     <div class="col-md-6">
                                         <label for="contactNumberInput" class="form-label">Contact Number</label>
                                         <input type="text" class="form-control" id="contactNumberInput" value="<?php echo htmlspecialchars($systemSettings['contactNumber'], ENT_QUOTES, 'UTF-8'); ?>">
@@ -343,6 +385,32 @@ $systemSettings = [
                                         <input type="text" class="form-control" id="businessAddressInput" value="<?php echo htmlspecialchars($systemSettings['businessAddress'], ENT_QUOTES, 'UTF-8'); ?>">
                                     </div>
 
+                                    <!-- Services Offered as a list -->
+                                    <div class="col-12">
+                                        <label class="form-label">Services Offered</label>
+                                        <div class="border rounded-3 overflow-hidden">
+                                            <ul class="list-group list-group-flush" id="servicesOfferedList">
+                                                <?php foreach ($systemSettings['servicesOffered'] as $serviceName): ?>
+                                                    <li class="list-group-item d-flex justify-content-between align-items-center service-item"
+                                                        data-service-name="<?php echo htmlspecialchars($serviceName, ENT_QUOTES, 'UTF-8'); ?>">
+                                                        <span><?php echo htmlspecialchars($serviceName, ENT_QUOTES, 'UTF-8'); ?></span>
+                                                        <button type="button" class="btn btn-sm btn-outline-danger service-remove-btn border-0" title="Remove" aria-label="Remove service">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                            <div class="p-2 bg-light border-top">
+                                                <div class="input-group input-group-sm">
+                                                    <input type="text" class="form-control" id="serviceNameInput" placeholder="Add a new service...">
+                                                    <button type="button" class="btn btn-primary" id="addServiceBtn">
+                                                        <i class="bi bi-plus-lg me-1"></i>Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="small text-muted mt-1">Add or remove the services available in the system.</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -357,6 +425,7 @@ $systemSettings = [
         </div>
     </div>
 
+    <!-- Add Material Modal -->
     <div class="modal fade" id="addMaterialModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -370,11 +439,9 @@ $systemSettings = [
                             <label class="form-label">Service</label>
                             <select class="form-select" id="materialService" required>
                                 <option value="">Select service</option>
-                                <option>Aircon Installation</option>
-                                <option>Aircon Repair</option>
-                                <option>Aircon Cleaning</option>
-                                <option>Ducting Fabrication</option>
-                                <option>Ducting Installation</option>
+                                <?php foreach ($systemSettings['servicesOffered'] as $serviceName): ?>
+                                    <option><?php echo htmlspecialchars($serviceName, ENT_QUOTES, 'UTF-8'); ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -400,6 +467,7 @@ $systemSettings = [
         </div>
     </div>
 
+    <!-- Add User Modal -->
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -433,6 +501,7 @@ $systemSettings = [
         </div>
     </div>
 
+    <!-- Edit User Modal -->
     <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -465,6 +534,7 @@ $systemSettings = [
         </div>
     </div>
 
+    <!-- Edit Material Modal -->
     <div class="modal fade" id="editMaterialModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -502,6 +572,7 @@ $systemSettings = [
     </div>
 
     <script>
+        // User search
         const userSearch = document.getElementById('userSearch');
         if (userSearch) {
             userSearch.addEventListener('input', function () {
@@ -514,6 +585,7 @@ $systemSettings = [
             });
         }
 
+        // Material search
         const materialSearch = document.getElementById('materialSearch');
         if (materialSearch) {
             materialSearch.addEventListener('input', function () {
@@ -524,48 +596,40 @@ $systemSettings = [
             });
         }
 
+        // Edit Material modal population
         document.querySelectorAll('.editMaterialBtn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const materialId = this.dataset.id;
-                const materialName = this.dataset.name;
-                const materialCost = this.dataset.cost;
-                const materialUnit = this.dataset.unit;
-                const materialService = this.dataset.service;
-
-                document.getElementById('editMaterialID').value = materialId;
-                document.getElementById('editMaterialService').value = materialService;
-                document.getElementById('editMaterialName').value = materialName;
-                document.getElementById('editMaterialCost').value = materialCost;
-                document.getElementById('editMaterialUnit').value = materialUnit;
+            btn.addEventListener('click', function () {
+                document.getElementById('editMaterialID').value = this.dataset.id;
+                document.getElementById('editMaterialService').value = this.dataset.service;
+                document.getElementById('editMaterialName').value = this.dataset.name;
+                document.getElementById('editMaterialCost').value = this.dataset.cost;
+                document.getElementById('editMaterialUnit').value = this.dataset.unit;
             });
         });
 
-        document.getElementById('editMaterialForm').addEventListener('submit', function(e) {
+        document.getElementById('editMaterialForm').addEventListener('submit', function (e) {
             e.preventDefault();
             alert('Material updated: ' + document.getElementById('editMaterialName').value);
             bootstrap.Modal.getInstance(document.getElementById('editMaterialModal')).hide();
         });
 
+        // Edit User modal population
         document.querySelectorAll('.editUserBtn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const userId = this.dataset.id;
-                const userName = this.dataset.name;
-                const userEmail = this.dataset.email;
-                const userRole = this.dataset.role;
-
-                document.getElementById('editUserID').value = userId;
-                document.getElementById('editUserName').value = userName;
-                document.getElementById('editUserEmail').value = userEmail;
-                document.getElementById('editUserRole').value = userRole;
+            btn.addEventListener('click', function () {
+                document.getElementById('editUserID').value = this.dataset.id;
+                document.getElementById('editUserName').value = this.dataset.name;
+                document.getElementById('editUserEmail').value = this.dataset.email;
+                document.getElementById('editUserRole').value = this.dataset.role;
             });
         });
 
-        document.getElementById('editUserForm').addEventListener('submit', function(e) {
+        document.getElementById('editUserForm').addEventListener('submit', function (e) {
             e.preventDefault();
             alert('User updated: ' + document.getElementById('editUserName').value);
             bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
         });
 
+        // Archive material
         function archiveMaterial(btn) {
             const materialId = btn.getAttribute('data-material-id');
             if (confirm('Are you sure you want to archive this material?')) {
@@ -575,21 +639,18 @@ $systemSettings = [
             }
         }
 
+        // Company logo preview
         const companyLogoInput = document.getElementById('companyLogoInput');
         const companyLogoPreview = document.getElementById('companyLogoPreview');
         if (companyLogoInput && companyLogoPreview) {
             companyLogoInput.addEventListener('change', function (event) {
                 const file = event.target.files && event.target.files[0] ? event.target.files[0] : null;
-                if (!file) {
-                    return;
-                }
-
+                if (!file) return;
                 if (!String(file.type || '').startsWith('image/')) {
                     alert('Please upload a valid image file.');
                     companyLogoInput.value = '';
                     return;
                 }
-
                 const reader = new FileReader();
                 reader.onload = function (loadEvent) {
                     companyLogoPreview.src = String(loadEvent.target && loadEvent.target.result ? loadEvent.target.result : '');
@@ -598,38 +659,111 @@ $systemSettings = [
             });
         }
 
+        // Services offered management
+        const servicesOfferedList = document.getElementById('servicesOfferedList');
+        const serviceNameInput = document.getElementById('serviceNameInput');
+        const addServiceBtn = document.getElementById('addServiceBtn');
+        const materialServiceSelect = document.getElementById('materialService');
+        const servicesOffered = <?php echo json_encode($systemSettings['servicesOffered'], JSON_UNESCAPED_SLASHES); ?>;
+
+        function escapeHtml(value) {
+            const container = document.createElement('div');
+            container.textContent = value == null ? '' : String(value);
+            return container.innerHTML;
+        }
+
+        function syncServiceSelect() {
+            if (!materialServiceSelect) return;
+            const currentValue = materialServiceSelect.value;
+            materialServiceSelect.innerHTML = '<option value="">Select service</option>';
+            servicesOffered.forEach(function (serviceName) {
+                const option = document.createElement('option');
+                option.textContent = serviceName;
+                materialServiceSelect.appendChild(option);
+            });
+            materialServiceSelect.value = currentValue;
+        }
+
+        function renderServicesOffered() {
+            if (!servicesOfferedList) return;
+            servicesOfferedList.innerHTML = servicesOffered.map(function (serviceName) {
+                return '<li class="list-group-item d-flex justify-content-between align-items-center service-item" data-service-name="' + escapeHtml(serviceName) + '">' +
+                    '<span>' + escapeHtml(serviceName) + '</span>' +
+                    '<button type="button" class="btn btn-sm btn-outline-danger service-remove-btn border-0" title="Remove" aria-label="Remove service"><i class="bi bi-trash"></i></button>' +
+                    '</li>';
+            }).join('');
+            syncServiceSelect();
+        }
+
+        if (addServiceBtn && serviceNameInput) {
+            addServiceBtn.addEventListener('click', function () {
+                const serviceName = serviceNameInput.value.trim();
+                if (!serviceName) return;
+                const exists = servicesOffered.some(function (s) {
+                    return s.toLowerCase() === serviceName.toLowerCase();
+                });
+                if (exists) {
+                    alert('This service already exists.');
+                    return;
+                }
+                servicesOffered.push(serviceName);
+                serviceNameInput.value = '';
+                renderServicesOffered();
+            });
+
+            serviceNameInput.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    addServiceBtn.click();
+                }
+            });
+        }
+
+        if (servicesOfferedList) {
+            servicesOfferedList.addEventListener('click', function (event) {
+                const removeButton = event.target.closest('.service-remove-btn');
+                if (!removeButton) return;
+                const serviceItem = removeButton.closest('.service-item');
+                if (!serviceItem) return;
+                const serviceName = serviceItem.getAttribute('data-service-name') || '';
+                const index = servicesOffered.findIndex(function (s) { return s === serviceName; });
+                if (index > -1) {
+                    servicesOffered.splice(index, 1);
+                    renderServicesOffered();
+                }
+            });
+        }
+
+        // System settings form submit
         const systemSettingsForm = document.getElementById('systemSettingsForm');
         if (systemSettingsForm) {
             systemSettingsForm.addEventListener('submit', function (event) {
                 event.preventDefault();
-
                 const companyNameInput = document.getElementById('companyNameInput');
                 const supportEmailInput = document.getElementById('supportEmailInput');
-                if (!companyNameInput || !supportEmailInput) {
-                    return;
-                }
-
+                if (!companyNameInput || !supportEmailInput) return;
                 if (!companyNameInput.value.trim() || !supportEmailInput.value.trim()) {
                     alert('Company name and support email are required.');
                     return;
                 }
-
                 alert('System settings saved for ' + companyNameInput.value.trim() + '.');
             });
         }
 
+        // Reset logo on form reset
         const resetSystemSettingsBtn = document.getElementById('resetSystemSettingsBtn');
         if (resetSystemSettingsBtn && systemSettingsForm) {
             resetSystemSettingsBtn.addEventListener('click', function () {
                 setTimeout(function () {
                     const logoPreview = document.getElementById('companyLogoPreview');
                     if (logoPreview) {
-                        logoPreview.src = '<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/logo.png', ENT_QUOTES, 'UTF-8'); ?>';
+                        logoPreview.src = '<?php echo htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/assets/img/coliconstruct-logo.svg', ENT_QUOTES, 'UTF-8'); ?>';
                     }
                 }, 0);
             });
         }
+
+        renderServicesOffered();
     </script>
 </main>
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
-

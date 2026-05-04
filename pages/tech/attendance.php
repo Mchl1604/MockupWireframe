@@ -57,23 +57,29 @@ $attendanceProjects = ['PRJ-1001', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005'];
 
     <div class="table-responsive card border-0 shadow-sm">
         <table class="table table-hover mb-0">
-            <thead class="table-light"><tr><th>Project ID</th><th>Date</th><th>Status</th><th>Remarks</th></tr></thead>
+            <thead class="table-light"><tr><th>Project ID</th><th>Date</th><th>Time In</th><th>Time Out</th><th>Status</th><th>Remarks</th></tr></thead>
             <tbody id="attendanceTableBody">
                 <tr>
                     <td>PRJ-1003</td>
                     <td>Apr 10, 2026</td>
+                    <td>08:00 AM</td>
+                    <td>05:00 PM</td>
                     <td><span class="badge text-bg-success">Present</span></td>
                     <td class="remarks-cell"><span class="badge text-bg-success">Confirmed</span></td>
                 </tr>
                 <tr>
                     <td>PRJ-1001</td>
                     <td>Apr 11, 2026</td>
+                    <td>08:15 AM</td>
+                    <td>05:05 PM</td>
                     <td><span class="badge text-bg-success">Present</span></td>
                     <td class="remarks-cell"><span class="badge text-bg-success">Confirmed</span></td>
                 </tr>
                 <tr>
                     <td>PRJ-1004</td>
                     <td>Apr 12, 2026</td>
+                    <td>-</td>
+                    <td>-</td>
                     <td><span class="badge text-bg-danger">Absent</span></td>
                     <td class="remarks-cell"><span class="badge text-bg-warning">Pending</span></td>
                 </tr>
@@ -101,13 +107,36 @@ $attendanceProjects = ['PRJ-1001', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005'];
                         </select>
                     </div>
 
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="attendanceDate" class="form-label">Date</label>
+                            <input type="text" id="attendanceDate" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Time</label>
+                            <input type="text" id="attendanceTimeDisplay" class="form-control" readonly>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Type</label>
+                            <input type="hidden" id="attendanceTypeHidden" value="Time In">
+                            <div class="d-flex gap-2" id="attendanceTypeCards">
+                                <div class="card attendance-type-card border border-2 border-primary" data-type="Time In" style="cursor:pointer;">
+                                    <div class="card-body py-2 text-center">Time In</div>
+                                </div>
+                                <div class="card attendance-type-card" data-type="Time Out" style="cursor:pointer;">
+                                    <div class="card-body py-2 text-center">Time Out</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     
 
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveAttendanceBtn">Save Attendance</button>
+                <button type="button" class="btn btn-primary" id="saveAttendanceBtn">Save</button>
             </div>
         </div>
     </div>
@@ -119,10 +148,14 @@ $attendanceProjects = ['PRJ-1001', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005'];
 document.addEventListener('DOMContentLoaded', function () {
     const saveBtn = document.getElementById('saveAttendanceBtn');
     const projectSelect = document.getElementById('attendanceProject');
+    const dateInput = document.getElementById('attendanceDate');
+    const timeDisplay = document.getElementById('attendanceTimeDisplay');
+    const typeHidden = document.getElementById('attendanceTypeHidden');
+    const typeCards = document.querySelectorAll('.attendance-type-card');
     const tableBody = document.getElementById('attendanceTableBody');
     const modalEl = document.getElementById('logAttendanceModal');
 
-    if (!saveBtn || !projectSelect || !tableBody || !modalEl) return;
+    if (!saveBtn || !projectSelect || !dateInput || !timeDisplay || !typeHidden || !tableBody || !modalEl) return;
 
     function statusBadgeHtml(status) {
         const badgeClass = status === 'Absent' ? 'text-bg-danger' : 'text-bg-success';
@@ -134,26 +167,112 @@ document.addEventListener('DOMContentLoaded', function () {
         return '<span class="badge ' + badgeClass + '">' + remark + '</span>';
     }
 
+    function formatTimeLabel(timeValue) {
+        if (!timeValue || String(timeValue).indexOf(':') === -1) return '-';
+        const parts = String(timeValue).split(':');
+        let hours = Number(parts[0]);
+        const minutes = parts[1] || '00';
+        if (Number.isNaN(hours)) return '-';
+        const suffix = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        if (hours === 0) hours = 12;
+        return String(hours).padStart(2, '0') + ':' + minutes + ' ' + suffix;
+    }
+
+    function getTodayDateLabel() {
+        const now = new Date();
+        return now.toLocaleDateString([], { month: 'short', day: '2-digit', year: 'numeric' });
+    }
+
+    function getNowTimeValue() {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        return hh + ':' + mm;
+    }
+
+    function findRow(projectId, dateLabel) {
+        const rows = tableBody.querySelectorAll('tr');
+        for (const r of rows) {
+            const proj = r.cells[0] ? r.cells[0].textContent.trim() : '';
+            const dateText = r.cells[1] ? r.cells[1].textContent.trim() : '';
+            if (proj === projectId && dateText === dateLabel) return r;
+        }
+        return null;
+    }
+
+    // Type card click handling
+    typeCards.forEach(function (card) {
+        card.addEventListener('click', function () {
+            typeCards.forEach(c => c.classList.remove('border-2', 'border-primary'));
+            card.classList.add('border-2', 'border-primary');
+            const t = card.dataset.type || 'Time In';
+            if (typeHidden) typeHidden.value = t;
+        });
+    });
+
     saveBtn.addEventListener('click', function () {
         const projectId = projectSelect.value.trim();
-        if (!projectId) {
-            projectSelect.focus();
-            return;
+        const timeVal = getNowTimeValue();
+        const typeVal = typeHidden.value || 'Time In';
+
+        if (!projectId) { projectSelect.focus(); return; }
+
+        const dateLabel = dateInput.value || getTodayDateLabel();
+        const existing = findRow(projectId, dateLabel);
+
+        if (typeVal === 'Time In') {
+            if (existing && existing.cells[2] && existing.cells[2].textContent.trim() !== '-') {
+                alert('Time In already recorded for this project today.');
+                return;
+            }
+
+            if (existing) {
+                existing.cells[2].textContent = formatTimeLabel(timeVal);
+            } else {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td>' + projectId + '</td>'
+                    + '<td>' + dateLabel + '</td>'
+                    + '<td>' + formatTimeLabel(timeVal) + '</td>'
+                    + '<td>-</td>'
+                    + '<td>' + statusBadgeHtml('Present') + '</td>'
+                    + '<td class="remarks-cell">' + remarksBadgeHtml('Confirmed') + '</td>';
+                tableBody.prepend(row);
+            }
+        } else { // Time Out
+            if (existing) {
+                existing.cells[3].textContent = formatTimeLabel(timeVal);
+            } else {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td>' + projectId + '</td>'
+                    + '<td>' + dateLabel + '</td>'
+                    + '<td>-</td>'
+                    + '<td>' + formatTimeLabel(timeVal) + '</td>'
+                    + '<td>' + statusBadgeHtml('Present') + '</td>'
+                    + '<td class="remarks-cell">' + remarksBadgeHtml('Confirmed') + '</td>';
+                tableBody.prepend(row);
+            }
         }
 
-        const status = 'Present';
-        const now = new Date();
-        const dateLabel = now.toLocaleDateString([], { month: 'short', day: '2-digit', year: 'numeric' });
-        const row = document.createElement('tr');
-        row.innerHTML = '<td>' + projectId + '</td>'
-            + '<td>' + dateLabel + '</td>'
-            + '<td>' + statusBadgeHtml(status) + '</td>'
-            + '<td class="remarks-cell">' + remarksBadgeHtml('Confirmed') + '</td>';
-        tableBody.prepend(row);
-
+        // reset and close
         projectSelect.value = '';
+        if (timeDisplay) timeDisplay.value = '';
+        if (typeHidden) typeHidden.value = 'Time In';
+        // reset card styles
+        typeCards.forEach(c => c.classList.remove('border-2', 'border-primary'));
+        if (typeCards[0]) typeCards[0].classList.add('border-2', 'border-primary');
         const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.hide();
+    });
+
+    // populate date when modal shows
+    modalEl.addEventListener('show.bs.modal', function () {
+        dateInput.value = getTodayDateLabel();
+        if (timeDisplay) timeDisplay.value = formatTimeLabel(getNowTimeValue());
+        if (typeHidden) typeHidden.value = 'Time In';
+        // set initial card selection
+        typeCards.forEach(c => c.classList.remove('border-2', 'border-primary'));
+        if (typeCards[0]) typeCards[0].classList.add('border-2', 'border-primary');
     });
 
     // Filter controls
@@ -163,9 +282,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const applyBtn = document.getElementById('applyAttendanceFilter');
     const clearBtn = document.getElementById('clearAttendanceFilter');
 
-
     function parseRowDate(text) {
-        // Expect formats like 'Apr 10, 2026' or 'May 01, 2026'
         const d = new Date(text);
         if (isNaN(d)) return null;
         const mm = String(d.getMonth() + 1).padStart(2, '0');

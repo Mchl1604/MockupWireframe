@@ -89,12 +89,12 @@ $quotationByProject = [
 ];
 
 $teamByProject = [
-    'PRJ-1001' => ['Engr. Mark Santos', 'Tech. Carlo Reyes'],
-    'PRJ-1002' => ['Engr. Mark Santos', 'Tech. Lito Ramos'],
-    'PRJ-1003' => ['Engr. Mark Santos', 'Tech. Carlo Reyes', 'Tech. Anne Mendoza'],
-    'PRJ-1004' => ['Engr. Mark Santos', 'Tech. Carl Dominguez', 'Tech. Lito Ramos'],
-    'PRJ-1005' => ['Engr. Mark Santos', 'Tech. John Gonzales'],
-    'PRJ-1006' => ['Engr. Mark Santos', 'Tech. Anne Mendoza', 'Tech. Lito Ramos'],
+    'PRJ-1001' => ['Tech. Mark Santos', 'Tech. Carlo Reyes'],
+    'PRJ-1002' => ['Tech. Mark Santos', 'Tech. Lito Ramos'],
+    'PRJ-1003' => ['Tech. Mark Santos', 'Tech. Carlo Reyes', 'Tech. Anne Mendoza'],
+    'PRJ-1004' => ['Tech. Mark Santos', 'Tech. Carl Dominguez', 'Tech. Lito Ramos'],
+    'PRJ-1005' => ['Tech. Mark Santos', 'Tech. John Gonzales'],
+    'PRJ-1006' => ['Tech. Mark Santos', 'Tech. Anne Mendoza', 'Tech. Lito Ramos'],
 ];
 
 $taskBoardByProject = [
@@ -128,7 +128,7 @@ $taskBoardByProject = [
 $progressReportsByProject = [
     'PRJ-1001' => [
         ['date' => 'Apr 12, 2026', 'technician' => 'Tech. Carlo Reyes', 'summary' => 'Site survey completed and installation zones confirmed.', 'photos' => ['imageSample.png', 'imageSample.png']],
-        ['date' => 'Apr 14, 2026', 'technician' => 'Engr. Mark Santos', 'summary' => 'Assessment reviewed with the client and service recommendations finalized.', 'photos' => ['imageSample.png']],
+        ['date' => 'Apr 14, 2026', 'technician' => 'Tech. Mark Santos', 'summary' => 'Assessment reviewed with the client and service recommendations finalized.', 'photos' => ['imageSample.png']],
     ],
     'PRJ-1003' => [
         ['date' => 'Apr 13, 2026', 'technician' => 'Tech. Anne Mendoza', 'summary' => 'Duct measurements validated and material requirements listed for quotation.', 'photos' => ['imageSample.png']],
@@ -143,7 +143,7 @@ $reportFeedByProject = [
         ['type' => 'Progress Report', 'date' => 'Apr 18, 2026', 'technician' => 'Tech. Carlo Reyes', 'summary' => 'Installation is underway and the first unit set has been mounted.', 'photos' => ['imageSample.png']],
         ['type' => 'Progress Report', 'date' => 'Apr 17, 2026', 'technician' => 'Tech. Anne Mendoza', 'summary' => 'Materials staged and line routing completed for the west wing.', 'photos' => ['imageSample.png', 'imageSample.png']],
         ['type' => 'Progress Report', 'date' => 'Apr 16, 2026', 'technician' => 'Tech. Lito Ramos', 'summary' => 'Indoor unit locations measured and confirmed with the client.', 'photos' => ['imageSample.png']],
-        ['type' => 'Incident Report', 'date' => 'Apr 15, 2026', 'technician' => 'Engr. Mark Santos', 'summary' => 'Minor delay due to access restrictions, resolved after coordination with building admin.', 'photos' => ['imageSample.png']],
+        ['type' => 'Incident Report', 'date' => 'Apr 15, 2026', 'technician' => 'Tech. Mark Santos', 'summary' => 'Minor delay due to access restrictions, resolved after coordination with building admin.', 'photos' => ['imageSample.png']],
     ],
     'PRJ-1002' => [
         ['type' => 'Progress Report', 'date' => 'Apr 09, 2026', 'technician' => 'Tech. Lito Ramos', 'summary' => 'Replacement parts installed and system test performed successfully.', 'photos' => ['imageSample.png']],
@@ -152,7 +152,7 @@ $reportFeedByProject = [
     'PRJ-1003' => [
         ['type' => 'Progress Report', 'date' => 'Apr 19, 2026', 'technician' => 'Tech. Anne Mendoza', 'summary' => 'Final duct measurements reviewed and site marking completed.', 'photos' => ['imageSample.png']],
         ['type' => 'Progress Report', 'date' => 'Apr 18, 2026', 'technician' => 'Tech. Carlo Reyes', 'summary' => 'Duct sections staged and installation path cleared.', 'photos' => ['imageSample.png']],
-        ['type' => 'Progress Report', 'date' => 'Apr 17, 2026', 'technician' => 'Engr. Mark Santos', 'summary' => 'Client walkthrough finished and work scope confirmed.', 'photos' => ['imageSample.png', 'imageSample.png']],
+        ['type' => 'Progress Report', 'date' => 'Apr 17, 2026', 'technician' => 'Tech. Mark Santos', 'summary' => 'Client walkthrough finished and work scope confirmed.', 'photos' => ['imageSample.png', 'imageSample.png']],
         ['type' => 'Incident Report', 'date' => 'Apr 16, 2026', 'technician' => 'Tech. Anne Mendoza', 'summary' => 'Minor surface rust found on existing supports and tagged for removal.', 'photos' => ['imageSample.png']],
     ],
     'PRJ-1004' => [
@@ -1060,7 +1060,7 @@ document.addEventListener('DOMContentLoaded', function () {
             reports.unshift({
                 type: selectedType,
                 date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
-                technician: 'Engr. Mark Santos',
+                technician: 'Tech. Mark Santos',
                 summary: description,
                 photos: [],
             });

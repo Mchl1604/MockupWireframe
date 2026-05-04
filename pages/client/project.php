@@ -314,7 +314,7 @@ $projectCancellationReason = (string) ($project['cancellationReason'] ?? ($cance
                 </div>
                 <?php if ($statusKey === 'awaiting quotation approval'): ?>
                     <div class="mt-3 d-flex justify-content-end gap-2" id="quotation-actions">
-                        <button type="button" class="btn btn-danger btn-sm" id="quotation-reject">Decline</button>
+                        <button type="button" class="btn btn-danger btn-sm" id="quotation-reject" data-bs-toggle="modal" data-bs-target="#quotationDeclineChoiceModal">Decline</button>
                         <button type="button" class="btn btn-success btn-sm" id="quotation-approve">Accept</button>
                     </div>
                 <?php endif; ?>
@@ -347,6 +347,48 @@ $projectCancellationReason = (string) ($project['cancellationReason'] ?? ($cance
     <?php endif; ?>
 </main>
 
+<div class="modal fade" id="quotationDeclineChoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-white">Decline Quotation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-2">Choose what you would like to do next.</p>
+                
+            </div>
+            <div class="modal-footer flex-wrap">
+                <button type="button" class="btn btn-warning" id="requestAnotherQuotationBtn">
+                    <i class="bi bi-arrow-repeat me-1"></i>Request Revision
+                </button>
+                <button type="button" class="btn btn-danger" id="cancelProjectFromQuotationBtn">
+                    <i class="bi bi-x-circle me-1"></i>Cancel Project
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="clientCancelProjectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancel Project</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-2">Are you sure you want to cancel this project?</p>
+                <p class="small text-muted mb-0">Project: <?php echo htmlspecialchars((string) ($project['name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Keep Project</button>
+                <button type="button" class="btn btn-danger" id="confirmClientCancelProjectBtn">Cancel Project</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const quotationButton = document.getElementById('toggleQuotationBtn');
@@ -365,8 +407,24 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     const approveBtn = document.getElementById('quotation-approve');
     const rejectBtn = document.getElementById('quotation-reject');
+    const requestAnotherQuotationBtn = document.getElementById('requestAnotherQuotationBtn');
+    const cancelProjectFromQuotationBtn = document.getElementById('cancelProjectFromQuotationBtn');
+    const confirmClientCancelProjectBtn = document.getElementById('confirmClientCancelProjectBtn');
     const statusBadge = document.getElementById('project-status-badge');
     const actionsWrap = document.getElementById('quotation-actions');
+    const quotationDeclineChoiceModalEl = document.getElementById('quotationDeclineChoiceModal');
+    const clientCancelProjectModalEl = document.getElementById('clientCancelProjectModal');
+
+    let quotationDeclineChoiceModal = null;
+    let clientCancelProjectModal = null;
+
+    if (quotationDeclineChoiceModalEl && typeof bootstrap !== 'undefined') {
+        quotationDeclineChoiceModal = bootstrap.Modal.getOrCreateInstance(quotationDeclineChoiceModalEl);
+    }
+
+    if (clientCancelProjectModalEl && typeof bootstrap !== 'undefined') {
+        clientCancelProjectModal = bootstrap.Modal.getOrCreateInstance(clientCancelProjectModalEl);
+    }
 
     function setStatusTextAndClass(text, className) {
         if (!statusBadge) return;
@@ -385,10 +443,64 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (rejectBtn) {
         rejectBtn.addEventListener('click', function () {
-            setStatusTextAndClass('Quotation Rejected', 'bg-danger');
+            if (quotationDeclineChoiceModal) {
+                quotationDeclineChoiceModal.show();
+            }
+        });
+    }
+
+    if (requestAnotherQuotationBtn) {
+        requestAnotherQuotationBtn.addEventListener('click', function () {
+            if (quotationDeclineChoiceModal) {
+                quotationDeclineChoiceModal.hide();
+            }
+
+            setStatusTextAndClass('Revision Requested', 'bg-warning text-dark');
             if (actionsWrap) actionsWrap.style.display = 'none';
-            rejectBtn.disabled = true;
             if (approveBtn) approveBtn.disabled = true;
+            if (rejectBtn) rejectBtn.disabled = true;
+
+            const mainContainer = document.querySelector('main.container');
+            if (mainContainer) {
+                const alertHtml = '<div class="alert alert-warning alert-dismissible fade show" role="alert">'
+                    + '<strong>Quotation revision requested.</strong> The admin will prepare another quotation.'
+                    + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+                    + '</div>';
+                mainContainer.insertAdjacentHTML('afterbegin', alertHtml);
+            }
+        });
+    }
+
+    if (cancelProjectFromQuotationBtn) {
+        cancelProjectFromQuotationBtn.addEventListener('click', function () {
+            if (quotationDeclineChoiceModal) {
+                quotationDeclineChoiceModal.hide();
+            }
+            if (clientCancelProjectModal) {
+                clientCancelProjectModal.show();
+            }
+        });
+    }
+
+    if (confirmClientCancelProjectBtn) {
+        confirmClientCancelProjectBtn.addEventListener('click', function () {
+            if (clientCancelProjectModal) {
+                clientCancelProjectModal.hide();
+            }
+
+            setStatusTextAndClass('Cancelled', 'bg-danger');
+            if (actionsWrap) actionsWrap.style.display = 'none';
+            if (approveBtn) approveBtn.disabled = true;
+            if (rejectBtn) rejectBtn.disabled = true;
+
+            const mainContainer = document.querySelector('main.container');
+            if (mainContainer) {
+                const alertHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+                    + '<strong>Project cancelled.</strong> The quotation was declined and the project has been cancelled.'
+                    + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+                    + '</div>';
+                mainContainer.insertAdjacentHTML('afterbegin', alertHtml);
+            }
         });
     }
 });

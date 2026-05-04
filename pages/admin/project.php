@@ -123,7 +123,7 @@ $quotationByProject = [
     'PRJ-1004' => [
         'id' => 'QT-105',
         'client' => 'Northline Foods',
-        'status' => 'Sent',
+        'status' => 'Approved',
         'laborCost' => 38500,
         'materials' => [
             ['name' => 'Split-Type Indoor Unit Bracket', 'qty' => 4, 'unit' => 'set', 'unitCost' => 2800],
@@ -154,10 +154,13 @@ $quotationByProject = [
     ],
 ];
 $projectQuotation = $quotationByProject[$id] ?? null;
+$quotationTotal = 0;
 
 if ($projectQuotation !== null && in_array($statusKey, ['ongoing', 'scheduled'], true)) {
     $projectQuotation['status'] = 'Approved';
 }
+
+$canDeclineQuotation = $projectQuotation !== null && !in_array((string) ($projectQuotation['status'] ?? ''), ['Approved', 'Cancelled'], true);
 
 if ($projectQuotation !== null) {
     $materialsTotal = 0;
@@ -169,11 +172,11 @@ if ($projectQuotation !== null) {
 
 $assetBasePath = ($baseUrl !== '' ? $baseUrl : '') . '/assets/img/';
 $teamByProject = [
-    'PRJ-1001' => ['Engr. Mario Santos', 'Tech. Carlo Reyes'],
+    'PRJ-1001' => ['Tech. Mario Santos', 'Tech. Carlo Reyes'],
     'PRJ-1002' => ['Tech. Lito Ramos'],
-    'PRJ-1003' => ['Engr. Mario Santos', 'Tech. Carlo Reyes', 'Tech. Anne Mendoza'],
+    'PRJ-1003' => ['Tech. Mario Santos', 'Tech. Carlo Reyes', 'Tech. Anne Mendoza'],
     'PRJ-1004' => ['Tech. Carl Dominguez'],
-    'PRJ-1005' => ['Engr. Mario Santos', 'Tech. John Gonzales'],
+    'PRJ-1005' => ['Tech. Mario Santos', 'Tech. John Gonzales'],
     'PRJ-1006' => ['Tech. Anne Mendoza', 'Tech. Lito Ramos'],
 ];
 $projectTeam = $teamByProject[$id] ?? [];
@@ -310,7 +313,7 @@ if (empty($taskAssigneeOptions)) {
 $assessmentByProject = [
     'PRJ-1001' => [
         'date' => 'Apr 08, 2026',
-        'technician' => 'Engr. Mario Santos',
+        'technician' => 'Tech. Mario Santos',
         'requiredTechnicians' => 2,
         'summary' => 'Aircon system assessment completed. Building has 3 zones requiring individual indoor units. Existing electrical capacity adequate. Installation timeline: 8 days.',
         'photos' => ['imageSample.png', 'imageSample.png', 'imageSample.png'],
@@ -345,7 +348,7 @@ $assessmentByProject = [
     ],
     'PRJ-1003' => [
         'date' => 'Apr 09, 2026',
-        'technician' => 'Engr. Mario Santos',
+        'technician' => 'Tech. Mario Santos',
         'requiredTechnicians' => 3,
         'summary' => 'Warehouse ducting assessment. Measurements completed for all zones. Existing ductwork requires partial replacement due to rust and deterioration.',
         'photos' => ['imageSample.png', 'imageSample.png'],
@@ -416,7 +419,7 @@ $assessmentByProject = [
     ],
     'PRJ-1007' => [
         'date' => 'Apr 15, 2026',
-        'technician' => 'Engr. Mario Santos',
+        'technician' => 'Tech. Mario Santos',
         'requiredTechnicians' => 3,
         'summary' => 'Mall branch duct assessment completed. Quotation is approved and project is ready for crew scheduling and site mobilization.',
         'photos' => ['imageSample.png', 'imageSample.png'],
@@ -797,16 +800,7 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                         </div>
                     </div>
 
-                    <div>
-                        <small class="text-muted d-block mb-2"><strong>Assessment Photos</strong></small>
-                        <div class="row g-2">
-                            <?php foreach ($projectAssessment['photos'] as $photo): ?>
-                                <div class="col-6 col-md-4 col-lg-3">
-                                    <img src="<?php echo htmlspecialchars($assetBasePath . $photo, ENT_QUOTES, 'UTF-8'); ?>" alt="Assessment photo" class="img-fluid rounded border report-photo">
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
+                    
                 <?php else: ?>
                     <p class="mb-0 text-muted">No assessment report is available for this project.</p>
                 <?php endif; ?>
@@ -826,7 +820,7 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                     <div class="row g-3 mb-3 align-items-end">
                         <div class="col-md-4"><small class="text-muted d-block">Quotation ID</small><strong><?php echo htmlspecialchars($projectQuotation['id'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         <div class="col-md-4"><small class="text-muted d-block">Client</small><strong><?php echo htmlspecialchars($projectQuotation['client'], ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div class="col-md-4"><small class="text-muted d-block">Status</small><span class="badge <?php echo htmlspecialchars($projectQuotation['status'] === 'Approved' ? 'bg-success' : ($projectQuotation['status'] === 'Sent' ? 'bg-primary' : 'bg-secondary'), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($projectQuotation['status'], ENT_QUOTES, 'UTF-8'); ?></span></div>
+                        <div class="col-md-4"><small class="text-muted d-block">Status</small><span id="projectQuotationStatusBadge" class="badge <?php echo htmlspecialchars($projectQuotation['status'] === 'Approved' ? 'bg-success' : ($projectQuotation['status'] === 'Sent' ? 'bg-primary' : 'bg-secondary'), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($projectQuotation['status'], ENT_QUOTES, 'UTF-8'); ?></span></div>
                     </div>
 
                     <div class="table-responsive border rounded">
@@ -853,6 +847,7 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
                             </tbody>
                         </table>
                     </div>
+                    
                 <?php else: ?>
                     <p class="mb-0 text-muted">No quotation is tied to this project yet.</p>
                 <?php endif; ?>
@@ -916,6 +911,27 @@ $schedulesModuleUrl = app_url('/admin/schedules', ['project' => $id, 'tab' => 'p
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Keep Project</button>
                 <button type="button" class="btn btn-danger" id="confirmCancelProjectBtn">Confirm Cancel Project</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="quotationDeclineChoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title">Decline Quotation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-2">Choose what to do after declining this quotation.</p>
+                <p class="small text-muted mb-0">Project: <?php echo htmlspecialchars($projectTitle, ENT_QUOTES, 'UTF-8'); ?></p>
+            </div>
+            <div class="modal-footer flex-wrap">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning" id="requestQuotationRevisionBtn">
+                    <i class="bi bi-arrow-repeat me-1"></i>Request Revision of Quotation
+                </button>
             </div>
         </div>
     </div>
@@ -1084,6 +1100,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelProjectReasonError = document.getElementById('cancelProjectReasonError');
     const confirmCancelProjectBtn = document.getElementById('confirmCancelProjectBtn');
     const cancelProjectModalEl = document.getElementById('cancelProjectModal');
+    const quotationDeclineChoiceModalEl = document.getElementById('quotationDeclineChoiceModal');
+    const requestQuotationRevisionBtn = document.getElementById('requestQuotationRevisionBtn');
     const projectStatusBadge = document.querySelector('.compact-project-overview .badge.rounded-pill.px-3.py-2');
     const canViewTaskBoard = <?php echo json_encode($canViewTaskBoard, JSON_UNESCAPED_SLASHES); ?>;
     const isCompletedProject = <?php echo json_encode($statusKey === 'completed', JSON_UNESCAPED_SLASHES); ?>;
@@ -1299,6 +1317,11 @@ document.addEventListener('DOMContentLoaded', function() {
         cancelProjectModal = bootstrap.Modal.getOrCreateInstance(cancelProjectModalEl);
     }
 
+    let quotationDeclineChoiceModal = null;
+    if (quotationDeclineChoiceModalEl && typeof bootstrap !== 'undefined') {
+        quotationDeclineChoiceModal = bootstrap.Modal.getOrCreateInstance(quotationDeclineChoiceModalEl);
+    }
+
     function renderTeam() {
         technicianList.innerHTML = '';
         
@@ -1364,6 +1387,28 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (cancelProjectModal) {
                 cancelProjectModal.hide();
+            }
+        });
+    }
+
+    if (requestQuotationRevisionBtn) {
+        requestQuotationRevisionBtn.addEventListener('click', function () {
+            if (quotationDeclineChoiceModal) {
+                quotationDeclineChoiceModal.hide();
+            }
+
+            if (projectQuotationStatusBadge) {
+                projectQuotationStatusBadge.textContent = 'Revision Requested';
+                projectQuotationStatusBadge.className = 'badge bg-warning text-dark';
+            }
+
+            const mainContainer = document.querySelector('main.container');
+            if (mainContainer) {
+                const alertHtml = '<div class="alert alert-warning alert-dismissible fade show" role="alert">'
+                    + '<strong>Quotation revision requested.</strong> The quotation has been sent back for updates.'
+                    + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+                    + '</div>';
+                mainContainer.insertAdjacentHTML('afterbegin', alertHtml);
             }
         });
     }

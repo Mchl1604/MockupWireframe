@@ -108,6 +108,8 @@ $attendanceProjects = ['PRJ-1001', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005'];
                         <thead class="table-light">
                             <tr>
                                 <th>Technician</th>
+                                <th>Time In</th>
+                                <th>Time Out</th>
                                 <th>Status</th>
                                 <th>Remarks</th>
                                 <th>Action</th>
@@ -115,7 +117,7 @@ $attendanceProjects = ['PRJ-1001', 'PRJ-1003', 'PRJ-1004', 'PRJ-1005'];
                         </thead>
                         <tbody id="confirmTechnicianTableBody">
                             <tr>
-                                <td colspan="4" class="text-center text-muted py-3">Select a project to load attendance list.</td>
+                                <td colspan="6" class="text-center text-muted py-3">Select a project to load attendance list.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -141,10 +143,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!saveBtn || !projectSelect || !tableBody || !modalEl) return;
 
     const projectTechnicians = {
-        'PRJ-1001': ['Engr. Mark Santos', 'Tech. Carlo Reyes'],
-        'PRJ-1003': ['Engr. Mark Santos', 'Tech. Carlo Reyes', 'Tech. Anne Mendoza'],
-        'PRJ-1004': ['Engr. Mark Santos', 'Tech. Carl Dominguez'],
-        'PRJ-1005': ['Engr. Mark Santos', 'Tech. John Gonzales']
+        'PRJ-1001': ['Tech. Carlo Reyes'],
+        'PRJ-1003': ['Tech. Carlo Reyes', 'Tech. Anne Mendoza'],
+        'PRJ-1004': ['Tech. Carl Dominguez'],
+        'PRJ-1005': ['Tech. John Gonzales']
     };
 
     function statusBadgeHtml(status) {
@@ -153,7 +155,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function remarksBadgeHtml(remark) {
-        const badgeClass = remark === 'Confirmed' ? 'text-bg-success' : 'text-bg-warning';
+        let badgeClass = 'text-bg-warning';
+        if (remark === 'Confirmed') badgeClass = 'text-bg-success';
+        if (remark === 'Invalid') badgeClass = 'text-bg-danger';
         return '<span class="badge ' + badgeClass + '">' + remark + '</span>';
     }
 
@@ -166,17 +170,24 @@ document.addEventListener('DOMContentLoaded', function () {
         const technicians = projectTechnicians[projectId] || [];
 
         if (!projectId || !technicians.length) {
-            confirmTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-3">Select a project to load attendance list.</td></tr>';
+            confirmTableBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3">Select a project to load attendance list.</td></tr>';
             return;
         }
 
         confirmTableBody.innerHTML = technicians.map(function (tech, index) {
             const status = index % 3 === 0 ? 'Absent' : 'Present';
+            const timeIn = status === 'Present' ? '08:00 AM' : '-';
+            const timeOut = status === 'Present' ? '05:00 PM' : '-';
             return '<tr>'
                 + '<td>' + tech + '</td>'
+                + '<td>' + timeIn + '</td>'
+                + '<td>' + timeOut + '</td>'
                 + '<td>' + statusBadgeHtml(status) + '</td>'
                 + '<td class="confirm-remarks-cell">' + remarksBadgeHtml('Pending') + '</td>'
-                + '<td><button type="button" class="btn btn-sm btn-primary confirm-tech-btn"><i class="bi bi-check2 me-1"></i>Confirm</button></td>'
+                + '<td>'
+                    + '<button type="button" class="btn btn-sm btn-primary confirm-tech-btn">Confirm</button>'
+                    + '<button type="button" class="btn btn-sm btn-danger invalid-tech-btn ms-1">Invalid</button>'
+                + '</td>'
                 + '</tr>';
         }).join('');
     }
@@ -243,20 +254,47 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (confirmTableBody) {
         confirmTableBody.addEventListener('click', function (event) {
-            const btn = event.target.closest('.confirm-tech-btn');
-            if (!btn || btn.disabled) return;
-
+            const btnConfirm = event.target.closest('.confirm-tech-btn');
+            const btnInvalid = event.target.closest('.invalid-tech-btn');
             const selectedProject = confirmProject ? confirmProject.value.trim() : '';
-            const row = btn.closest('tr');
-            const remarksCell = row ? row.querySelector('.confirm-remarks-cell') : null;
-            if (!selectedProject || !row || !remarksCell) return;
 
-            remarksCell.innerHTML = remarksBadgeHtml('Confirmed');
-            btn.className = 'btn btn-sm btn-outline-success confirm-tech-btn';
-            btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-check2-circle me-1"></i>Confirmed';
+            if (!selectedProject) return;
 
-            syncMainTableRemarks(selectedProject);
+            if (btnConfirm && !btnConfirm.disabled) {
+                const row = btnConfirm.closest('tr');
+                const remarksCell = row ? row.querySelector('.confirm-remarks-cell') : null;
+                if (!row || !remarksCell) return;
+
+                remarksCell.innerHTML = remarksBadgeHtml('Confirmed');
+                btnConfirm.className = 'btn btn-sm btn-outline-success confirm-tech-btn';
+                btnConfirm.disabled = true;
+                btnConfirm.textContent = 'Confirmed';
+
+                // disable invalid button for this row
+                const otherInvalid = row.querySelector('.invalid-tech-btn');
+                if (otherInvalid) otherInvalid.disabled = true;
+
+                syncMainTableRemarks(selectedProject);
+                return;
+            }
+
+            if (btnInvalid && !btnInvalid.disabled) {
+                const row = btnInvalid.closest('tr');
+                const remarksCell = row ? row.querySelector('.confirm-remarks-cell') : null;
+                if (!row || !remarksCell) return;
+
+                remarksCell.innerHTML = remarksBadgeHtml('Invalid');
+                btnInvalid.className = 'btn btn-sm btn-outline-danger invalid-tech-btn';
+                btnInvalid.disabled = true;
+                btnInvalid.textContent = 'Invalid';
+
+                // disable confirm button for this row
+                const otherConfirm = row.querySelector('.confirm-tech-btn');
+                if (otherConfirm) otherConfirm.disabled = true;
+
+                syncMainTableRemarks(selectedProject);
+                return;
+            }
         });
     }
 });

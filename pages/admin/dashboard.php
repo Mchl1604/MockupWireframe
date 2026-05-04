@@ -52,18 +52,7 @@
         </div>
     </div>
 
-    <div class="row g-3">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white d-flex align-items-center justify-content-between">
-                    <strong>Projects Completed</strong>
-                    <span class="small text-muted">Last 6 months</span>
-                </div>
-                <div class="card-body">
-                    <canvas id="requestsTrendChart" height="120"></canvas>
-                </div>
-            </div>
-        </div>
+    <div class="row g-3 mb-4">
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white">
@@ -74,7 +63,225 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white d-flex align-items-center justify-content-between">
+                    <strong>Pending Requests</strong>
+                    <a href="/pages/admin/requests.php" class="small text-primary text-decoration-none">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="pending-requests">
+                        <div class="request-item d-flex justify-content-between align-items-start py-2 border-bottom">
+                            <div>
+                                <p class="small fw-bold mb-1">Aircon Installation</p>
+                                <p class="text-muted small mb-0">New Building Corp - Commercial</p>
+                            </div>
+                            <span class="badge text-bg-warning">Pending</span>
+                        </div>
+                        <div class="request-item d-flex justify-content-between align-items-start py-2 border-bottom">
+                            <div>
+                                <p class="small fw-bold mb-1">Aircon Repair</p>
+                                <p class="text-muted small mb-0">Metro Center - Commercial</p>
+                            </div>
+                            <span class="badge text-bg-warning">Pending</span>
+                        </div>
+                        <div class="request-item d-flex justify-content-between align-items-start pt-2">
+                            <div>
+                                <p class="small fw-bold mb-1">Ducting Installation</p>
+                                <p class="text-muted small mb-0">Prime Office Space - Commercial</p>
+                            </div>
+                            <span class="badge text-bg-warning">Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white d-flex align-items-center justify-content-between">
+                    <strong>Recent Activity</strong>
+                    <a href="/pages/admin/reports.php" class="small text-primary text-decoration-none">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="activity-feed">
+                        <div class="activity-item d-flex gap-3 pb-3 border-bottom">
+                            <div class="activity-badge bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="min-width: 40px; height: 40px;">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-1 small"><strong>Project Completed</strong></p>
+                                <p class="text-muted small mb-1">PRJ-1002 - Aircon Repair completed by Tech. Lito Ramos</p>
+                                <span class="text-muted small">Apr 18, 2026 - 2:30 PM</span>
+                            </div>
+                        </div>
+                        <div class="activity-item d-flex gap-3 py-3 border-bottom">
+                            <div class="activity-badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="min-width: 40px; height: 40px;">
+                                <i class="bi bi-file-earmark-text"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-1 small"><strong>Progress Report Submitted</strong></p>
+                                <p class="text-muted small mb-1">PRJ-1001 - Installation progress report by Tech. Carlo Reyes</p>
+                                <span class="text-muted small">Apr 18, 2026 - 1:15 PM</span>
+                            </div>
+                        </div>
+                        <div class="activity-item d-flex gap-3 py-3 border-bottom">
+                            <div class="activity-badge bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center" style="min-width: 40px; height: 40px;">
+                                <i class="bi bi-exclamation-circle"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-1 small"><strong>Incident Report</strong></p>
+                                <p class="text-muted small mb-1">PRJ-1001 - Minor delay due to access restrictions (resolved)</p>
+                                <span class="text-muted small">Apr 15, 2026 - 10:45 AM</span>
+                            </div>
+                        </div>
+                        <div class="activity-item d-flex gap-3 py-3 border-bottom">
+                            <div class="activity-badge bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="min-width: 40px; height: 40px;">
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-1 small"><strong>Schedule Updated</strong></p>
+                                <p class="text-muted small mb-1">PRJ-1003 - Technician assignment updated</p>
+                                <span class="text-muted small">Apr 14, 2026 - 9:20 AM</span>
+                            </div>
+                        </div>
+                        <div class="activity-item d-flex gap-3 pt-3">
+                            <div class="activity-badge bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="min-width: 40px; height: 40px;">
+                                <i class="bi bi-person-plus"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-1 small"><strong>New Request Created</strong></p>
+                                <p class="text-muted small mb-1">Aircon Installation request - ACME Holdings</p>
+                                <span class="text-muted small">Apr 13, 2026 - 3:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header bg-white">
+                    <strong>Upcoming This Week</strong>
+                </div>
+                <div class="card-body">
+                    <div class="upcoming-list">
+                        <div class="upcoming-item pb-2 mb-2 border-bottom">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <p class="small fw-bold mb-0">PRJ-1001</p>
+                                <span class="badge text-bg-primary">Apr 21</span>
+                            </div>
+                            <p class="text-muted small mb-0">Aircon Installation - ACME Holdings</p>
+                        </div>
+                        <div class="upcoming-item pb-2 mb-2 border-bottom">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <p class="small fw-bold mb-0">PRJ-1003</p>
+                                <span class="badge text-bg-warning">Apr 22-23</span>
+                            </div>
+                            <p class="text-muted small mb-0">Ducting Installation - Metro Storage</p>
+                        </div>
+                        <div class="upcoming-item pb-2 mb-2 border-bottom">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <p class="small fw-bold mb-0">PRJ-1005</p>
+                                <span class="badge text-bg-info">Apr 24-28</span>
+                            </div>
+                            <p class="text-muted small mb-0">Ducting Fabrication - BluePeak IT</p>
+                        </div>
+                        <div class="upcoming-item pt-2">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <p class="small fw-bold mb-0">PRJ-1006</p>
+                                <span class="badge text-bg-danger">Apr 24-30</span>
+                            </div>
+                            <p class="text-muted small mb-0">Ducting Installation - Grand Arc Tower</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <strong>Quick Actions</strong>
+                </div>
+                <div class="card-body d-flex flex-column gap-2">
+                    
+                    <a href="/pages/admin/quotations.php" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-file-earmark-plus"></i>New Quotation
+                    </a>
+                    <a href="/pages/admin/project.php" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-folder-plus"></i>New Project
+                    </a>
+                    <a href="/pages/admin/schedules.php" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-calendar-plus"></i>View Schedule
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white d-flex align-items-center justify-content-between">
+                    <strong>Technician Availability</strong>
+                    <a href="/pages/admin/technicians.php" class="small text-primary text-decoration-none">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="technician-status">
+                        <div class="technician-item d-flex align-items-center justify-content-between py-2 border-bottom">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-success rounded-circle" style="width: 12px; height: 12px;"></span>
+                                <p class="small mb-0">Tech. Carlo Reyes</p>
+                            </div>
+                            <span class="badge text-bg-light border">Available</span>
+                        </div>
+                        <div class="technician-item d-flex align-items-center justify-content-between py-2 border-bottom">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-warning rounded-circle" style="width: 12px; height: 12px;"></span>
+                                <p class="small mb-0">Tech. Lito Ramos</p>
+                            </div>
+                            <span class="badge text-bg-light border">On Project</span>
+                        </div>
+                        <div class="technician-item d-flex align-items-center justify-content-between py-2 border-bottom">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-success rounded-circle" style="width: 12px; height: 12px;"></span>
+                                <p class="small mb-0">Tech. Anne Mendoza</p>
+                            </div>
+                            <span class="badge text-bg-light border">Available</span>
+                        </div>
+                        <div class="technician-item d-flex align-items-center justify-content-between py-2 border-bottom">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-warning rounded-circle" style="width: 12px; height: 12px;"></span>
+                                <p class="small mb-0">Tech. Carl Dominguez</p>
+                            </div>
+                            <span class="badge text-bg-light border">On Project</span>
+                        </div>
+                        <div class="technician-item d-flex align-items-center justify-content-between py-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-success rounded-circle" style="width: 12px; height: 12px;"></span>
+                                <p class="small mb-0">Tech. John Gonzales</p>
+                            </div>
+                            <span class="badge text-bg-light border">Available</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex align-items-center justify-content-between">
+                    <strong>Projects Completed</strong>
+                    <span class="small text-muted">Last 6 months</span>
+                </div>
+                <div class="card-body">
+                    <canvas id="requestsTrendChart" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
